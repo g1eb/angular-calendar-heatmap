@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="ExampleApp">
+<head>
+  <title>D3.js Calendar Heatmap for AngularJS</title>
+  <link rel="stylesheet" type="text/css" href="calendar-heatmap.css">
+</head>
+<body ng-controller="MainCtrl">
+
+  <calendar-heatmap data="exampleData" color="'#ff0000'" handler="print"></calendar-heatmap>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.16/d3.js" charset="utf-8"></script>
+  <script src="calendar-heatmap.js"></script>
+
+  <script>
+    angular.module('ExampleApp', ['g1b.calendar-heatmap']).
+      controller('MainCtrl', function ($scope) {
+        var now = moment().endOf('day').toDate();
+        var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+        $scope.exampleData = d3.time.days(yearAgo, now).map(function (dateElement) {
+          return {
+            date: dateElement,
+            total: Math.floor(Math.random() * 3600 * 8),
+            details: [{
+              'name': 'Project 1',
+              'value': 3600 * 5 + Math.floor(Math.random() * 3600)
+            }, {
+              'name': 'Project 2',
+              'value': 3600 * 4 + Math.floor(Math.random() * 3600)
+            }, {
+              'name': 'Project 3',
+              'value': 3600 * 3 + Math.floor(Math.random() * 3600)
+            }, {
+              'name': 'Project 4',
+              'value': 3600 * 2 + Math.floor(Math.random() * 3600)
+            }, {
+              'name': 'Project 5',
+              'value': 3600 * 1 + Math.floor(Math.random() * 3600)
+            }]
+          };
+        });
+        $scope.print = function (val) {
+          console.log(val);
+        };
+      });
+  </script>
+</body>
+</html>
