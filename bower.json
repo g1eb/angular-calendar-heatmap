@@ -1,0 +1,37 @@
+{
+  "name": "angular-calendar-heatmap",
+  "main": [
+    "calendar-heatmap.js",
+    "calendar-heatmap.css"
+  ],
+  "homepage": "https://github.com/g1eb/angular-calendar-heatmap",
+  "authors": [
+    "Gleb <git@gleb.nl>"
+  ],
+  "description": "Angular directive for d3.js heatmap representing time series data.",
+  "moduleType": [],
+  "keywords": [
+    "angular",
+    "angularjs",
+    "directive",
+    "calendar",
+    "heatmap",
+    "d3",
+    "chart",
+    "time",
+    "visualisation"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.4.8",
+    "d3": "^3.5.16",
+    "moment": "^2.12.0"
+  }
+}
