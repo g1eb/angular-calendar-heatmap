@@ -78,7 +78,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('opacity', 1);
 
           dayCircles.on('click', function (d) {
-            scope.handler(d);
+            if ( scope.handler ) { scope.handler(d); }
           });
 
           dayCircles.on('mouseover', function (d) {
