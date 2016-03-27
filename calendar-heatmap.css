@@ -2,16 +2,10 @@
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 100%; /* aspect ratio */
-  vertical-align: top;
-  overflow: hidden;
   @include user-select(none);
 }
 .calendar-heatmap .svg {
-  display: inline-block;
-  position: absolute;
-  top: 10px;
-  left: 0;
+  padding: 35px 0 0 35px;
 }
 .calendar-heatmap circle.circle {
   cursor: pointer;

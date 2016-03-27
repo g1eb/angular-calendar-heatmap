@@ -40,9 +40,8 @@ angular.module('g1b.calendar-heatmap', []).
           var svg = d3.select(element[0])
             .append('svg')
             .attr('preserveAspectRatio', 'xMinYMin meet')
-            .attr('viewBox', '0 0 1280 960')
-            .attr('class', 'svg')
-            .style('padding', '36px');
+            .attr('viewBox', '0 0 1280 175')
+            .attr('class', 'svg');
 
           var tooltip = d3.select(element[0])
             .append('div')
