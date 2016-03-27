@@ -82,6 +82,8 @@ angular.module('g1b.calendar-heatmap', []).
 
           dayCircles.on('mouseover', function (d) {
             var circle = d3.select(this);
+            var circle_xpos = parseInt(circle.attr('cx'));
+            var circle_ypos = parseInt(circle.attr('cy'));
             (function repeat() {
               circle = circle.transition()
                 .duration(500)
@@ -95,12 +97,12 @@ angular.module('g1b.calendar-heatmap', []).
             })();
             tooltip.html(scope.tooltipHTMLForDate(d))
               .style('left', function () {
-                if ( (parseInt(svg.style('width')) - d3.event.pageX ) < TOOLTIP_WIDTH ) {
-                  return (d3.event.pageX - CIRCLE_RADIUS*4 - TOOLTIP_WIDTH) + 'px';
+                if ( (parseInt(svg.style('width')) - circle_xpos ) < TOOLTIP_WIDTH ) {
+                  return (circle_xpos - TOOLTIP_WIDTH) + 'px';
                 }
-                return (d3.event.pageX + CIRCLE_RADIUS) + 'px';
+                return (circle_xpos + TOOLTIP_WIDTH/2) + 'px';
               })
-              .style('top', (d3.event.pageY - CIRCLE_RADIUS) + 'px')
+              .style('top', (circle_ypos + CIRCLE_RADIUS*3 + MONTH_LABEL_PADDING) + 'px')
               .transition()
               .duration(250)
               .ease('ease-in')
