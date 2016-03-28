@@ -1,8 +1,8 @@
 .calendar-heatmap {
-  display: inline-block;
-  position: relative;
-  width: 100%;
-  @include user-select(none);
+  user-select: none;
+  -ms-user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
 }
 .calendar-heatmap circle.circle {
   cursor: pointer;
