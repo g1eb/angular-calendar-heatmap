@@ -128,29 +128,29 @@ angular.module('g1b.calendar-heatmap', []).
                 .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
 
               // Add details to the tooltip
-              for ( var i = 0; i < d.details.length; i++ ) {
+              angular.forEach(d.details, function (d, i) {
                 tooltip.append('text')
                   .attr('class', 'tooltip-detail-name')
                   .attr('font-weight', 900)
                   .attr('x', tooltip_padding)
                   .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
-                  .text(d.details[i].name)
+                  .text(d.name)
                   .each(function () {
-                    var self = d3.select(this),
-                      textLength = self.node().getComputedTextLength(),
-                      text = self.text();
+                    var obj = d3.select(this),
+                      textLength = obj.node().getComputedTextLength(),
+                      text = obj.text();
                     while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
                       text = text.slice(0, -1);
-                      self.text(text + '...');
-                      textLength = self.node().getComputedTextLength();
+                      obj.text(text + '...');
+                      textLength = obj.node().getComputedTextLength();
                     }
                   });
                 tooltip.append('text')
                   .attr('class', 'tooltip-detail-value')
                   .attr('x', tooltip_width / 2 + tooltip_padding / 2)
                   .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
-                  .text(scope.formatTime(d.details[i].value));
-              }
+                  .text(scope.formatTime(d.value));
+              });
 
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
