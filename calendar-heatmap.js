@@ -128,6 +128,9 @@ angular.module('g1b.calendar-heatmap', []).
             .data(d3.time.months(moment(yearAgo).startOf('month').toDate(), now))
             .enter().append('text')
             .attr('class', 'label')
+            .attr('font-size', function () {
+              return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
+            })
             .text(function (d) {
               return d.toLocaleDateString('en-us', {month: 'short'});
             })
@@ -146,6 +149,9 @@ angular.module('g1b.calendar-heatmap', []).
               return i * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
             })
             .style('text-anchor', 'middle')
+            .attr('font-size', function () {
+              return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
+            })
             .attr('dy', '3')
             .text(function (d) {
               return d;
