@@ -23,7 +23,11 @@ angular.module('g1b.calendar-heatmap', []).
         var height = 200;
         var circle_radius = 10;
         var label_padding = 40;
+
+        // Tooltip defaults
         var tooltip_width = 250;
+        var tooltip_padding = 15;
+        var tooltip_line_height = 15;
 
         var svg = d3.select(element[0])
           .append('svg')
@@ -104,22 +108,23 @@ angular.module('g1b.calendar-heatmap', []).
               })();
 
               // Construct tooltip
+              var tooltip_height = 60 + tooltip_line_height * d.details.length;
               tooltip.selectAll('text').remove();
               tooltip.selectAll('rect').remove();
               tooltip.insert('rect')
                 .attr('class', 'tooltip-background')
-                .attr('width', 250)
-                .attr('height', 60 + 15 * d.details.length);
+                .attr('width', tooltip_width)
+                .attr('height', tooltip_height);
               tooltip.append('text')
                 .attr('class', 'tooltip-title')
                 .attr('font-weight', 900)
-                .attr('x', 15)
-                .attr('y', 20)
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 1.5)
                 .text((d.total ? scope.formatTime(d.total) : 'No time') + ' tracked');
               tooltip.append('text')
                 .attr('class', 'tooltip-date')
-                .attr('x', 15)
-                .attr('y', 35)
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 2.5)
                 .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
 
               // Add details to the tooltip
@@ -127,14 +132,14 @@ angular.module('g1b.calendar-heatmap', []).
                 tooltip.append('text')
                   .attr('class', 'tooltip-detail-name')
                   .attr('font-weight', 900)
-                  .attr('x', 15)
-                  .attr('y', 60 + i * 15)
+                  .attr('x', tooltip_padding)
+                  .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
                   .text(d.details[i].name)
                   .each(function () {
                     var self = d3.select(this),
                       textLength = self.node().getComputedTextLength(),
                       text = self.text();
-                    while (textLength > (125 - 2 * 10) && text.length > 0) {
+                    while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
                       text = text.slice(0, -1);
                       self.text(text + '...');
                       textLength = self.node().getComputedTextLength();
@@ -142,19 +147,19 @@ angular.module('g1b.calendar-heatmap', []).
                   });
                 tooltip.append('text')
                   .attr('class', 'tooltip-detail-value')
-                  .attr('x', 130)
-                  .attr('y', 60 + i * 15)
+                  .attr('x', tooltip_width / 2 + tooltip_padding / 2)
+                  .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
                   .text(scope.formatTime(d.details[i].value));
               }
 
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
               var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-              while ( width - x < 300 ) {
+              while ( width - x < tooltip_width + tooltip_padding * 3 ) {
                 x -= 10;
               }
               var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-              while ( height - y < (90 + d.details.length * 15 ) ) {
+              while ( height - y < (d.details.length * tooltip_line_height + tooltip_padding * 6) ) {
                 y -= 10;
               }
               tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
