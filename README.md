@@ -27,24 +27,24 @@ Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) b
 ## Example data
 
 Time series data for each day going 1 year back.
-Each day has a total time tracked in seconds.
+Each day has a total time tracked (in seconds).
 Details, if provided, are shown in a tooltip.
 
 ```
 var data = {[
-  date: Sun Mar 27 2016 00:00:00 GMT+0100 (CET),
-  total: 17164,
-  details: [{
-    name: 'Project 1',
-    seconds: 9192
+  "date": "2016-01-01",
+  "total": 17164,
+  "details": [{
+    "name": "Project 1",
+    values: 9192
   }, {
-    name: 'Project 2',
-    seconds: 6753
+    "name": "Project 2",
+    "values": 6753
   },
   .....
   {
-    name: 'Project X',
-    seconds: 1219
+    "name": "Project X",
+    "values": 1219
   }]
 ]}
 ```
