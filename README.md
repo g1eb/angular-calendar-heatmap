@@ -13,7 +13,7 @@ Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) b
 
 ## Demo
 
-<a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">View demo in a new window</a>
+Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
 
 ## Installation
 
