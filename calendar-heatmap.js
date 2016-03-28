@@ -5,12 +5,6 @@
 angular.module('g1b.calendar-heatmap', []).
     directive('calendarHeatmap', function () {
 
-    var DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
-    var GUTTER = 3;
-    var CIRCLE_RADIUS = 10;
-    var TOOLTIP_WIDTH = 250;
-    var MONTH_LABEL_PADDING = 40;
-
     return {
       restrict: 'E',
       scope: {
@@ -22,10 +16,31 @@ angular.module('g1b.calendar-heatmap', []).
       template: '<div class="calendar-heatmap"></div>',
       link: function (scope, element) {
 
-        scope.$watch('data', function(data) {
-          if ( !data ) { return; }
-          scope.drawChart(data);
+        var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
+        var gutter = 5;
+        var circle_radius = 10;
+        var label_padding = 40;
+        var tooltip_width = 250;
+
+        var svg = d3.select(element[0])
+          .append('svg')
+          .attr('class', 'svg');
+
+        scope.$watch(function () {
+          return element[0].clientWidth;
+        }, function ( width ) {
+          if ( !width ) { return; }
+          width = width < 1000 ? 1000 : width;
+          circle_radius = Math.round((width / moment().weeksInYear() - gutter * 2) / 2);
+          label_padding = circle_radius * 4;
+          svg.attr('width', width)
+            .attr('height', function () {
+              return (label_padding + 7 * (circle_radius * 2 + gutter));
+            });
+          scope.drawChart();
         });
+
+        scope.$watch('data', scope.drawChart);
 
         scope.drawChart = function (data) {
           var firstDate = moment(data[0].date);
@@ -37,17 +52,11 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([0, max]);
 
-          var svg = d3.select(element[0])
-            .append('svg')
-            .attr('preserveAspectRatio', 'xMinYMin meet')
-            .attr('viewBox', '0 0 1280 200')
-            .attr('class', 'svg');
-
           var tooltip = d3.select(element[0])
             .append('div')
             .attr('class', 'tooltip')
             .style('opacity', 0)
-            .attr('width', TOOLTIP_WIDTH);
+            .attr('width', tooltip_width);
 
           var dayCircles = svg.selectAll('.cell')
             .data(data);
@@ -56,18 +65,18 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'circle')
             .attr('opacity', 0)
             .attr('r', function (d) {
-              return CIRCLE_RADIUS * 0.75 + (CIRCLE_RADIUS * d.total / max) * 0.25;
+              return circle_radius * 0.75 + (circle_radius * d.total / max) * 0.25;
             })
             .attr('fill', function (d) {
               return color(d.total);
             })
             .attr('cx', function (d) {
               var cellDate = moment(d.date);
-              var result = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-              return result * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
+              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
+              return week_num * (circle_radius * 2 + gutter) + label_padding;
             })
             .attr('cy', function (d) {
-              return moment(d.date).weekday() * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
+              return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             });
 
           // Animate circles on show
@@ -91,28 +100,28 @@ angular.module('g1b.calendar-heatmap', []).
               circle = circle.transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('r', CIRCLE_RADIUS+1)
+                .attr('r', circle_radius+1)
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('r', CIRCLE_RADIUS)
+                .attr('r', circle_radius)
                 .each('end', repeat);
             })();
             tooltip.html(scope.tooltipHTMLForDate(d))
               .style('left', function () {
-                if ( (parseInt(svg.style('width')) - circle_xpos ) < TOOLTIP_WIDTH ) {
-                  return (circle_xpos - TOOLTIP_WIDTH) + 'px';
+                if ( (parseInt(svg.attr('width')) - circle_xpos ) < tooltip_width ) {
+                  return (circle_xpos - tooltip_width) + 'px';
                 }
-                return (circle_xpos + TOOLTIP_WIDTH/2) + 'px';
+                return (circle_xpos + tooltip_width/2) + 'px';
               })
-              .style('top', (circle_ypos + CIRCLE_RADIUS*3 + MONTH_LABEL_PADDING) + 'px')
+              .style('top', (circle_ypos + circle_radius*3 + label_padding) + 'px')
               .transition()
               .duration(250)
               .ease('ease-in')
               .style('opacity', 1);
           })
           .on('mouseout', function () {
-            d3.select(this).transition().duration(250).ease('ease-in').attr('r', CIRCLE_RADIUS);
+            d3.select(this).transition().duration(250).ease('ease-in').attr('r', circle_radius);
             tooltip.transition()
               .duration(250)
               .ease('ease-in')
@@ -135,18 +144,18 @@ angular.module('g1b.calendar-heatmap', []).
               return d.toLocaleDateString('en-us', {month: 'short'});
             })
             .attr('x', function (d, i) {
-              return i * ((CIRCLE_RADIUS * 2 + GUTTER) * 30 / 7) + MONTH_LABEL_PADDING / 3;
+              return i * ((circle_radius * 2 + gutter) * 30 / 7) + label_padding / 3;
             })
-            .attr('y', MONTH_LABEL_PADDING / 2);
+            .attr('y', label_padding / 2);
 
           // Add day labels
           svg.selectAll('label')
-            .data(DAYS)
+            .data(days)
             .enter().append('text')
             .attr('class', 'label')
-            .attr('x', MONTH_LABEL_PADDING / 3)
+            .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return i * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
+              return i * (circle_radius * 2 + gutter) + label_padding;
             })
             .style('text-anchor', 'middle')
             .attr('font-size', function () {
