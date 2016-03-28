@@ -29,6 +29,8 @@
 }
 .calendar-heatmap .tooltip > ul > li > strong {
   width: 75px;
+  line-height: 10px;
+  padding-right: 10px;
   display: inline-block;
   overflow: hidden;
   white-space: nowrap;
