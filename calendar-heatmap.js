@@ -70,8 +70,11 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d.date).weekday() * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
             });
 
+          // Animate circles on show
           dayCircles.transition()
-            .delay(function(d, i) { return i * 5; })
+            .delay(function(d, i) {
+              return Math.cos( Math.PI * Math.random() ) * 1000;
+            })
             .duration(500)
             .ease('ease-in')
             .attr('opacity', 1);
