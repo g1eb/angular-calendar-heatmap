@@ -36,15 +36,15 @@ var data = {[
   "total": 17164,
   "details": [{
     "name": "Project 1",
-    values: 9192
+    "value": 9192
   }, {
     "name": "Project 2",
-    "values": 6753
+    "value": 6753
   },
   .....
   {
-    "name": "Project X",
-    "values": 1219
+    "name": "Project N",
+    "value": 1219
   }]
 ]}
 ```
