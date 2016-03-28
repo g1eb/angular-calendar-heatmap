@@ -42,9 +42,11 @@ angular.module('g1b.calendar-heatmap', []).
 
         scope.$watch('data', scope.drawChart);
 
-        scope.drawChart = function (data) {
-          var firstDate = moment(data[0].date);
-          var max = d3.max(data, function (d) {
+        scope.drawChart = function () {
+          if ( !scope.data ) { return; }
+
+          var firstDate = moment(scope.data[0].date);
+          var max = d3.max(scope.data, function (d) {
             return d.total;
           });
 
@@ -59,7 +61,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('width', tooltip_width);
 
           var dayCircles = svg.selectAll('.cell')
-            .data(data);
+            .data(scope.data);
 
           dayCircles.enter().append('circle')
             .attr('class', 'circle')
