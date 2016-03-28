@@ -20,15 +20,16 @@
   color: #333333;
   background: rgba(255, 255, 255, 0.75);
   text-align: left;
-  width: 200px;
+  width: 250px;
   pointer-events: none;
 }
 .calendar-heatmap .tooltip > ul {
   padding: 0;
+  margin-bottom: 0;
   list-style-type: none;
 }
 .calendar-heatmap .tooltip > ul > li > strong {
-  width: 75px;
+  width: 125px;
   line-height: 10px;
   padding-right: 10px;
   display: inline-block;

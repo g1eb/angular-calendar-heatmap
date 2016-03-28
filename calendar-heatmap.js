@@ -8,7 +8,7 @@ angular.module('g1b.calendar-heatmap', []).
     var DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     var GUTTER = 3;
     var CIRCLE_RADIUS = 10;
-    var TOOLTIP_WIDTH = 200;
+    var TOOLTIP_WIDTH = 250;
     var MONTH_LABEL_PADDING = 40;
 
     return {
