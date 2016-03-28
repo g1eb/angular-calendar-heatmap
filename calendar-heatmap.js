@@ -26,6 +26,8 @@ angular.module('g1b.calendar-heatmap', []).
           .append('svg')
           .attr('class', 'svg');
 
+        var labels = svg.append('g');
+
         scope.$watch(function () {
           return element[0].clientWidth;
         }, function ( width ) {
@@ -135,10 +137,11 @@ angular.module('g1b.calendar-heatmap', []).
           // Add month labels
           var now = moment().endOf('day').toDate();
           var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-          svg.selectAll('label')
+          labels.selectAll('.label-month')
             .data(d3.time.months(moment(yearAgo).startOf('month').toDate(), now))
-            .enter().append('text')
-            .attr('class', 'label')
+            .enter()
+            .append('text')
+            .attr('class', 'label label-month')
             .attr('font-size', function () {
               return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
             })
@@ -151,10 +154,11 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', label_padding / 2);
 
           // Add day labels
-          svg.selectAll('label')
+          labels.selectAll('.label-day')
             .data(days)
-            .enter().append('text')
-            .attr('class', 'label')
+            .enter()
+            .append('text')
+            .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
               return i * (circle_radius * 2 + gutter) + label_padding;
