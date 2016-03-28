@@ -146,10 +146,18 @@ angular.module('g1b.calendar-heatmap', []).
                   .text(scope.formatTime(d.details[i].value));
               }
 
+              var width = parseInt(svg.attr('width'));
+              var height = parseInt(svg.attr('height'));
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
               var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              while ( width - x < 300 ) {
+                x -= 10;
+              }
               var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              while ( height - y < (90 + d.details.length * 15 ) ) {
+                y -= 10;
+              }
               tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
               tooltip.transition()
                 .duration(250)
