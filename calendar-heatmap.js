@@ -16,9 +16,11 @@ angular.module('g1b.calendar-heatmap', []).
       template: '<div class="calendar-heatmap"></div>',
       link: function (scope, element) {
 
+        // Defaults
         var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
         var gutter = 5;
         var width = 1000;
+        var height = 200;
         var circle_radius = 10;
         var label_padding = 40;
         var tooltip_width = 250;
@@ -43,10 +45,8 @@ angular.module('g1b.calendar-heatmap', []).
           width = w < 1000 ? 1000 : w;
           circle_radius = Math.round((width / moment().weeksInYear() - gutter * 2) / 2);
           label_padding = circle_radius * 4;
-          svg.attr('width', width)
-            .attr('height', function () {
-              return (label_padding + 7 * (circle_radius * 2 + gutter));
-            });
+          height = label_padding + 7 * (circle_radius * 2 + gutter);
+          svg.attr({'width': width, 'height': height});
           scope.drawChart();
         });
 
@@ -147,7 +147,6 @@ angular.module('g1b.calendar-heatmap', []).
                   .text(scope.formatTime(d.details[i].value));
               }
 
-              var height = parseInt(svg.attr('height'));
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
               var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
