@@ -9,7 +9,7 @@ A [d3.js](https://d3js.org/) heatmap representing time series data.
 
 Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 
-[![Angular directive for d3.js calendar heatmap chart](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
+[![Angular directive for d3.js calendar heatmap chart](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
 
 ## Demo
 
