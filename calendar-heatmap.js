@@ -9,7 +9,7 @@ angular.module('g1b.calendar-heatmap', []).
     var GUTTER = 3;
     var CIRCLE_RADIUS = 10;
     var TOOLTIP_WIDTH = 200;
-    var MONTH_LABEL_PADDING = 20;
+    var MONTH_LABEL_PADDING = 40;
 
     return {
       restrict: 'E',
@@ -40,7 +40,7 @@ angular.module('g1b.calendar-heatmap', []).
           var svg = d3.select(element[0])
             .append('svg')
             .attr('preserveAspectRatio', 'xMinYMin meet')
-            .attr('viewBox', '0 0 1280 175')
+            .attr('viewBox', '0 0 1280 200')
             .attr('class', 'svg');
 
           var tooltip = d3.select(element[0])
@@ -67,7 +67,7 @@ angular.module('g1b.calendar-heatmap', []).
               return result * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
             })
             .attr('cy', function (d) {
-              return d.date.getDay() * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
+              return moment(d.date).weekday() * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
             });
 
           dayCircles.transition()
@@ -121,7 +121,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add month labels
           var now = moment().endOf('day').toDate();
           var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-          svg.selectAll('.month')
+          svg.selectAll('label')
             .data(d3.time.months(moment(yearAgo).startOf('month').toDate(), now))
             .enter().append('text')
             .attr('class', 'label')
@@ -129,20 +129,21 @@ angular.module('g1b.calendar-heatmap', []).
               return d.toLocaleDateString('en-us', {month: 'short'});
             })
             .attr('x', function (d, i) {
-              return i * ((CIRCLE_RADIUS * 2 + GUTTER) * 30 / 7);
+              return i * ((CIRCLE_RADIUS * 2 + GUTTER) * 30 / 7) + MONTH_LABEL_PADDING / 3;
             })
-            .attr('y', 0);  // fix these to the top
+            .attr('y', MONTH_LABEL_PADDING / 2);
 
           // Add day labels
           svg.selectAll('label')
             .data(DAYS)
             .enter().append('text')
             .attr('class', 'label')
-            .attr('x', 15)
+            .attr('x', MONTH_LABEL_PADDING / 3)
             .attr('y', function (d, i) {
-              return (CIRCLE_RADIUS * 2 + GUTTER) * (i+1);
+              return i * (CIRCLE_RADIUS * 2 + GUTTER) + MONTH_LABEL_PADDING;
             })
             .style('text-anchor', 'middle')
+            .attr('dy', '3')
             .text(function (d) {
               return d;
             });
