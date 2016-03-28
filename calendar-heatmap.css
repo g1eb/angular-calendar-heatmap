@@ -11,7 +11,10 @@
   fill: rgb(170, 170, 170);
   font-family: Helvetica, arial, 'Open Sans', sans-serif;
 }
-.calendar-heatmap .tooltip .tooltip-background{
+.calendar-heatmap .tooltip {
+  pointer-events: none;
+}
+.calendar-heatmap .tooltip .tooltip-background {
   fill: rgba(255, 255, 255, 0.75);
 }
 .calendar-heatmap .tooltip text {
