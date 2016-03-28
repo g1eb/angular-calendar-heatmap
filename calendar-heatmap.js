@@ -152,7 +152,9 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('font-size', function () {
               return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
             })
-            .attr('dy', '3')
+            .attr('dy', function () {
+              return Math.floor(parseInt(svg.attr('width')) / 100) / 3;
+            })
             .text(function (d) {
               return d;
             });
