@@ -134,14 +134,18 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', 0);  // fix these to the top
 
           // Add day labels
-          DAYS.forEach(function (day, index) {
-            svg.append('text')
-              .attr('class', 'label')
-              .attr('transform', 'translate(-8,' + (CIRCLE_RADIUS * 2 + GUTTER) * (index + 1) + ')')
-              .style('text-anchor', 'middle')
-              .attr('dy', '2')
-              .text(day);
-          });
+          svg.selectAll('label')
+            .data(DAYS)
+            .enter().append('text')
+            .attr('class', 'label')
+            .attr('x', 15)
+            .attr('y', function (d, i) {
+              return (CIRCLE_RADIUS * 2 + GUTTER) * (i+1);
+            })
+            .style('text-anchor', 'middle')
+            .text(function (d) {
+              return d;
+            });
         };
 
         /**
