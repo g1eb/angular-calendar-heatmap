@@ -18,6 +18,7 @@ angular.module('g1b.calendar-heatmap', []).
 
         var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
         var gutter = 5;
+        var width = 1000;
         var circle_radius = 10;
         var label_padding = 40;
         var tooltip_width = 250;
@@ -37,9 +38,9 @@ angular.module('g1b.calendar-heatmap', []).
 
         scope.$watch(function () {
           return element[0].clientWidth;
-        }, function ( width ) {
-          if ( !width ) { return; }
-          width = width < 1000 ? 1000 : width;
+        }, function ( w ) {
+          if ( !w ) { return; }
+          width = w < 1000 ? 1000 : w;
           circle_radius = Math.round((width / moment().weeksInYear() - gutter * 2) / 2);
           label_padding = circle_radius * 4;
           svg.attr('width', width)
@@ -146,7 +147,6 @@ angular.module('g1b.calendar-heatmap', []).
                   .text(scope.formatTime(d.details[i].value));
               }
 
-              var width = parseInt(svg.attr('width'));
               var height = parseInt(svg.attr('height'));
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
@@ -194,7 +194,7 @@ angular.module('g1b.calendar-heatmap', []).
             .append('text')
             .attr('class', 'label label-month')
             .attr('font-size', function () {
-              return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
+              return Math.floor(width / 100) + 'px';
             })
             .text(function (d) {
               return d.toLocaleDateString('en-us', {month: 'short'});
@@ -216,10 +216,10 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .style('text-anchor', 'middle')
             .attr('font-size', function () {
-              return Math.floor(parseInt(svg.attr('width')) / 100) + 'px';
+              return Math.floor(width / 100) + 'px';
             })
             .attr('dy', function () {
-              return Math.floor(parseInt(svg.attr('width')) / 100) / 3;
+              return Math.floor(width / 100) / 3;
             })
             .text(function (d) {
               return d;
