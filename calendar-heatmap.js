@@ -27,6 +27,7 @@ angular.module('g1b.calendar-heatmap', []).
           .attr('class', 'svg');
 
         var labels = svg.append('g');
+        var circles = svg.selectAll('circle')
 
         scope.$watch(function () {
           return element[0].clientWidth;
@@ -62,10 +63,9 @@ angular.module('g1b.calendar-heatmap', []).
             .style('opacity', 0)
             .attr('width', tooltip_width);
 
-          var dayCircles = svg.selectAll('.cell')
-            .data(scope.data);
-
-          dayCircles.enter().append('circle')
+          circles.data(scope.data)
+            .enter()
+            .append('circle')
             .attr('class', 'circle')
             .attr('opacity', 0)
             .attr('r', function (d) {
@@ -81,22 +81,20 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('cy', function (d) {
               return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
-            });
-
-          // Animate circles on show
-          dayCircles.transition()
-            .delay(function(d, i) {
-              return Math.cos( Math.PI * Math.random() ) * 1000;
             })
-            .duration(500)
-            .ease('ease-in')
-            .attr('opacity', 1);
+            .transition()
+              .delay( function () {
+                return Math.cos( Math.PI * Math.random() ) * 1000;
+              })
+              .duration(500)
+              .ease('ease-in')
+              .attr('opacity', 1);
 
-          dayCircles.on('click', function (d) {
+          circles.on('click', function (d) {
             if ( scope.handler ) { scope.handler(d); }
           });
 
-          dayCircles.on('mouseover', function (d) {
+          circles.on('mouseover', function (d) {
             var circle = d3.select(this);
             var circle_xpos = parseInt(circle.attr('cx'));
             var circle_ypos = parseInt(circle.attr('cy'));
@@ -131,8 +129,6 @@ angular.module('g1b.calendar-heatmap', []).
               .ease('ease-in')
               .style('opacity', 0);
           });
-
-          dayCircles.exit().remove();
 
           // Add month labels
           var now = moment().endOf('day').toDate();
