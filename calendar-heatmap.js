@@ -27,7 +27,13 @@ angular.module('g1b.calendar-heatmap', []).
           .attr('class', 'svg');
 
         var labels = svg.append('g');
-        var circles = svg.selectAll('circle')
+        var circles = svg.append('g');
+
+        var tooltip = svg.append('g')
+          .attr('opacity', 0)
+          .attr('x', -500)
+          .attr('y', -500)
+          .attr('class', 'tooltip');
 
         scope.$watch(function () {
           return element[0].clientWidth;
@@ -57,13 +63,9 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([0, max]);
 
-          var tooltip = d3.select(element[0])
-            .append('div')
-            .attr('class', 'tooltip')
-            .style('opacity', 0)
-            .attr('width', tooltip_width);
-
-          circles.data(scope.data)
+          circles.selectAll('circle').remove();
+          circles.selectAll('circle')
+            .data(scope.data)
             .enter()
             .append('circle')
             .attr('class', 'circle')
@@ -82,6 +84,91 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('cy', function (d) {
               return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             })
+            .on('click', function (d) {
+              if ( scope.handler ) { scope.handler(d); }
+            })
+            .on('mouseover', function (d) {
+              // Pulsating animation
+              var circle = d3.select(this);
+              (function repeat() {
+                circle = circle.transition()
+                  .duration(500)
+                  .ease('ease-in')
+                  .attr('r', circle_radius+1)
+                  .transition()
+                  .duration(500)
+                  .ease('ease-in')
+                  .attr('r', circle_radius)
+                  .each('end', repeat);
+              })();
+
+              // Construct tooltip
+              tooltip.selectAll('text').remove();
+              tooltip.selectAll('rect').remove();
+              tooltip.insert('rect')
+                .attr('class', 'tooltip-background')
+                .attr('width', 250)
+                .attr('height', 60 + 15 * d.details.length);
+              tooltip.append('text')
+                .attr('class', 'tooltip-title')
+                .attr('font-weight', 900)
+                .attr('x', 15)
+                .attr('y', 20)
+                .text((d.total ? scope.formatTime(d.total) : 'No time') + ' tracked');
+              tooltip.append('text')
+                .attr('class', 'tooltip-date')
+                .attr('x', 15)
+                .attr('y', 35)
+                .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
+
+              // Add details to the tooltip
+              for ( var i = 0; i < d.details.length; i++ ) {
+                tooltip.append('text')
+                  .attr('class', 'tooltip-detail-name')
+                  .attr('font-weight', 900)
+                  .attr('x', 15)
+                  .attr('y', 60 + i * 15)
+                  .text(d.details[i].name)
+                  .each(function () {
+                    var self = d3.select(this),
+                      textLength = self.node().getComputedTextLength(),
+                      text = self.text();
+                    while (textLength > (125 - 2 * 10) && text.length > 0) {
+                      text = text.slice(0, -1);
+                      self.text(text + '...');
+                      textLength = self.node().getComputedTextLength();
+                    }
+                  });
+                tooltip.append('text')
+                  .attr('class', 'tooltip-detail-value')
+                  .attr('x', 130)
+                  .attr('y', 60 + i * 15)
+                  .text(scope.formatTime(d.details[i].value));
+              }
+
+              var cellDate = moment(d.date);
+              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
+              var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
+              tooltip.transition()
+                .duration(250)
+                .ease('ease-in')
+                .attr('opacity', 1);
+            })
+            .on('mouseout', function () {
+              // Set circle radius back to what it's supposed to be
+              d3.select(this).transition()
+                .duration(250)
+                .ease('ease-in')
+                .attr('r', circle_radius);
+
+              // Hide tooltip
+              tooltip.transition()
+                .duration(250)
+                .ease('ease-in')
+                .attr('opacity', 0);
+            })
             .transition()
               .delay( function () {
                 return Math.cos( Math.PI * Math.random() ) * 1000;
@@ -89,46 +176,6 @@ angular.module('g1b.calendar-heatmap', []).
               .duration(500)
               .ease('ease-in')
               .attr('opacity', 1);
-
-          circles.on('click', function (d) {
-            if ( scope.handler ) { scope.handler(d); }
-          });
-
-          circles.on('mouseover', function (d) {
-            var circle = d3.select(this);
-            var circle_xpos = parseInt(circle.attr('cx'));
-            var circle_ypos = parseInt(circle.attr('cy'));
-            (function repeat() {
-              circle = circle.transition()
-                .duration(500)
-                .ease('ease-in')
-                .attr('r', circle_radius+1)
-                .transition()
-                .duration(500)
-                .ease('ease-in')
-                .attr('r', circle_radius)
-                .each('end', repeat);
-            })();
-            tooltip.html(scope.tooltipHTMLForDate(d))
-              .style('left', function () {
-                if ( (parseInt(svg.attr('width')) - circle_xpos ) < tooltip_width ) {
-                  return (circle_xpos - tooltip_width) + 'px';
-                }
-                return (circle_xpos + tooltip_width/2) + 'px';
-              })
-              .style('top', (circle_ypos + circle_radius*3 + label_padding) + 'px')
-              .transition()
-              .duration(250)
-              .ease('ease-in')
-              .style('opacity', 1);
-          })
-          .on('mouseout', function () {
-            d3.select(this).transition().duration(250).ease('ease-in').attr('r', circle_radius);
-            tooltip.transition()
-              .duration(250)
-              .ease('ease-in')
-              .style('opacity', 0);
-          });
 
           // Add month labels
           var now = moment().endOf('day').toDate();
@@ -169,23 +216,6 @@ angular.module('g1b.calendar-heatmap', []).
             .text(function (d) {
               return d;
             });
-        };
-
-        /**
-         * Helper function to build html for the tooltip
-         * @param d Object
-         */
-        scope.tooltipHTMLForDate = function (d) {
-          var dateStr = moment(d.date).format('dddd, MMM Do YYYY');
-          var html = '<span><strong>' + (d.total ? scope.formatTime(d.total) : 'No time') + ' tracked' + '</strong><br/> on ' + dateStr + '</span>';
-          if ( d.details.length > 0 ) {
-            html += '<ul>';
-            for ( var i = 0; i < d.details.length; i++ ) {
-              html += '<li><strong>' + d.details[i].name + '</strong>' + scope.formatTime(d.details[i].value) + '</li>';
-            }
-            html += '</ul>';
-          }
-          return html;
         };
 
         /**
