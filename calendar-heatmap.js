@@ -5,7 +5,7 @@
 angular.module('g1b.calendar-heatmap', []).
     directive('calendarHeatmap', function () {
 
-    var DAYS = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    var DAYS = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
     var GUTTER = 3;
     var CIRCLE_RADIUS = 10;
     var TOOLTIP_WIDTH = 200;
