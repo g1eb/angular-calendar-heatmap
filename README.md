@@ -1,11 +1,9 @@
 # Angular directive for D3.js Calendar Heatmap
 
-This circular time series heatmap is used to visualise tracked time over the past year, showing details for each of the days on demand.
-Converted into an angular directive for your convenience.
+This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
+Converted into an angular directive for your convenience :)
 
 Inspired by Github's contribution chart.
-
-A [d3.js](https://d3js.org/) heatmap representing time series data. 
 
 Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)
 
@@ -33,7 +31,7 @@ angular.module('myApp', [
 ])
 ```
 
-3) Use 'calendar-heatmap' directive in your view
+3) Use 'calendar-heatmap' directive in a view
 
 ```html
 <calendar-heatmap data="exampleData" color="'#ff0000'" handler="print"></calendar-heatmap>
@@ -44,7 +42,7 @@ angular.module('myApp', [
 |Property        | Usage           | Default  | Required |
 |:------------- |:-------------|:-----:|:-----:|
 | data | Time series data | none | yes |
-| color | Theme color | #45ff00 | no |
+| color | Theme hex color | #45ff00 | no |
 | handler | Handler function is fired on click | none | no |
 
 ### Example data
@@ -72,4 +70,4 @@ var data = [{
 }]
 ```
 
-See example.html for an example implementation with random data, click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
+See [example.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/example.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
