@@ -54,7 +54,11 @@ angular.module('g1b.calendar-heatmap', []).
           scope.drawChart();
         });
 
-        scope.$watch('data', scope.drawChart);
+        // Watch for data availability
+        scope.$watch('data', function (data) {
+          if ( !data ) { return; }
+          scope.drawChart();
+        });
 
         scope.drawChart = function () {
           if ( !scope.data ) { return; }
