@@ -71,3 +71,9 @@ var data = [{
 ```
 
 See [example.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/example.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
+
+## Dependencies
+
+* [d3.js](https://d3js.org/)
+* [moment.js](http://momentjs.com/)
+* [AngularJS](https://angularjs.org/)
