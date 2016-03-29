@@ -38,9 +38,7 @@ angular.module('g1b.calendar-heatmap', []).
 
         var tooltip = svg.append('g')
           .attr('opacity', 0)
-          .attr('x', -500)
-          .attr('y', -500)
-          .attr('class', 'tooltip');
+          .attr('class', 'heatmap-tooltip');
 
         scope.$watch(function () {
           return element[0].clientWidth;
@@ -116,17 +114,15 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip.selectAll('text').remove();
               tooltip.selectAll('rect').remove();
               tooltip.insert('rect')
-                .attr('class', 'tooltip-background')
+                .attr('class', 'heatmap-tooltip-background')
                 .attr('width', tooltip_width)
                 .attr('height', tooltip_height);
               tooltip.append('text')
-                .attr('class', 'tooltip-title')
                 .attr('font-weight', 900)
                 .attr('x', tooltip_padding)
                 .attr('y', tooltip_padding * 1.5)
                 .text((d.total ? scope.formatTime(d.total) : 'No time') + ' tracked');
               tooltip.append('text')
-                .attr('class', 'tooltip-date')
                 .attr('x', tooltip_padding)
                 .attr('y', tooltip_padding * 2.5)
                 .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
@@ -134,7 +130,6 @@ angular.module('g1b.calendar-heatmap', []).
               // Add details to the tooltip
               angular.forEach(d.details, function (d, i) {
                 tooltip.append('text')
-                  .attr('class', 'tooltip-detail-name')
                   .attr('font-weight', 900)
                   .attr('x', tooltip_padding)
                   .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
@@ -150,7 +145,6 @@ angular.module('g1b.calendar-heatmap', []).
                     }
                   });
                 tooltip.append('text')
-                  .attr('class', 'tooltip-detail-value')
                   .attr('x', tooltip_width / 2 + tooltip_padding / 2)
                   .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
                   .text(scope.formatTime(d.value));
