@@ -78,6 +78,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'circle')
             .attr('opacity', 0)
             .attr('r', function (d) {
+              if ( max <= 0 ) { return circle_radius; }
               return circle_radius * 0.75 + (circle_radius * d.total / max) * 0.25;
             })
             .attr('fill', function (d) {
