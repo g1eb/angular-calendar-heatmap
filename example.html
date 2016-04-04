@@ -21,14 +21,19 @@
         $scope.exampleData = d3.time.days(yearAgo, now).map(function (dateElement) {
           return {
             date: dateElement,
-            total: Math.floor(Math.random() * 3600 * 8),
             details: Array.apply(null, new Array(Math.floor(Math.random() * 15))).map(function(e, i, arr) {
               return {
                 'name': 'Project ' + (i+1),
                 'value': 3600 * (arr.length - i-1) + Math.floor(Math.random() * 3600)
               }
-            })
-          };
+            }),
+            init: function () {
+              this.total = this.details.reduce(function (prev, e) {
+                return e.value + prev;
+              }, 0);
+              return this;
+            }
+          }.init();
         });
         $scope.print = function (val) {
           console.log(val);
