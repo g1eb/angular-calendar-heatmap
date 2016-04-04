@@ -22,22 +22,12 @@
           return {
             date: dateElement,
             total: Math.floor(Math.random() * 3600 * 8),
-            details: [{
-              'name': 'Project 1',
-              'value': 3600 * 5 + Math.floor(Math.random() * 3600)
-            }, {
-              'name': 'Project 2',
-              'value': 3600 * 4 + Math.floor(Math.random() * 3600)
-            }, {
-              'name': 'Project 3',
-              'value': 3600 * 3 + Math.floor(Math.random() * 3600)
-            }, {
-              'name': 'Project 4',
-              'value': 3600 * 2 + Math.floor(Math.random() * 3600)
-            }, {
-              'name': 'Project 5',
-              'value': 3600 * 1 + Math.floor(Math.random() * 3600)
-            }]
+            details: Array.apply(null, new Array(Math.floor(Math.random() * 15))).map(function(e, i, arr) {
+              return {
+                'name': 'Project ' + (i+1),
+                'value': 3600 * (arr.length - i-1) + Math.floor(Math.random() * 3600)
+              }
+            })
           };
         });
         $scope.print = function (val) {
