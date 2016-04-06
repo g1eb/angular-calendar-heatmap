@@ -154,11 +154,11 @@ angular.module('g1b.calendar-heatmap', []).
               var cellDate = moment(d.date);
               var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
               var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-              while ( width - x < tooltip_width + tooltip_padding * 3 ) {
+              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
               var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-              while ( height - y < (d.details.length * tooltip_line_height + tooltip_padding * 6) ) {
+              while ( height - y < tooltip_height && y > label_padding/2 ) {
                 y -= 10;
               }
               tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
