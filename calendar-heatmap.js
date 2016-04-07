@@ -45,7 +45,7 @@ angular.module('g1b.calendar-heatmap', []).
         }, function ( w ) {
           if ( !w ) { return; }
           width = w < 1000 ? 1000 : w;
-          circle_radius = Math.round((width / moment().weeksInYear() - gutter * 2) / 2);
+          circle_radius = (((width - label_padding - gutter) / moment().weeksInYear() ) - gutter ) / 2;
           label_padding = circle_radius * 4;
           height = label_padding + 7 * (circle_radius * 2 + gutter);
           svg.attr({'width': width, 'height': height});
