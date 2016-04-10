@@ -3,7 +3,7 @@
 /* globals d3 */
 
 angular.module('g1b.calendar-heatmap', []).
-    directive('calendarHeatmap', function () {
+    directive('calendarHeatmap', ['$window', function ($window) {
 
     return {
       restrict: 'E',
@@ -50,6 +50,10 @@ angular.module('g1b.calendar-heatmap', []).
           height = label_padding + 7 * (circle_radius * 2 + gutter);
           svg.attr({'width': width, 'height': height});
           scope.drawChart();
+        });
+
+        angular.element($window).bind('resize', function () {
+          scope.$apply();
         });
 
         // Watch for data availability
@@ -251,4 +255,4 @@ angular.module('g1b.calendar-heatmap', []).
         };
       }
     };
-});
+}]);
