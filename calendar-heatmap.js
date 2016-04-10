@@ -202,7 +202,7 @@ angular.module('g1b.calendar-heatmap', []).
             .append('text')
             .attr('class', 'label label-month')
             .attr('font-size', function () {
-              return Math.floor(width / 100) + 'px';
+              return Math.floor(label_padding / 3) + 'px';
             })
             .text(function (d) {
               return d.toLocaleDateString('en-us', {month: 'short'});
@@ -225,7 +225,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .style('text-anchor', 'middle')
             .attr('font-size', function () {
-              return Math.floor(width / 100) + 'px';
+              return Math.floor(label_padding / 3) + 'px';
             })
             .attr('dy', function () {
               return Math.floor(width / 100) / 3;
