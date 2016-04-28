@@ -17,7 +17,6 @@ angular.module('g1b.calendar-heatmap', []).
       link: function (scope, element) {
 
         // Defaults
-        var days = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
         var gutter = 5;
         var width = 1000;
         var height = 200;
@@ -213,6 +212,10 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', label_padding / 2);
 
           // Add day labels
+          var days = [];
+          for (var i = 0; i < 7; i++ ) {
+            days.push(moment().startOf('week').add('days', i).format('dddd')[0]);
+          }
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
             .data(days)
