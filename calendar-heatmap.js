@@ -196,7 +196,7 @@ angular.module('g1b.calendar-heatmap', []).
           var todayYearAgo = moment().startOf('day').subtract(1, 'year');
           var monthLabels = d3.time.months(todayYearAgo.startOf('month'), today);
           var monthAxis = d3.scale.linear()
-            .range([0, width])
+            .range([label_padding, width])
             .domain([0, monthLabels.length]);
           labels.selectAll('.label-month').remove();
           labels.selectAll('.label-month')
@@ -211,7 +211,7 @@ angular.module('g1b.calendar-heatmap', []).
               return d.toLocaleDateString('en-us', {month: 'short'});
             })
             .attr('x', function (d, i) {
-              return monthAxis(i) + label_padding;
+              return monthAxis(i);
             })
             .attr('y', label_padding / 2);
 
