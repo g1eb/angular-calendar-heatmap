@@ -213,7 +213,24 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('x', function (d, i) {
               return monthAxis(i);
             })
-            .attr('y', label_padding / 2);
+            .attr('y', label_padding / 2)
+            .on('mouseenter', function (d) {
+              var selectedMonth = moment(d);
+              circles.selectAll('circle')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', function (d) {
+                  return moment(d.date).isSame(selectedMonth, 'month') ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              circles.selectAll('circle')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', 1);
+            });
 
           // Add day labels
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
