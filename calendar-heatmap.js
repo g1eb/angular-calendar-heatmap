@@ -256,6 +256,23 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .text(function (d) {
               return moment(d).format('dddd')[0];
+            })
+            .on('mouseenter', function (d) {
+              var selectedDay = moment(d);
+              circles.selectAll('circle')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', function (d) {
+                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              circles.selectAll('circle')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', 1);
             });
         };
 
