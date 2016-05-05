@@ -192,11 +192,11 @@ angular.module('g1b.calendar-heatmap', []).
               .attr('opacity', 1);
 
           // Add month labels
-          var now = moment().endOf('day').toDate();
-          var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
+          var today = moment().endOf('day');
+          var todayYearAgo = moment().startOf('day').subtract(1, 'year');
           labels.selectAll('.label-month').remove();
           labels.selectAll('.label-month')
-            .data(d3.time.months(moment(yearAgo).startOf('month').toDate(), now))
+            .data(d3.time.months(todayYearAgo.startOf('month'), today))
             .enter()
             .append('text')
             .attr('class', 'label label-month')
