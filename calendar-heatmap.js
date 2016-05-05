@@ -216,13 +216,10 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', label_padding / 2);
 
           // Add day labels
-          var days = [];
-          for (var i = 0; i < 7; i++ ) {
-            days.push(moment().startOf('week').add('days', i).format('dddd')[0]);
-          }
+          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
-            .data(days)
+            .data(dayLabels)
             .enter()
             .append('text')
             .attr('class', 'label label-day')
@@ -238,7 +235,7 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.floor(width / 100) / 3;
             })
             .text(function (d) {
-              return d;
+              return moment(d).format('dddd')[0];
             });
         };
 
