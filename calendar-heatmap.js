@@ -217,6 +217,9 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Add day labels
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var dayAxis = d3.scale.linear()
+            .range([label_padding, height])
+            .domain([0, dayLabels.length]);
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
             .data(dayLabels)
@@ -225,7 +228,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return i * (circle_radius * 2 + gutter) + label_padding;
+              return dayAxis(i);
             })
             .style('text-anchor', 'middle')
             .attr('font-size', function () {
