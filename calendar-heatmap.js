@@ -114,7 +114,7 @@ angular.module('g1b.calendar-heatmap', []).
               })();
 
               // Construct tooltip
-              var tooltip_height = 60 + tooltip_line_height * d.details.length;
+              var tooltip_height = tooltip_padding * 4 + tooltip_line_height * d.details.length;
               tooltip.selectAll('text').remove();
               tooltip.selectAll('rect').remove();
               tooltip.insert('rect')
