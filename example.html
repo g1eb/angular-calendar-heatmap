@@ -34,6 +34,22 @@
               }
             }),
             init: function () {
+              var summary = this.details.reduce( function(previousValue, currentValue, currentIndex, array) {
+                if ( !previousValue[currentValue.name] ) {
+                  previousValue[currentValue.name] = {
+                    'value': currentValue.value
+                  };
+                } else {
+                  previousValue[currentValue.name].value += currentValue.value;
+                }
+                return previousValue;
+              }, {});
+              this.summary = Object.keys(summary).map(function (key) {
+                return {
+                  'name': key,
+                  'value': summary[key].value
+                }
+              });
               this.total = this.details.reduce(function (prev, e) {
                 return e.value + prev;
               }, 0);
