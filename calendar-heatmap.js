@@ -114,7 +114,7 @@ angular.module('g1b.calendar-heatmap', []).
               })();
 
               // Construct tooltip
-              var tooltip_height = tooltip_padding * 4 + tooltip_line_height * d.details.length;
+              var tooltip_height = tooltip_padding * 4 + tooltip_line_height * d.summary.length;
               tooltip.selectAll('text').remove();
               tooltip.selectAll('rect').remove();
               tooltip.insert('rect')
@@ -131,8 +131,8 @@ angular.module('g1b.calendar-heatmap', []).
                 .attr('y', tooltip_padding * 2.5)
                 .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
 
-              // Add details to the tooltip
-              angular.forEach(d.details, function (d, i) {
+              // Add summary to the tooltip
+              angular.forEach(d.summary, function (d, i) {
                 tooltip.append('text')
                   .attr('font-weight', 900)
                   .attr('x', tooltip_padding)
