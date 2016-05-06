@@ -34,15 +34,15 @@
               }
             }),
             init: function () {
-              var summary = this.details.reduce( function(previousValue, currentValue, currentIndex, array) {
-                if ( !previousValue[currentValue.name] ) {
-                  previousValue[currentValue.name] = {
-                    'value': currentValue.value
+              var summary = this.details.reduce( function(uniques, project) {
+                if ( !uniques[project.name] ) {
+                  uniques[project.name] = {
+                    'value': project.value
                   };
                 } else {
-                  previousValue[currentValue.name].value += currentValue.value;
+                  uniques[project.name].value += project.value;
                 }
-                return previousValue;
+                return uniques;
               }, {});
               this.summary = Object.keys(summary).map(function (key) {
                 return {
