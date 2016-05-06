@@ -24,6 +24,11 @@
             details: Array.apply(null, new Array(Math.floor(Math.random() * 10))).map(function(e, i, arr) {
               return {
                 'name': 'Project ' + (i+1),
+                'date': function () {
+                  dateElement.setHours(Math.floor(Math.random() * 24));
+                  dateElement.setMinutes(Math.floor(Math.random() * 60));
+                  return dateElement;
+                }(),
                 'value': 3600 * (arr.length - i-1) + Math.floor(Math.random() * 3600)
               }
             }),
