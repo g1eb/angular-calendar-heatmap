@@ -29,7 +29,7 @@
             }),
             init: function () {
               this.total = this.details.reduce(function (prev, e) {
-                return e.value + prev;
+                return prev + e.value;
               }, 0);
               return this;
             }
