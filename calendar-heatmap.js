@@ -62,6 +62,30 @@ angular.module('g1b.calendar-heatmap', []).
         // Watch for data availability
         scope.$watch('data', function (data) {
           if ( !data ) { return; }
+
+          // Get daily summary if that was not provided
+          if ( !data[0].summary ) {
+            for ( var i = 0; i < data.length; i++ ) {
+              var summary = data[i].details.reduce( function(uniques, project) {
+                if ( !uniques[project.name] ) {
+                  uniques[project.name] = {
+                    'value': project.value
+                  };
+                } else {
+                  uniques[project.name].value += project.value;
+                }
+                return uniques;
+              }, {});
+              data[i].summary = Object.keys(summary).map(function (key) {
+                return {
+                  'name': key,
+                  'value': summary[key].value
+                }
+              });
+            }
+          }
+
+          // Draw the chart
           scope.drawChart();
         });
 
