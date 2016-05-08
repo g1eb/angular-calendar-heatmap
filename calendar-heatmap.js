@@ -22,6 +22,7 @@ angular.module('g1b.calendar-heatmap', []).
         var height = 200;
         var circle_radius = 10;
         var label_padding = 40;
+        var transition_duration = 500;
         var selected_date;
 
         // Tooltip defaults
@@ -120,31 +121,31 @@ angular.module('g1b.calendar-heatmap', []).
               // Remove year overview
               items.selectAll('circle')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               tooltip.selectAll('text')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               tooltip.selectAll('rect')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               labels.selectAll('.label-month')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               labels.selectAll('.label-day')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
@@ -152,18 +153,18 @@ angular.module('g1b.calendar-heatmap', []).
               // Redraw the chart
               setTimeout(function () {
                 scope.drawChart();
-              }, 500);
+              }, transition_duration);
             })
             .on('mouseover', function (d) {
               // Pulsating animation
               var circle = d3.select(this);
               (function repeat() {
                 circle = circle.transition()
-                  .duration(500)
+                  .duration(transition_duration)
                   .ease('ease-in')
                   .attr('r', circle_radius+1)
                   .transition()
-                  .duration(500)
+                  .duration(transition_duration)
                   .ease('ease-in')
                   .attr('r', circle_radius)
                   .each('end', repeat);
@@ -222,20 +223,20 @@ angular.module('g1b.calendar-heatmap', []).
               }
               tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
               tooltip.transition()
-                .duration(250)
+                .duration(transition_duration / 2)
                 .ease('ease-in')
                 .style('opacity', 1);
             })
             .on('mouseout', function () {
               // Set circle radius back to what it's supposed to be
               d3.select(this).transition()
-                .duration(250)
+                .duration(transition_duration / 2)
                 .ease('ease-in')
                 .attr('r', circle_radius);
 
               // Hide tooltip
               tooltip.transition()
-                .duration(250)
+                .duration(transition_duration / 2)
                 .ease('ease-in')
                 .style('opacity', 0);
             })
@@ -243,7 +244,7 @@ angular.module('g1b.calendar-heatmap', []).
               .delay( function () {
                 return Math.cos( Math.PI * Math.random() ) * 1000;
               })
-              .duration(500)
+              .duration(transition_duration)
               .ease('ease-in')
               .style('opacity', 1);
 
@@ -275,7 +276,7 @@ angular.module('g1b.calendar-heatmap', []).
               var selectedMonth = moment(d);
               items.selectAll('.item-circle')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
                   return moment(d.date).isSame(selectedMonth, 'month') ? 1 : 0.1;
@@ -284,7 +285,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               items.selectAll('.item-circle')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 1);
             });
@@ -318,7 +319,7 @@ angular.module('g1b.calendar-heatmap', []).
               var selectedDay = moment(d);
               items.selectAll('.item-circle')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
                   return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
@@ -327,7 +328,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               items.selectAll('.item-circle')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 1);
             });
@@ -380,7 +381,7 @@ angular.module('g1b.calendar-heatmap', []).
               .delay( function () {
                 return Math.cos( Math.PI * Math.random() ) * 1000;
               })
-              .duration(500)
+              .duration(transition_duration)
               .ease('ease-in')
               .style('opacity', 0.5);
 
@@ -433,7 +434,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (project) {
               items.selectAll('.item-block')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
                   return (d.name === project) ? 1 : 0.1;
@@ -442,7 +443,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               items.selectAll('.item-block')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 0.5);
             });
@@ -458,7 +459,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Remove daily overview related items and labels
               items.selectAll('.item-block')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 0)
                 .attr('x', function (d, i) {
@@ -467,19 +468,19 @@ angular.module('g1b.calendar-heatmap', []).
                 .remove();
               labels.selectAll('.label-time')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               labels.selectAll('.label-project')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
               buttons.selectAll('.button')
                 .transition()
-                .duration(500)
+                .duration(transition_duration)
                 .ease('ease')
                 .style('opacity', 0)
                 .remove();
@@ -487,7 +488,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Wait for transition to finish and redraw
               setTimeout(function () {
                 scope.drawChart();
-              }, 500);
+              }, transition_duration);
             });
           button.append('circle')
             .attr('cx', label_padding / 1.75)
