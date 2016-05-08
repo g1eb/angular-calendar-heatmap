@@ -61,9 +61,25 @@ angular.module('g1b.calendar-heatmap', []).
           scope.drawChart();
         });
 
+
+        /**
+         * Draw the chart based on the current overview type
+         */
         scope.drawChart = function () {
           if ( !scope.data ) { return; }
 
+          if ( !!selected_date ) {
+            scope.drawDayOverview();
+          } else {
+            scope.drawYearOverview();
+          }
+        };
+
+
+        /**
+         * Draw year overview
+         */
+        scope.drawYearOverview = function () {
           var firstDate = moment(scope.data[0].date);
           var max = d3.max(scope.data, function (d) {
             return d.total;
