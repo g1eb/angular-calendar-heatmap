@@ -118,14 +118,41 @@ angular.module('g1b.calendar-heatmap', []).
               selected_date = d;
 
               // Remove year overview
-              items.selectAll('circle').remove();
-              tooltip.selectAll('text').remove();
-              tooltip.selectAll('rect').remove();
-              labels.selectAll('.label-month').remove();
-              labels.selectAll('.label-day').remove();
+              items.selectAll('circle')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              tooltip.selectAll('text')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              tooltip.selectAll('rect')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              labels.selectAll('.label-month')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              labels.selectAll('.label-day')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
 
               // Redraw the chart
-              scope.drawChart();
+              setTimeout(function () {
+                scope.drawChart();
+              }, 500);
             })
             .on('mouseover', function (d) {
               // Pulsating animation
