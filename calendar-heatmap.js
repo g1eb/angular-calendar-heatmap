@@ -35,28 +35,12 @@ angular.module('g1b.calendar-heatmap', []).
           .attr('class', 'svg');
 
         // Initialize main svg elements
-        var labels = svg.append('g');
         var items = svg.append('g');
+        var labels = svg.append('g');
+        var buttons = svg.append('g');
         var tooltip = svg.append('g')
           .attr('opacity', 0)
           .attr('class', 'heatmap-tooltip');
-        var button = svg.append('g')
-          .attr('opacity', 0)
-          .attr('class', 'button button-back');
-        button.append('circle')
-          .attr('cx', label_padding / 1.5)
-          .attr('cy', label_padding / 2)
-          .attr('r', circle_radius);
-        button.append('text')
-          .attr('x', label_padding / 1.5)
-          .attr('y', label_padding / 2)
-          .attr('dy', function () {
-            return Math.floor(width / 100) / 3;
-          })
-          .attr('font-size', function () {
-            return Math.floor(label_padding / 3) + 'px';
-          })
-          .html('&#x2190;');
 
         scope.$watch(function () {
           return element[0].clientWidth;
@@ -436,20 +420,37 @@ angular.module('g1b.calendar-heatmap', []).
                 .attr('opacity', 0.5);
             });
 
-          // Show the button and set on click method
-          button.attr('opacity', 1)
+          // Add button to switch back to year overview
+          buttons.selectAll('.button').remove();
+          var button = buttons.append('g')
+            .attr('class', 'button button-back')
             .on('click', function (d) {
               // Unset selected date
               selected_date = undefined;
 
-              // Remove year overview
+              // Remove daily overview related items
               items.selectAll('.item-block').remove();
               labels.selectAll('.label-time').remove();
               labels.selectAll('.label-project').remove();
+              buttons.selectAll('.button').remove();
 
               // Redraw the chart
               scope.drawChart();
             });
+          button.append('circle')
+            .attr('cx', label_padding / 1.5)
+            .attr('cy', label_padding / 2)
+            .attr('r', circle_radius);
+          button.append('text')
+            .attr('x', label_padding / 1.5)
+            .attr('y', label_padding / 2)
+            .attr('dy', function () {
+              return Math.floor(width / 100) / 3;
+            })
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .html('&#x2190;');
         };
 
 
