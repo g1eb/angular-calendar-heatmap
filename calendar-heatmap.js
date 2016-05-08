@@ -82,13 +82,12 @@ angular.module('g1b.calendar-heatmap', []).
          */
         scope.drawYearOverview = function () {
           var firstDate = moment(scope.data[0].date);
-          var max = d3.max(scope.data, function (d) {
+          var max_value = d3.max(scope.data, function (d) {
             return d.total;
           });
-
           var color = d3.scale.linear()
             .range(['#ffffff', scope.color || '#ff4500'])
-            .domain([0, max]);
+            .domain([0, max_value]);
 
           items.selectAll('circle').remove();
           items.selectAll('circle')
@@ -98,8 +97,8 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'item item-circle')
             .attr('opacity', 0)
             .attr('r', function (d) {
-              if ( max <= 0 ) { return circle_radius; }
-              return circle_radius * 0.75 + (circle_radius * d.total / max) * 0.25;
+              if ( max_value <= 0 ) { return circle_radius; }
+              return circle_radius * 0.75 + (circle_radius * d.total / max_value) * 0.25;
             })
             .attr('fill', function (d) {
               return color(d.total);
