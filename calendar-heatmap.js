@@ -80,7 +80,7 @@ angular.module('g1b.calendar-heatmap', []).
                 return {
                   'name': key,
                   'value': summary[key].value
-                }
+                };
               });
               data[i].summary = unsorted_summary.sort(function (a, b) {
                 return b.value - a.value;
@@ -373,7 +373,6 @@ angular.module('g1b.calendar-heatmap', []).
             .domain(projectLabels)
             .rangeRoundBands([label_padding, height], 0.1);
 
-          var seconds = d3.time.seconds(moment().startOf('day'), moment().endOf('day'));
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
             .domain([moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day')]);
@@ -393,10 +392,10 @@ angular.module('g1b.calendar-heatmap', []).
               var end = itemScale(d3.time.second.offset(d.date, d.value));
               return end - itemScale(d.date);
             })
-            .attr('height', function (d) {
+            .attr('height', function () {
               return projectScale.rangeBand();
             })
-            .attr('fill', function (d) {
+            .attr('fill', function () {
               return scope.color || '#ff4500';
             })
             .style('opacity', 0)
@@ -502,7 +501,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', function (d) {
               return projectScale(d);
             })
-            .attr('min-height', function (d) {
+            .attr('min-height', function () {
               return projectScale.rangeBand();
             })
             .style('text-anchor', 'left')
@@ -536,7 +535,7 @@ angular.module('g1b.calendar-heatmap', []).
           buttons.selectAll('.button').remove();
           var button = buttons.append('g')
             .attr('class', 'button button-back')
-            .on('click', function (d) {
+            .on('click', function () {
               // Unset selected date
               selected_date = undefined;
 
