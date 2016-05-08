@@ -65,8 +65,8 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Get daily summary if that was not provided
           if ( !data[0].summary ) {
-            for ( var i = 0; i < data.length; i++ ) {
-              var summary = data[i].details.reduce( function(uniques, project) {
+            data.map(function (d) {
+              var summary = d.details.reduce( function(uniques, project) {
                 if ( !uniques[project.name] ) {
                   uniques[project.name] = {
                     'value': project.value
@@ -82,10 +82,11 @@ angular.module('g1b.calendar-heatmap', []).
                   'value': summary[key].value
                 };
               });
-              data[i].summary = unsorted_summary.sort(function (a, b) {
+              d.summary = unsorted_summary.sort(function (a, b) {
                 return b.value - a.value;
               });
-            }
+              return d;
+            });
           }
 
           // Draw the chart
