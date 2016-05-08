@@ -130,7 +130,7 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             })
             .on('click', function (d) {
-              // Set selected day to the one clicked on
+              // Set selected date to the one clicked on
               selected_date = d;
 
               // Remove year overview
