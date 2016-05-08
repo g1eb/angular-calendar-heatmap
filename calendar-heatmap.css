@@ -12,6 +12,17 @@
   fill: rgb(170, 170, 170);
   font-family: Helvetica, arial, 'Open Sans', sans-serif;
 }
+.calendar-heatmap .button {
+  cursor: pointer;
+  fill: transparent;
+  stroke-width: 2;
+  stroke: rgb(170, 170, 170);
+}
+.calendar-heatmap .button text {
+  stroke-width: 1;
+  text-anchor: middle;
+  fill: rgb(170, 170, 170);
+}
 .calendar-heatmap .heatmap-tooltip {
   pointer-events: none;
 }
