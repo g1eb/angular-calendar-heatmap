@@ -304,6 +304,122 @@ angular.module('g1b.calendar-heatmap', []).
             });
         };
 
+
+        /**
+         * Draw day overview
+         */
+        scope.drawDayOverview = function () {
+          var projectLabels = selected_date.summary.map(function (project) {
+            return project.name;
+          });
+          var projectScale = d3.scale.ordinal()
+            .domain(projectLabels)
+            .rangeRoundBands([label_padding, height], 0.1);
+
+          var seconds = d3.time.seconds(moment().startOf('day'), moment().endOf('day'));
+          var itemScale = d3.time.scale()
+            .range([label_padding*2, width])
+            .domain([moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day')]);
+          items.selectAll('block').remove();
+          items.selectAll('block')
+            .data(selected_date.details)
+            .enter()
+            .append('rect')
+            .attr('class', 'item item-block')
+            .attr('x', function (d) {
+              return itemScale(d.date);
+            })
+            .attr('y', function (d) {
+              return projectScale(d.name) -15;
+            })
+            .attr('width', function (d) {
+              return d.value * 100 / (60 * 60 * 24);
+            })
+            .attr('height', function (d) {
+              return projectScale.rangeBand();
+            })
+            .attr('fill', function (d) {
+              return scope.color || '#ff4500';
+            })
+            .attr('opacity', 0)
+            .on('click', function (d) {
+              if ( scope.handler ) {
+                scope.handler(d);
+              }
+            })
+            .transition()
+              .delay( function () {
+                return Math.cos( Math.PI * Math.random() ) * 1000;
+              })
+              .duration(500)
+              .ease('ease-in')
+              .attr('opacity', 0.5);
+
+          // Add time labels
+          var timeLabels = d3.time.hours(moment().startOf('day'), moment().endOf('day'));
+          var timeAxis = d3.time.scale()
+            .range([label_padding*2, width])
+            .domain([0, timeLabels.length]);
+          labels.selectAll('.label-time').remove();
+          labels.selectAll('.label-time')
+            .data(timeLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-time')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .text(function (d) {
+              return moment(d).format('HH:mm');
+            })
+            .attr('x', function (d, i) {
+              return timeAxis(i);
+            })
+            .attr('y', label_padding / 2);
+
+          // Add project labels
+          labels.selectAll('.label-project').remove();
+          labels.selectAll('.label-project')
+            .data(projectLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-project')
+            .attr('x', label_padding / 3)
+            .attr('y', function (d) {
+              return projectScale(d);
+            })
+            .attr('min-height', function (d) {
+              return projectScale.rangeBand();
+            })
+            .style('text-anchor', 'left')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .attr('dy', function () {
+              return Math.floor(width / 100) / 3;
+            })
+            .text(function (d) {
+              return d;
+            })
+            .on('mouseenter', function (project) {
+              items.selectAll('.item-block')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', function (d) {
+                  return (d.name === project) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              items.selectAll('.item-block')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .attr('opacity', 0.5);
+            });
+        };
+
+
         /**
          * Helper function to convert seconds to a human readable format
          * @param seconds Integer
