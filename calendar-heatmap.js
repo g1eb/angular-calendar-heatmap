@@ -39,7 +39,7 @@ angular.module('g1b.calendar-heatmap', []).
         var labels = svg.append('g');
         var buttons = svg.append('g');
         var tooltip = svg.append('g')
-          .attr('opacity', 0)
+          .style('opacity', 0)
           .attr('class', 'heatmap-tooltip');
 
         scope.$watch(function () {
@@ -97,7 +97,7 @@ angular.module('g1b.calendar-heatmap', []).
             .enter()
             .append('circle')
             .attr('class', 'item item-circle')
-            .attr('opacity', 0)
+            .style('opacity', 0)
             .attr('r', function (d) {
               if ( max_value <= 0 ) { return circle_radius; }
               return circle_radius * 0.75 + (circle_radius * d.total / max_value) * 0.25;
@@ -197,7 +197,7 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip.transition()
                 .duration(250)
                 .ease('ease-in')
-                .attr('opacity', 1);
+                .style('opacity', 1);
             })
             .on('mouseout', function () {
               // Set circle radius back to what it's supposed to be
@@ -210,7 +210,7 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip.transition()
                 .duration(250)
                 .ease('ease-in')
-                .attr('opacity', 0);
+                .style('opacity', 0);
             })
             .transition()
               .delay( function () {
@@ -218,7 +218,7 @@ angular.module('g1b.calendar-heatmap', []).
               })
               .duration(500)
               .ease('ease-in')
-              .attr('opacity', 1);
+              .style('opacity', 1);
 
           // Add month labels
           var today = moment().endOf('day');
@@ -250,7 +250,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', function (d) {
+                .style('opacity', function (d) {
                   return moment(d.date).isSame(selectedMonth, 'month') ? 1 : 0.1;
                 });
             })
@@ -259,7 +259,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', 1);
+                .style('opacity', 1);
             });
 
           // Add day labels
@@ -293,7 +293,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', function (d) {
+                .style('opacity', function (d) {
                   return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
                 });
             })
@@ -302,7 +302,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', 1);
+                .style('opacity', 1);
             });
         };
 
@@ -343,7 +343,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('fill', function (d) {
               return scope.color || '#ff4500';
             })
-            .attr('opacity', 0)
+            .style('opacity', 0)
             .on('click', function (d) {
               if ( scope.handler ) {
                 scope.handler(d);
@@ -355,7 +355,7 @@ angular.module('g1b.calendar-heatmap', []).
               })
               .duration(500)
               .ease('ease-in')
-              .attr('opacity', 0.5);
+              .style('opacity', 0.5);
 
           // Add time labels
           var timeLabels = d3.time.hours(moment().startOf('day'), moment().endOf('day'));
@@ -408,7 +408,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', function (d) {
+                .style('opacity', function (d) {
                   return (d.name === project) ? 1 : 0.1;
                 });
             })
@@ -417,7 +417,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .transition()
                 .duration(500)
                 .ease('ease-in')
-                .attr('opacity', 0.5);
+                .style('opacity', 0.5);
             });
 
           // Add button to switch back to year overview
