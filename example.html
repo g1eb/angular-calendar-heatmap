@@ -34,22 +34,6 @@
               }
             }),
             init: function () {
-              var summary = this.details.reduce( function(uniques, project) {
-                if ( !uniques[project.name] ) {
-                  uniques[project.name] = {
-                    'value': project.value
-                  };
-                } else {
-                  uniques[project.name].value += project.value;
-                }
-                return uniques;
-              }, {});
-              this.summary = Object.keys(summary).map(function (key) {
-                return {
-                  'name': key,
-                  'value': summary[key].value
-                }
-              });
               this.total = this.details.reduce(function (prev, e) {
                 return e.value + prev;
               }, 0);
