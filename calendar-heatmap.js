@@ -330,7 +330,7 @@ angular.module('g1b.calendar-heatmap', []).
               return itemScale(d.date);
             })
             .attr('y', function (d) {
-              return projectScale(d.name) -15;
+              return projectScale(d.name) - 10;
             })
             .attr('width', function (d) {
               return d.value * 100 / (60 * 60 * 24);
