@@ -430,7 +430,7 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip.append('text')
                 .attr('x', tooltip_padding)
                 .attr('y', tooltip_padding * 4)
-                .text('on ' + moment(d.date).format('dddd, MMM Do YYYY HH:MM'));
+                .text('on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm'));
 
               var x = d.value * 100 / (60 * 60 * 24) + itemScale(d.date);
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
