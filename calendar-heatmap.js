@@ -22,6 +22,7 @@ angular.module('g1b.calendar-heatmap', []).
         var height = 200;
         var circle_radius = 10;
         var label_padding = 40;
+        var selected_date;
 
         // Tooltip defaults
         var tooltip_width = 250;
@@ -112,7 +113,18 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             })
             .on('click', function (d) {
-              if ( scope.handler ) { scope.handler(d); }
+              // Set selected day to the one clicked on
+              selected_date = d;
+
+              // Remove year overview
+              items.selectAll('circle').remove();
+              tooltip.selectAll('text').remove();
+              tooltip.selectAll('rect').remove();
+              labels.selectAll('.label-month').remove();
+              labels.selectAll('.label-day').remove();
+
+              // Redraw the chart
+              scope.drawChart();
             })
             .on('mouseover', function (d) {
               // Pulsating animation
