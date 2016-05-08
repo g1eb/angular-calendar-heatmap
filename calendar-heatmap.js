@@ -372,6 +372,62 @@ angular.module('g1b.calendar-heatmap', []).
               return scope.color || '#ff4500';
             })
             .style('opacity', 0)
+            .on('mouseover', function(d) {
+
+              // Construct tooltip
+              var tooltip_height = tooltip_padding * 4 + tooltip_line_height;
+              tooltip.selectAll('text').remove();
+              tooltip.selectAll('rect').remove();
+              tooltip.insert('rect')
+                .attr('class', 'heatmap-tooltip-background')
+                .attr('width', tooltip_width)
+                .attr('height', tooltip_height);
+              tooltip.append('text')
+                .attr('font-weight', 900)
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 1.5)
+                .text(d.name)
+                .each(function () {
+                  var obj = d3.select(this),
+                    textLength = obj.node().getComputedTextLength(),
+                    text = obj.text();
+                  while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
+                    text = text.slice(0, -1);
+                    obj.text(text + '...');
+                    textLength = obj.node().getComputedTextLength();
+                  }
+                });
+              tooltip.append('text')
+                .attr('font-weight', 900)
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 3)
+                .text((d.value ? scope.formatTime(d.value) : 'No time') + ' tracked');
+              tooltip.append('text')
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 4)
+                .text('on ' + moment(d.date).format('dddd, MMM Do YYYY HH:MM'));
+
+              var x = d.value * 100 / (60 * 60 * 24) + itemScale(d.date);
+              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
+                x -= 10;
+              }
+              var y = projectScale(d.name) - 10 + projectScale.rangeBand();
+              while ( height - y < tooltip_height && y > label_padding/2 ) {
+                y -= 10;
+              }
+              tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
+              tooltip.transition()
+                .duration(transition_duration / 2)
+                .ease('ease-in')
+                .style('opacity', 1);
+            })
+            .on('mouseout', function () {
+              // Hide tooltip
+              tooltip.transition()
+                .duration(transition_duration / 2)
+                .ease('ease-in')
+                .style('opacity', 0);
+            })
             .on('click', function (d) {
               if ( scope.handler ) {
                 scope.handler(d);
