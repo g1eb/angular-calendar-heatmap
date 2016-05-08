@@ -89,8 +89,8 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([0, max_value]);
 
-          items.selectAll('circle').remove();
-          items.selectAll('circle')
+          items.selectAll('.item-circle').remove();
+          items.selectAll('.item-circle')
             .data(scope.data)
             .enter()
             .append('circle')
@@ -320,8 +320,8 @@ angular.module('g1b.calendar-heatmap', []).
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
             .domain([moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day')]);
-          items.selectAll('block').remove();
-          items.selectAll('block')
+          items.selectAll('.item-block').remove();
+          items.selectAll('.item-block')
             .data(selected_date.details)
             .enter()
             .append('rect')
