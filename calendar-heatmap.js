@@ -428,22 +428,47 @@ angular.module('g1b.calendar-heatmap', []).
               // Unset selected date
               selected_date = undefined;
 
-              // Remove daily overview related items
-              items.selectAll('.item-block').remove();
-              labels.selectAll('.label-time').remove();
-              labels.selectAll('.label-project').remove();
-              buttons.selectAll('.button').remove();
+              // Remove daily overview related items and labels
+              items.selectAll('.item-block')
+                .transition()
+                .duration(500)
+                .ease('ease-in')
+                .style('opacity', 0)
+                .attr('x', function (d, i) {
+                  return ( i % 2 === 0) ? 0 : width;
+                })
+                .remove();
+              labels.selectAll('.label-time')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              labels.selectAll('.label-project')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
+              buttons.selectAll('.button')
+                .transition()
+                .duration(500)
+                .ease('ease')
+                .style('opacity', 0)
+                .remove();
 
-              // Redraw the chart
-              scope.drawChart();
+              // Wait for transition to finish and redraw
+              setTimeout(function () {
+                scope.drawChart();
+              }, 500);
             });
           button.append('circle')
-            .attr('cx', label_padding / 1.5)
-            .attr('cy', label_padding / 2)
+            .attr('cx', label_padding / 1.75)
+            .attr('cy', label_padding / 2.5)
             .attr('r', circle_radius);
           button.append('text')
-            .attr('x', label_padding / 1.5)
-            .attr('y', label_padding / 2)
+            .attr('x', label_padding / 1.75)
+            .attr('y', label_padding / 2.5)
             .attr('dy', function () {
               return Math.floor(width / 100) / 3;
             })
