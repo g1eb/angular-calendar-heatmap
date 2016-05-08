@@ -76,11 +76,14 @@ angular.module('g1b.calendar-heatmap', []).
                 }
                 return uniques;
               }, {});
-              data[i].summary = Object.keys(summary).map(function (key) {
+              var unsorted_summary = Object.keys(summary).map(function (key) {
                 return {
                   'name': key,
                   'value': summary[key].value
                 }
+              });
+              data[i].summary = unsorted_summary.sort(function (a, b) {
+                return b.value - a.value;
               });
             }
           }
