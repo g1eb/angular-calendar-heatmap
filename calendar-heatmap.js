@@ -29,13 +29,14 @@ angular.module('g1b.calendar-heatmap', []).
         var tooltip_padding = 15;
         var tooltip_line_height = 15;
 
+        // Initialize svg element
         var svg = d3.select(element[0])
           .append('svg')
           .attr('class', 'svg');
 
+        // Initialize main svg elements
         var labels = svg.append('g');
         var items = svg.append('g');
-
         var tooltip = svg.append('g')
           .attr('opacity', 0)
           .attr('class', 'heatmap-tooltip');
