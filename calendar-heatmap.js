@@ -40,6 +40,23 @@ angular.module('g1b.calendar-heatmap', []).
         var tooltip = svg.append('g')
           .attr('opacity', 0)
           .attr('class', 'heatmap-tooltip');
+        var button = svg.append('g')
+          .attr('opacity', 0)
+          .attr('class', 'button button-back');
+        button.append('circle')
+          .attr('cx', label_padding / 1.5)
+          .attr('cy', label_padding / 2)
+          .attr('r', circle_radius);
+        button.append('text')
+          .attr('x', label_padding / 1.5)
+          .attr('y', label_padding / 2)
+          .attr('dy', function () {
+            return Math.floor(width / 100) / 3;
+          })
+          .attr('font-size', function () {
+            return Math.floor(label_padding / 3) + 'px';
+          })
+          .html('&#x2190;');
 
         scope.$watch(function () {
           return element[0].clientWidth;
