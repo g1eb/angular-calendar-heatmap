@@ -435,6 +435,21 @@ angular.module('g1b.calendar-heatmap', []).
                 .ease('ease-in')
                 .attr('opacity', 0.5);
             });
+
+          // Show the button and set on click method
+          button.attr('opacity', 1)
+            .on('click', function (d) {
+              // Unset selected date
+              selected_date = undefined;
+
+              // Remove year overview
+              items.selectAll('.item-block').remove();
+              labels.selectAll('.label-time').remove();
+              labels.selectAll('.label-project').remove();
+
+              // Redraw the chart
+              scope.drawChart();
+            });
         };
 
 
