@@ -387,7 +387,8 @@ angular.module('g1b.calendar-heatmap', []).
               return projectScale(d.name) - 10;
             })
             .attr('width', function (d) {
-              return d.value * 100 / (60 * 60 * 24);
+              var end = itemScale(d3.time.second.offset(d.date, d.value));
+              return end - itemScale(d.date);
             })
             .attr('height', function (d) {
               return projectScale.rangeBand();
