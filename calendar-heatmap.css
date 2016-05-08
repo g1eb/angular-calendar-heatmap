@@ -4,7 +4,7 @@
   -moz-user-select: none;
   -webkit-user-select: none;
 }
-.calendar-heatmap .circle {
+.calendar-heatmap .item {
   cursor: pointer;
 }
 .calendar-heatmap .label {
