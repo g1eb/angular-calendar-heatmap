@@ -34,7 +34,7 @@ angular.module('g1b.calendar-heatmap', []).
           .attr('class', 'svg');
 
         var labels = svg.append('g');
-        var circles = svg.append('g');
+        var items = svg.append('g');
 
         var tooltip = svg.append('g')
           .attr('opacity', 0)
@@ -90,12 +90,12 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([0, max]);
 
-          circles.selectAll('circle').remove();
-          circles.selectAll('circle')
+          items.selectAll('circle').remove();
+          items.selectAll('circle')
             .data(scope.data)
             .enter()
             .append('circle')
-            .attr('class', 'circle')
+            .attr('class', 'item item-circle')
             .attr('opacity', 0)
             .attr('r', function (d) {
               if ( max <= 0 ) { return circle_radius; }
@@ -245,7 +245,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
               var selectedMonth = moment(d);
-              circles.selectAll('circle')
+              items.selectAll('.item-circle')
                 .transition()
                 .duration(500)
                 .ease('ease-in')
@@ -254,7 +254,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
-              circles.selectAll('circle')
+              items.selectAll('.item-circle')
                 .transition()
                 .duration(500)
                 .ease('ease-in')
@@ -288,7 +288,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .on('mouseenter', function (d) {
               var selectedDay = moment(d);
-              circles.selectAll('circle')
+              items.selectAll('.item-circle')
                 .transition()
                 .duration(500)
                 .ease('ease-in')
@@ -297,7 +297,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
-              circles.selectAll('circle')
+              items.selectAll('.item-circle')
                 .transition()
                 .duration(500)
                 .ease('ease-in')
