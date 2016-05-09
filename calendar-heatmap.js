@@ -541,6 +541,14 @@ angular.module('g1b.calendar-heatmap', []).
             });
 
           // Add button to switch back to year overview
+          scope.drawButton();
+        };
+
+
+        /**
+         * Draw the button for navigation purposes
+         */
+        scope.drawButton = function () {
           buttons.selectAll('.button').remove();
           var button = buttons.append('g')
             .attr('class', 'button button-back')
