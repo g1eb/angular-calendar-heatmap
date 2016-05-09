@@ -584,9 +584,9 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .html('&#x2190;');
           button.transition()
-              .duration(transition_duration)
-              .ease('ease-in')
-              .style('opacity', 1);
+            .duration(transition_duration)
+            .ease('ease-in')
+            .style('opacity', 1);
         };
 
 
