@@ -249,7 +249,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .transition()
               .delay( function () {
-                return Math.cos( Math.PI * Math.random() ) * 1000;
+                return Math.cos( Math.PI * Math.random() ) * transition_duration;
               })
               .duration(transition_duration)
               .ease('ease-in')
@@ -442,7 +442,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .transition()
               .delay( function () {
-                return Math.cos( Math.PI * Math.random() ) * 1000;
+                return Math.cos( Math.PI * Math.random() ) * transition_duration;
               })
               .duration(transition_duration)
               .ease('ease-in')
