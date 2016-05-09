@@ -8,11 +8,14 @@ Inspired by Github's contribution chart.
 Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) by [Darragh Kirwan](https://github.com/DKirwan)  
 Aaand [Calendar View](https://bl.ocks.org/mbostock/4063318) by [Mike Bostock](https://github.com/mbostock)
 
-[![Angular directive for d3.js calendar heatmap chart](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
-
 ## Demo
-
 Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
+
+### Year overview
+[![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
+
+### Daily overview
+[![Angular directive for d3.js calendar heatmap chart - daily overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_daily_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
 
 ## Installation
 
@@ -44,19 +47,48 @@ angular.module('myApp', [
 |:------------- |:-------------|:-----:|:-----:|
 | data | Time series data | none | yes |
 | color | Theme hex color | #45ff00 | no |
-| handler | Handler function is fired on click | none | no |
+| handler | Handler function is fired on click of a time entry in daily overview | none | no |
 
 ### Example data
 
 Time series data for each day going 1 year back.
 Each day has a total time tracked (in seconds).
-Details, if provided, are shown in a tooltip.
+Details, if provided, are shown in a tooltip as well as in daily overview.
 
 ```
 var data = [{
   "date": "2016-01-01",
   "total": 17164,
   "details": [{
+    "name": "Project 1",
+    "date": "2016-01-01 12:30:45",
+    "value": 9192
+  }, {
+    "name": "Project 2",
+    "date": "2016-01-01 13:37:00",
+    "value": 6753
+  },
+  .....
+  {
+    "name": "Project N",
+    "date": "2016-01-01 17:52:41",
+    "value": 1219
+  }]
+}]
+```
+
+### Optimization
+
+In some cases details array could be large and in order to fit the data into the tooltip a short summary is generated with distinct projects and their total tracked time for that date.
+In terms of optimization summary data can be computed server-side and passed in using the ``summary'' attribute.
+And in addition to the data structure described above this would result in a summary dictionary with distinct project names and total values of tracked time in seconds, e.g.:
+
+```
+var data = [{
+  "date": "2016-01-01",
+  "total": 17164,
+  "details": [.....],
+  "summary": [{
     "name": "Project 1",
     "value": 9192
   }, {
