@@ -528,7 +528,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Wait for transition to finish and redraw
               setTimeout(function () {
                 scope.drawChart();
-              }, transition_duration / 2);
+              }, transition_duration);
             });
           button.append('circle')
             .attr('cx', label_padding / 2.75)
