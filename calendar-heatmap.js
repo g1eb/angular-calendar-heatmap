@@ -153,7 +153,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Redraw the chart
               setTimeout(function () {
                 scope.drawChart();
-              }, transition_duration);
+              }, transition_duration / 2);
             })
             .on('mouseover', function (d) {
               // Pulsating animation
@@ -528,7 +528,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Wait for transition to finish and redraw
               setTimeout(function () {
                 scope.drawChart();
-              }, transition_duration);
+              }, transition_duration / 2);
             });
           button.append('circle')
             .attr('cx', label_padding / 2.75)
