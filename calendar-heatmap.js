@@ -24,6 +24,7 @@ angular.module('g1b.calendar-heatmap', []).
         var label_padding = 40;
         var max_block_height = 25;
         var transition_duration = 500;
+        var in_transition = false;
         var selected_date;
 
         // Tooltip defaults
@@ -120,7 +121,6 @@ angular.module('g1b.calendar-heatmap', []).
           var color = d3.scale.linear()
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([-0.15 * max_value, max_value]);
-          var in_transition = false;
 
           items.selectAll('.item-circle').remove();
           items.selectAll('.item-circle')
