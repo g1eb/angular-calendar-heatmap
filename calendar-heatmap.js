@@ -652,24 +652,9 @@ angular.module('g1b.calendar-heatmap', []).
             .ease('ease')
             .style('opacity', 0)
             .remove();
-          tooltip.selectAll('rect')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
-          labels.selectAll('.label-month')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
-          labels.selectAll('.label-day')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
+          tooltip.selectAll('rect').remove();
+          labels.selectAll('.label-day').remove();
+          labels.selectAll('.label-month').remove();
         };
 
 
@@ -686,18 +671,8 @@ angular.module('g1b.calendar-heatmap', []).
               return ( i % 2 === 0) ? 0 : width;
             })
             .remove();
-          labels.selectAll('.label-time')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
-          labels.selectAll('.label-project')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
+          labels.selectAll('.label-time').remove();
+          labels.selectAll('.label-project').remove();
           buttons.selectAll('.button')
             .transition()
             .duration(transition_duration)
