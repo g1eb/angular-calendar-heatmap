@@ -468,7 +468,26 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('x', function (d, i) {
               return timeAxis(i);
             })
-            .attr('y', label_padding / 2);
+            .attr('y', label_padding / 2)
+            .on('mouseenter', function (d) {
+              var selected = itemScale(moment(d));
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  var start = itemScale(moment(d.date));
+                  var end = itemScale(moment(d.date).add(d.value, 'seconds'));
+                  return ( selected >= start && selected <= end ) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function (time) {
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 0.5);
+            });
 
           // Add project labels
           labels.selectAll('.label-project').remove();
