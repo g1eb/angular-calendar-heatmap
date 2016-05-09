@@ -551,7 +551,7 @@ angular.module('g1b.calendar-heatmap', []).
          * Transition and remove items and labels related to year overview
          */
         scope.removeYearOverview = function () {
-          items.selectAll('circle')
+          items.selectAll('.item-circle')
             .transition()
             .duration(transition_duration)
             .ease('ease')
