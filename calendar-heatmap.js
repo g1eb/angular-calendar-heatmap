@@ -249,9 +249,11 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .transition()
               .delay( function () {
-                return Math.cos( Math.PI * Math.random() ) * transition_duration;
+                return ( in_transition ) ? transition_duration / 2 : 0;
               })
-              .duration(transition_duration)
+              .duration(function () {
+                return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
+              })
               .ease('ease-in')
               .style('opacity', 1);
 
@@ -441,10 +443,12 @@ angular.module('g1b.calendar-heatmap', []).
               }
             })
             .transition()
-              .delay( function () {
-                return Math.cos( Math.PI * Math.random() ) * transition_duration;
+              .delay(function () {
+                return ( in_transition ) ? transition_duration / 2: 0;
               })
-              .duration(transition_duration)
+              .duration(function () {
+                return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
+              })
               .ease('ease-in')
               .style('opacity', 0.5);
 
