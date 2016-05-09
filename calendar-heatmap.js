@@ -132,7 +132,7 @@ angular.module('g1b.calendar-heatmap', []).
               return circle_radius * 0.75 + (circle_radius * d.total / max_value) * 0.25;
             })
             .attr('fill', function (d) {
-              return color(d.total);
+              return ( d.total > 0 ) ? color(d.total) : 'transparent';
             })
             .attr('cx', function (d) {
               var cellDate = moment(d.date);
