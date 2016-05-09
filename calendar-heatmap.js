@@ -420,7 +420,7 @@ angular.module('g1b.calendar-heatmap', []).
                   var obj = d3.select(this),
                     textLength = obj.node().getComputedTextLength(),
                     text = obj.text();
-                  while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
+                  while (textLength > (tooltip_width - tooltip_padding * 2) && text.length > 0) {
                     text = text.slice(0, -1);
                     obj.text(text + '...');
                     textLength = obj.node().getComputedTextLength();
