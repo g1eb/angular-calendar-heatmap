@@ -147,37 +147,8 @@ angular.module('g1b.calendar-heatmap', []).
               // Set selected date to the one clicked on
               selected_date = d;
 
-              // Remove year overview
-              items.selectAll('circle')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              tooltip.selectAll('text')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              tooltip.selectAll('rect')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              labels.selectAll('.label-month')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              labels.selectAll('.label-day')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
+              // Remove all year overview related items and labels
+              scope.removeYearOverview();
 
               // Redraw the chart
               setTimeout(function () {
@@ -551,34 +522,8 @@ angular.module('g1b.calendar-heatmap', []).
               // Unset selected date
               selected_date = undefined;
 
-              // Remove daily overview related items and labels
-              items.selectAll('.item-block')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease-in')
-                .style('opacity', 0)
-                .attr('x', function (d, i) {
-                  return ( i % 2 === 0) ? 0 : width;
-                })
-                .remove();
-              labels.selectAll('.label-time')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              labels.selectAll('.label-project')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
-              buttons.selectAll('.button')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease')
-                .style('opacity', 0)
-                .remove();
+              // Remove all day overview related items and labels
+              scope.removeDayOverview();
 
               // Wait for transition to finish and redraw
               setTimeout(function () {
@@ -599,6 +544,77 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.floor(label_padding / 3) + 'px';
             })
             .html('&#x2190;');
+        };
+
+
+        /**
+         * Transition and remove items and labels related to year overview
+         */
+        scope.removeYearOverview = function () {
+          items.selectAll('circle')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          tooltip.selectAll('text')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          tooltip.selectAll('rect')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          labels.selectAll('.label-month')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          labels.selectAll('.label-day')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+        };
+
+
+        /**
+         * Transition and remove items and labels related to daily overview
+         */
+        scope.removeDayOverview = function () {
+          items.selectAll('.item-block')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease-in')
+            .style('opacity', 0)
+            .attr('x', function (d, i) {
+              return ( i % 2 === 0) ? 0 : width;
+            })
+            .remove();
+          labels.selectAll('.label-time')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          labels.selectAll('.label-project')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          buttons.selectAll('.button')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
         };
 
 
