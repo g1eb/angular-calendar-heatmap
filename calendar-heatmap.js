@@ -449,7 +449,7 @@ angular.module('g1b.calendar-heatmap', []).
               .style('opacity', 0.5);
 
           // Add time labels
-          var timeLabels = d3.time.hours(moment().startOf('day'), moment().endOf('day'));
+          var timeLabels = d3.time.hours(moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day'));
           var timeAxis = d3.time.scale()
             .range([label_padding*2, width])
             .domain([0, timeLabels.length]);
