@@ -499,7 +499,7 @@ angular.module('g1b.calendar-heatmap', []).
             .enter()
             .append('text')
             .attr('class', 'label label-project')
-            .attr('x', label_padding / 3)
+            .attr('x', gutter)
             .attr('y', function (d) {
               return projectScale(d);
             })
@@ -586,11 +586,11 @@ angular.module('g1b.calendar-heatmap', []).
               }, transition_duration);
             });
           button.append('circle')
-            .attr('cx', label_padding / 1.75)
+            .attr('cx', label_padding / 2.75)
             .attr('cy', label_padding / 2.5)
             .attr('r', circle_radius);
           button.append('text')
-            .attr('x', label_padding / 1.75)
+            .attr('x', label_padding / 2.75)
             .attr('y', label_padding / 2.5)
             .attr('dy', function () {
               return Math.floor(width / 100) / 3;
