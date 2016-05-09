@@ -516,6 +516,16 @@ angular.module('g1b.calendar-heatmap', []).
             .text(function (d) {
               return d;
             })
+            .each(function () {
+              var obj = d3.select(this),
+                textLength = obj.node().getComputedTextLength(),
+                text = obj.text();
+              while (textLength > (label_padding * 1.5) && text.length > 0) {
+                text = text.slice(0, -1);
+                obj.text(text + '...');
+                textLength = obj.node().getComputedTextLength();
+              }
+            })
             .on('mouseenter', function (project) {
               items.selectAll('.item-block')
                 .transition()
