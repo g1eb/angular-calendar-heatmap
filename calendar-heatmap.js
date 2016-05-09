@@ -384,14 +384,14 @@ angular.module('g1b.calendar-heatmap', []).
             .append('rect')
             .attr('class', 'item item-block')
             .attr('x', function (d) {
-              return itemScale(d.date);
+              return itemScale(moment(d.date));
             })
             .attr('y', function (d) {
               return projectScale(d.name) - 10;
             })
             .attr('width', function (d) {
-              var end = itemScale(d3.time.second.offset(d.date, d.value));
-              return end - itemScale(d.date);
+              var end = itemScale(d3.time.second.offset(moment(d.date), d.value));
+              return end - itemScale(moment(d.date));
             })
             .attr('height', function () {
               return projectScale.rangeBand();
@@ -435,7 +435,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .attr('y', tooltip_padding * 4)
                 .text('on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm'));
 
-              var x = d.value * 100 / (60 * 60 * 24) + itemScale(d.date);
+              var x = d.value * 100 / (60 * 60 * 24) + itemScale(moment(d.date));
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
