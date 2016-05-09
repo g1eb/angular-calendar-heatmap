@@ -575,6 +575,8 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'button button-back')
             .style('opacity', 0)
             .on('click', function () {
+              in_transition = true;
+
               // Unset selected date
               selected_date = undefined;
 
