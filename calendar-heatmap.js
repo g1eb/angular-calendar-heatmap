@@ -253,8 +253,22 @@ angular.module('g1b.calendar-heatmap', []).
                 return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
               })
               .ease('ease-in')
-              .style('opacity', 1);
-
+              .style('opacity', 1)
+              .call(function (transition, callback) {
+                if ( transition.empty() ) {
+                  callback();
+                }
+                var n = 0;
+                transition
+                  .each(function() { ++n; })
+                  .each('end', function() {
+                    if ( !--n ) {
+                      callback.apply(this, arguments);
+                    }
+                  });
+                }, function() {
+                  in_transition = false;
+                });
           // Add month labels
           var today = moment().endOf('day');
           var todayYearAgo = moment().startOf('day').subtract(1, 'year');
@@ -459,7 +473,22 @@ angular.module('g1b.calendar-heatmap', []).
                 return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
               })
               .ease('ease-in')
-              .style('opacity', 0.5);
+              .style('opacity', 0.5)
+              .call(function (transition, callback) {
+                if ( transition.empty() ) {
+                  callback();
+                }
+                var n = 0;
+                transition
+                  .each(function() { ++n; })
+                  .each('end', function() {
+                    if ( !--n ) {
+                      callback.apply(this, arguments);
+                    }
+                  });
+                }, function() {
+                  in_transition = false;
+                });
 
           // Add time labels
           var timeLabels = d3.time.hours(moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day'));
