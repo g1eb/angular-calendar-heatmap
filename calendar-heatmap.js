@@ -118,7 +118,7 @@ angular.module('g1b.calendar-heatmap', []).
           });
           var color = d3.scale.linear()
             .range(['#ffffff', scope.color || '#ff4500'])
-            .domain([0, max_value]);
+            .domain([-0.15 * max_value, max_value]);
 
           items.selectAll('.item-circle').remove();
           items.selectAll('.item-circle')
