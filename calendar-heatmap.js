@@ -157,87 +157,87 @@ angular.module('g1b.calendar-heatmap', []).
               scope.drawChart();
             })
             .on('mouseover', function (d) {
-              // Pulsating animation
-              if ( !in_transition ) {
-                var circle = d3.select(this);
-                (function repeat() {
-                  circle = circle.transition()
-                    .duration(transition_duration)
-                    .ease('ease-in')
-                    .attr('r', circle_radius+1)
-                    .transition()
-                    .duration(transition_duration)
-                    .ease('ease-in')
-                    .attr('r', circle_radius)
-                    .each('end', repeat);
-                })();
+              if ( in_transition ) { return; };
 
-                // Construct tooltip
-                var tooltip_height = tooltip_padding * 4 + tooltip_line_height * d.summary.length;
-                tooltip.selectAll('text').remove();
-                tooltip.selectAll('rect').remove();
-                tooltip.insert('rect')
-                  .attr('class', 'heatmap-tooltip-background')
-                  .attr('width', tooltip_width)
-                  .attr('height', tooltip_height);
+              // Pulsating animation
+              var circle = d3.select(this);
+              (function repeat() {
+                circle = circle.transition()
+                  .duration(transition_duration)
+                  .ease('ease-in')
+                  .attr('r', circle_radius+1)
+                  .transition()
+                  .duration(transition_duration)
+                  .ease('ease-in')
+                  .attr('r', circle_radius)
+                  .each('end', repeat);
+              })();
+
+              // Construct tooltip
+              var tooltip_height = tooltip_padding * 4 + tooltip_line_height * d.summary.length;
+              tooltip.selectAll('text').remove();
+              tooltip.selectAll('rect').remove();
+              tooltip.insert('rect')
+                .attr('class', 'heatmap-tooltip-background')
+                .attr('width', tooltip_width)
+                .attr('height', tooltip_height);
+              tooltip.append('text')
+                .attr('font-weight', 900)
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 1.5)
+                .text((d.total ? scope.formatTime(d.total) : 'No time') + ' tracked');
+              tooltip.append('text')
+                .attr('x', tooltip_padding)
+                .attr('y', tooltip_padding * 2.5)
+                .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
+
+              // Add summary to the tooltip
+              angular.forEach(d.summary, function (d, i) {
                 tooltip.append('text')
                   .attr('font-weight', 900)
                   .attr('x', tooltip_padding)
-                  .attr('y', tooltip_padding * 1.5)
-                  .text((d.total ? scope.formatTime(d.total) : 'No time') + ' tracked');
+                  .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
+                  .text(d.name)
+                  .each(function () {
+                    var obj = d3.select(this),
+                      textLength = obj.node().getComputedTextLength(),
+                      text = obj.text();
+                    while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
+                      text = text.slice(0, -1);
+                      obj.text(text + '...');
+                      textLength = obj.node().getComputedTextLength();
+                    }
+                  });
                 tooltip.append('text')
-                  .attr('x', tooltip_padding)
-                  .attr('y', tooltip_padding * 2.5)
-                  .text('on ' + moment(d.date).format('dddd, MMM Do YYYY'));
+                  .attr('x', tooltip_width / 2 + tooltip_padding / 2)
+                  .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
+                  .text(scope.formatTime(d.value));
+              });
 
-                // Add summary to the tooltip
-                angular.forEach(d.summary, function (d, i) {
-                  tooltip.append('text')
-                    .attr('font-weight', 900)
-                    .attr('x', tooltip_padding)
-                    .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
-                    .text(d.name)
-                    .each(function () {
-                      var obj = d3.select(this),
-                        textLength = obj.node().getComputedTextLength(),
-                        text = obj.text();
-                      while (textLength > (tooltip_width / 2 - tooltip_padding) && text.length > 0) {
-                        text = text.slice(0, -1);
-                        obj.text(text + '...');
-                        textLength = obj.node().getComputedTextLength();
-                      }
-                    });
-                  tooltip.append('text')
-                    .attr('x', tooltip_width / 2 + tooltip_padding / 2)
-                    .attr('y', tooltip_line_height * 4 + i * tooltip_line_height)
-                    .text(scope.formatTime(d.value));
-                });
-
-                var cellDate = moment(d.date);
-                var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-                var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-                while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
-                  x -= 10;
-                }
-                var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
-                while ( height - y < tooltip_height && y > label_padding/2 ) {
-                  y -= 10;
-                }
-                tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
-                tooltip.transition()
-                  .duration(transition_duration / 2)
-                  .ease('ease-in')
-                  .style('opacity', 1);
+              var cellDate = moment(d.date);
+              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
+              var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
+                x -= 10;
               }
+              var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              while ( height - y < tooltip_height && y > label_padding/2 ) {
+                y -= 10;
+              }
+              tooltip.attr('transform', 'translate(' + x + ',' + y + ')');
+              tooltip.transition()
+                .duration(transition_duration / 2)
+                .ease('ease-in')
+                .style('opacity', 1);
             })
             .on('mouseout', function () {
-              if ( !in_transition ) {
-                // Set circle radius back to what it's supposed to be
-                d3.select(this).transition()
-                  .duration(transition_duration / 2)
-                  .ease('ease-in')
-                  .attr('r', circle_radius);
-              }
+              if ( in_transition ) { return; };
+
+              // Set circle radius back to what it's supposed to be
+              d3.select(this).transition()
+                .duration(transition_duration / 2)
+                .ease('ease-in')
+                .attr('r', circle_radius);
 
               // Hide tooltip
               tooltip.transition()
@@ -280,6 +280,8 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
+              if ( in_transition ) { return; };
+
               var selectedMonth = moment(d);
               items.selectAll('.item-circle')
                 .transition()
@@ -290,6 +292,8 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
+              if ( in_transition ) { return; };
+
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
@@ -323,6 +327,8 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d).format('dddd')[0];
             })
             .on('mouseenter', function (d) {
+              if ( in_transition ) { return; };
+
               var selectedDay = moment(d);
               items.selectAll('.item-circle')
                 .transition()
@@ -333,6 +339,8 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
+              if ( in_transition ) { return; };
+
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
@@ -380,6 +388,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .style('opacity', 0)
             .on('mouseover', function(d) {
+              if ( in_transition ) { return; };
 
               // Construct tooltip
               var tooltip_height = tooltip_padding * 4 + tooltip_line_height;
@@ -429,6 +438,8 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 1);
             })
             .on('mouseout', function () {
+              if ( in_transition ) { return; };
+
               // Hide tooltip
               tooltip.transition()
                 .duration(transition_duration / 2)
@@ -472,6 +483,8 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
+              if ( in_transition ) { return; };
+
               var selected = itemScale(moment(d));
               items.selectAll('.item-block')
                 .transition()
@@ -484,6 +497,8 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function (time) {
+              if ( in_transition ) { return; };
+
               items.selectAll('.item-block')
                 .transition()
                 .duration(transition_duration)
@@ -526,6 +541,8 @@ angular.module('g1b.calendar-heatmap', []).
               }
             })
             .on('mouseenter', function (project) {
+              if ( in_transition ) { return; };
+
               items.selectAll('.item-block')
                 .transition()
                 .duration(transition_duration)
@@ -535,6 +552,8 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
+              if ( in_transition ) { return; };
+
               items.selectAll('.item-block')
                 .transition()
                 .duration(transition_duration)
