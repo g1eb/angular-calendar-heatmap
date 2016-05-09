@@ -154,9 +154,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
-              setTimeout(function () {
-                scope.drawChart();
-              }, transition_duration / 2);
+              scope.drawChart();
             })
             .on('mouseover', function (d) {
               // Pulsating animation
@@ -565,9 +563,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeDayOverview();
 
               // Wait for transition to finish and redraw
-              setTimeout(function () {
-                scope.drawChart();
-              }, transition_duration);
+              scope.drawChart();
             });
           button.append('circle')
             .attr('cx', label_padding / 2.75)
