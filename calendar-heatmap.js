@@ -22,6 +22,7 @@ angular.module('g1b.calendar-heatmap', []).
         var height = 200;
         var circle_radius = 10;
         var label_padding = 40;
+        var max_block_height = 25;
         var transition_duration = 500;
         var selected_date;
 
@@ -394,7 +395,7 @@ angular.module('g1b.calendar-heatmap', []).
               return end - itemScale(moment(d.date));
             })
             .attr('height', function () {
-              return projectScale.rangeBand();
+              return Math.min(projectScale.rangeBand(), max_block_height);
             })
             .attr('fill', function () {
               return scope.color || '#ff4500';
