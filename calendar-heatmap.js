@@ -552,6 +552,7 @@ angular.module('g1b.calendar-heatmap', []).
           buttons.selectAll('.button').remove();
           var button = buttons.append('g')
             .attr('class', 'button button-back')
+            .style('opacity', 0)
             .on('click', function () {
               // Unset selected date
               selected_date = undefined;
@@ -578,6 +579,10 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.floor(label_padding / 3) + 'px';
             })
             .html('&#x2190;');
+          button.transition()
+              .duration(transition_duration)
+              .ease('ease-in')
+              .style('opacity', 1);
         };
 
 
