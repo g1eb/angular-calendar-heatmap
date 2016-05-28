@@ -9,13 +9,13 @@ Based on [D3.js Calendar Heatmap](https://github.com/DKirwan/calendar-heatmap) b
 Aaand [Calendar View](https://bl.ocks.org/mbostock/4063318) by [Mike Bostock](https://github.com/mbostock)
 
 ## Demo
-Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
+Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
 
 ### Year overview
-[![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
+[![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ### Daily overview
-[![Angular directive for d3.js calendar heatmap chart - daily overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_daily_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html)
+[![Angular directive for d3.js calendar heatmap chart - daily overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_daily_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ## Installation
 
@@ -103,7 +103,7 @@ var data = [{
 }]
 ```
 
-See [example.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/example.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/example.html" target="_blank">here</a> for a live demo.
+See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
 
 ## Dependencies
 
