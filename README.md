@@ -103,7 +103,7 @@ var data = [{
 }]
 ```
 
-See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
+See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/index.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
 
 ## Dependencies
 
