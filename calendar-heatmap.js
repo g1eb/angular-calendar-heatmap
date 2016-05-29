@@ -830,8 +830,11 @@ angular.module('g1b.calendar-heatmap', []).
           items.selectAll('.item-block')
             .transition()
             .duration(transition_duration)
-            .ease('ease')
+            .ease('ease-in')
             .style('opacity', 0)
+            .attr('x', function (d, i) {
+              return ( i % 2 === 0) ? 0 : width;
+            })
             .remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-week').remove();
