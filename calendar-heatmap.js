@@ -244,11 +244,11 @@ angular.module('g1b.calendar-heatmap', []).
                 }, function() {
                   in_transition = false;
                 });
+
           // Add month labels
           var today = moment().endOf('day');
           var todayYearAgo = moment().startOf('day').subtract(1, 'year');
           var monthLabels = d3.time.months(todayYearAgo.startOf('month'), today);
-          var monthLabelOffset = (width - label_padding * 2) / 12 / 2;
           var monthAxis = d3.scale.linear()
             .range([label_padding, width])
             .domain([0, monthLabels.length]);
@@ -265,7 +265,7 @@ angular.module('g1b.calendar-heatmap', []).
               return d.toLocaleDateString('en-us', {month: 'short'});
             })
             .attr('x', function (d, i) {
-              return monthLabelOffset + monthAxis(i);
+              return monthAxis(i);
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
