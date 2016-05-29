@@ -365,6 +365,10 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw month overview
          */
         scope.drawMonthOverview = function () {
+          // Define beginning and end of the month
+          var start_of_month = moment(selected_date).startOf('month');
+          var end_of_month = moment(selected_date).endOf('month');
+
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayAxis = d3.scale.ordinal()
@@ -374,24 +378,23 @@ angular.module('g1b.calendar-heatmap', []).
             }));
 
           // Define week labels and axis
-          var weekLabels = d3.time.weeks(
-            moment(selected_date).startOf('month'),
-            moment(selected_date).endOf('month')
-          );
-          var weekAxis = d3.scale.linear()
-            .range([label_padding*2, width])
-            .domain([0, weekLabels.length]);
+          var weekLabels = [];
+          var first_week = start_of_month.week();
+          var last_week = end_of_month.week();
+          while ( first_week <= last_week ) {
+            weekLabels.push(first_week);
+            first_week++;
+          }
 
           // Filter data down to the selected month
           var month_data = scope.data.filter(function (d) {
             return d.date.getMonth() === selected_date.getMonth();
           });
 
-          var itemScale = d3.scale.ordinal()
+          // Add month data items to the overview
+          var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.1)
-            .domain(weekLabels.map(function(d) {
-              return moment(d).week();
-            }));
+            .domain(weekLabels);
           items.selectAll('.item-block').remove();
           items.selectAll('.item-block')
             .data(month_data)
@@ -399,7 +402,7 @@ angular.module('g1b.calendar-heatmap', []).
             .append('rect')
             .attr('class', 'item item-block')
             .attr('x', function (d) {
-              return itemScale(moment(d.date).week());
+              return weekScale(moment(d.date).week());
             })
             .attr('y', function (d) {
               return dayAxis(moment(d.date).weekday()) - 10;
@@ -429,7 +432,7 @@ angular.module('g1b.calendar-heatmap', []).
               });
 
               // Calculate tooltip position
-              var x = itemScale(moment(d.date).week()) + tooltip_padding * 3;
+              var x = weekScale(moment(d.date).week()) + tooltip_padding * 3;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
@@ -547,23 +550,22 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
             })
-            .text(function (d) {
-              return 'Week ' + moment(d).week();
+            .text(function (week_nr) {
+              return 'Week ' + week_nr;
             })
-            .attr('x', function (d, i) {
-              return weekAxis(i);
+            .attr('x', function (d) {
+              return weekScale(d);
             })
             .attr('y', label_padding / 2)
-            .on('mouseenter', function (d) {
+            .on('mouseenter', function (week_nr) {
               if ( in_transition ) { return; }
 
-              var selected_week = moment(d).week();
               items.selectAll('.item-block')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return ( moment(d.date).week() === selected_week ) ? 1 : 0.1;
+                  return ( moment(d.date).week() === week_nr ) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
