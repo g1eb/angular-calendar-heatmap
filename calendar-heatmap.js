@@ -365,6 +365,53 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw month overview
          */
         scope.drawMonthOverview = function () {
+          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var dayAxis = d3.scale.linear()
+            .range([label_padding, height])
+            .domain([0, dayLabels.length]);
+
+          // Add day labels
+          labels.selectAll('.label-day').remove();
+          labels.selectAll('.label-day')
+            .data(dayLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-day')
+            .attr('x', label_padding / 3)
+            .attr('y', function (d, i) {
+              return dayAxis(i);
+            })
+            .style('text-anchor', 'middle')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .attr('dy', function () {
+              return Math.floor(width / 100) / 3;
+            })
+            .text(function (d) {
+              return moment(d).format('dddd')[0];
+            })
+            .on('mouseenter', function (d) {
+              if ( in_transition ) { return; }
+
+              var selectedDay = moment(d);
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
+
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 1);
+            });
         };
 
 
