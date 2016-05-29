@@ -835,6 +835,7 @@ angular.module('g1b.calendar-heatmap', []).
             .remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-week').remove();
+          scope.hideBackButton();
         };
 
 
@@ -853,12 +854,7 @@ angular.module('g1b.calendar-heatmap', []).
             .remove();
           labels.selectAll('.label-time').remove();
           labels.selectAll('.label-project').remove();
-          buttons.selectAll('.button')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
+          scope.hideBackButton();
         };
 
 
@@ -870,6 +866,19 @@ angular.module('g1b.calendar-heatmap', []).
             .duration(transition_duration / 2)
             .ease('ease-in')
             .style('opacity', 0);
+        };
+
+
+        /**
+         * Helper function to hide the back button
+         */
+        scope.hideBackButton = function () {
+          buttons.selectAll('.button')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
         };
 
 
