@@ -30,7 +30,6 @@ angular.module('g1b.calendar-heatmap', []).
         // Tooltip defaults
         var tooltip_width = 250;
         var tooltip_padding = 15;
-        var tooltip_line_height = 15;
 
         // Initialize svg element
         var svg = d3.select(element[0])
@@ -163,7 +162,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.drawChart();
             })
             .on('mouseover', function (d) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               // Pulsating animation
               var circle = d3.select(this);
@@ -185,7 +184,7 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
 
               // Add summary to the tooltip
-              angular.forEach(d.summary, function (d, i) {
+              angular.forEach(d.summary, function (d) {
                 tooltip_html += '<div><span><strong>' + d.name + '</strong></span>';
                 tooltip_html += '<span>' + scope.formatTime(d.value) + '</span></div>';
               });
@@ -209,7 +208,7 @@ angular.module('g1b.calendar-heatmap', []).
                   .style('opacity', 1);
             })
             .on('mouseout', function () {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               // Set circle radius back to what it's supposed to be
               d3.select(this).transition()
@@ -269,7 +268,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               var selectedMonth = moment(d);
               items.selectAll('.item-circle')
@@ -281,7 +280,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               items.selectAll('.item-circle')
                 .transition()
@@ -316,7 +315,7 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d).format('dddd')[0];
             })
             .on('mouseenter', function (d) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               var selectedDay = moment(d);
               items.selectAll('.item-circle')
@@ -328,7 +327,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               items.selectAll('.item-circle')
                 .transition()
@@ -377,7 +376,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .style('opacity', 0)
             .on('mouseover', function(d) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               // Construct tooltip
               var tooltip_html = '';
@@ -402,7 +401,7 @@ angular.module('g1b.calendar-heatmap', []).
                   .style('opacity', 1);
             })
             .on('mouseout', function () {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
               scope.hideTooltip();
             })
             .on('click', function (d) {
@@ -457,7 +456,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               var selected = itemScale(moment(d));
               items.selectAll('.item-block')
@@ -470,8 +469,8 @@ angular.module('g1b.calendar-heatmap', []).
                   return ( selected >= start && selected <= end ) ? 1 : 0.1;
                 });
             })
-            .on('mouseout', function (time) {
-              if ( in_transition ) { return; };
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
 
               items.selectAll('.item-block')
                 .transition()
@@ -515,7 +514,7 @@ angular.module('g1b.calendar-heatmap', []).
               }
             })
             .on('mouseenter', function (project) {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               items.selectAll('.item-block')
                 .transition()
@@ -526,7 +525,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
             })
             .on('mouseout', function () {
-              if ( in_transition ) { return; };
+              if ( in_transition ) { return; }
 
               items.selectAll('.item-block')
                 .transition()
