@@ -37,9 +37,17 @@
   font-family: Helvetica, arial, 'Open Sans', sans-serif;
   background: rgba(255, 255, 255, 0.75);
 }
+.calendar-heatmap .heatmap-tooltip .header strong {
+  display: inline-block;
+  width: 250px;
+}
 .calendar-heatmap .heatmap-tooltip span {
   display: inline-block;
-  width: 125px;
+  width: 115px;
+  padding-right: 10px;
+}
+.calendar-heatmap .heatmap-tooltip span,
+.calendar-heatmap .heatmap-tooltip .header strong {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
