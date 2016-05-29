@@ -413,6 +413,52 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 1);
             });
 
+          // Add week labels
+          var weekLabels = d3.time.weeks(
+            moment(selected_date).startOf('month'),
+            moment(selected_date).endOf('month')
+          );
+          var weekAxis = d3.scale.linear()
+            .range([label_padding*2, width])
+            .domain([0, weekLabels.length]);
+          labels.selectAll('.label-week').remove();
+          labels.selectAll('.label-week')
+            .data(weekLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-time')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .text(function (d) {
+              return 'Week ' + moment(d).week();
+            })
+            .attr('x', function (d, i) {
+              return weekAxis(i);
+            })
+            .attr('y', label_padding / 2)
+            .on('mouseenter', function (d) {
+              if ( in_transition ) { return; }
+
+              var selected_week = moment(d).week();
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  return ( moment(d).week() === selected_week ) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
+
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 0.5);
+            });
+
           // Add button to switch back to year overview
           scope.drawButton();
         };
