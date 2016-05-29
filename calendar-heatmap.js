@@ -419,16 +419,21 @@ angular.module('g1b.calendar-heatmap', []).
 
               // Construct tooltip
               var tooltip_html = '';
-              tooltip_html += '<div class="header"><strong>' + d.name + '</strong><div><br>';
-              tooltip_html += '<div><strong>' + (d.value ? scope.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
-              tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY HH:mm') + '</div>';
+              tooltip_html += '<div class="header"><strong>' + (d.total ? scope.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
+              tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
+
+              // Add summary to the tooltip
+              angular.forEach(d.summary, function (d) {
+                tooltip_html += '<div><span><strong>' + d.name + '</strong></span>';
+                tooltip_html += '<span>' + scope.formatTime(d.value) + '</span></div>';
+              });
 
               // Calculate tooltip position
-              var x = d.value * 100 / (60 * 60 * 24) + itemScale(moment(d.date));
+              var x = itemScale(moment(d.date).week()) + tooltip_padding * 3;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = dayAxis(d.name) - 10;
+              var y = dayAxis(moment(d.date).weekday()) + tooltip_padding;
 
               // Show tooltip
               tooltip.html(tooltip_html)
