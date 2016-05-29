@@ -369,6 +369,19 @@ angular.module('g1b.calendar-heatmap', []).
           var start_of_month = moment(selected_date).startOf('month');
           var end_of_month = moment(selected_date).endOf('month');
 
+          // Filter data down to the selected month
+          var month_data = scope.data.filter(function (d) {
+            return start_of_month <= d.date && d.date < end_of_month;
+          });
+
+          // Calculate max_value and set color range
+          var max_value = d3.max(month_data, function (d) {
+            return d.total;
+          });
+          var color = d3.scale.linear()
+            .range(['#ffffff', scope.color || '#ff4500'])
+            .domain([-0.15 * max_value, max_value]);
+
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayAxis = d3.scale.ordinal()
@@ -385,11 +398,6 @@ angular.module('g1b.calendar-heatmap', []).
             weekLabels.push(first_week);
             first_week++;
           }
-
-          // Filter data down to the selected month
-          var month_data = scope.data.filter(function (d) {
-            return start_of_month <= d.date && d.date < end_of_month;
-          });
 
           // Add month data items to the overview
           var weekScale = d3.scale.ordinal()
@@ -413,8 +421,8 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('height', function () {
               return Math.min(dayAxis.rangeBand(), max_block_height);
             })
-            .attr('fill', function () {
-              return scope.color || '#ff4500';
+            .attr('fill', function (d) {
+              return ( d.total > 0 ) ? color(d.total) : 'transparent';
             })
             .style('opacity', 0)
             .on('mouseover', function(d) {
@@ -495,7 +503,6 @@ angular.module('g1b.calendar-heatmap', []).
                 }, function() {
                   in_transition = false;
                 });
-
 
           // Add day labels
           labels.selectAll('.label-day').remove();
