@@ -778,13 +778,17 @@ angular.module('g1b.calendar-heatmap', []).
             .on('click', function () {
               in_transition = true;
 
+              // Cleanup the canvas from whichever overview type was on
+              if ( !!selected_date && !!selected_date.total ) {
+                scope.removeDayOverview();
+              } else if ( !!selected_date ) {
+                scope.removeMonthOverview();
+              }
+
               // Unset selected date
-              selected_date = undefined;
+              selected_date = undefined
 
-              // Remove all day overview related items and labels
-              scope.removeDayOverview();
-
-              // Wait for transition to finish and redraw
+              // Redraw the chart
               scope.drawChart();
             });
           button.append('circle')
