@@ -449,9 +449,24 @@ angular.module('g1b.calendar-heatmap', []).
               scope.hideTooltip();
             })
             .on('click', function (d) {
-              if ( scope.handler ) {
-                scope.handler(d);
-              }
+              if ( in_transition ) { return; }
+
+              // Don't transition if there is no data to show
+              if ( d.total === 0 ) { return; }
+
+              in_transition = true;
+
+              // Set selected date to the one clicked on
+              selected_date = d;
+
+              // Hide tooltip
+              scope.hideTooltip();
+
+              // Remove all year overview related items and labels
+              scope.removeMonthOverview();
+
+              // Redraw the chart
+              scope.drawChart();
             })
             .transition()
               .delay(function () {
