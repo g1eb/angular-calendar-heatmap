@@ -388,7 +388,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Filter data down to the selected month
           var month_data = scope.data.filter(function (d) {
-            return d.date.getMonth() === selected_date.getMonth();
+            return start_of_month <= d.date && d.date < end_of_month;
           });
 
           // Add month data items to the overview
