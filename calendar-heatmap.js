@@ -563,7 +563,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return ( moment(d).week() === selected_week ) ? 1 : 0.1;
+                  return ( moment(d.date).week() === selected_week ) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
