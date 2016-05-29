@@ -412,7 +412,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('y', function (d) {
               return dayAxis(moment(d.date).weekday()) - 10;
             })
-            .attr('width', function (d) {
+            .attr('width', function () {
               return (width - label_padding) / weekLabels.length - gutter * 5;
             })
             .attr('height', function () {
@@ -810,7 +810,7 @@ angular.module('g1b.calendar-heatmap', []).
               }
 
               // Unset selected date
-              selected_date = undefined
+              selected_date = undefined;
 
               // Redraw the chart
               scope.drawChart();
