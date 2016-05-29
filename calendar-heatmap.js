@@ -797,6 +797,9 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'button button-back')
             .style('opacity', 0)
             .on('click', function () {
+              if ( in_transition ) { return; }
+
+              // Set transition boolean
               in_transition = true;
 
               // Cleanup the canvas from whichever overview type was on
