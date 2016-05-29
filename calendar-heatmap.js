@@ -41,9 +41,11 @@ angular.module('g1b.calendar-heatmap', []).
         var items = svg.append('g');
         var labels = svg.append('g');
         var buttons = svg.append('g');
-        var tooltip = svg.append('g')
-          .style('opacity', 0)
-          .attr('class', 'heatmap-tooltip');
+
+        // Add tooltip to the same element as main svg
+        var tooltip = d3.select(element[0]).append('div')
+          .attr('class', 'heatmap-tooltip')
+          .style('opacity', 0);
 
         scope.$watch(function () {
           return element[0].clientWidth;
