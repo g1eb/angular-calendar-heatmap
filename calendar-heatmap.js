@@ -103,8 +103,10 @@ angular.module('g1b.calendar-heatmap', []).
         scope.drawChart = function () {
           if ( !scope.data ) { return; }
 
-          if ( !!selected_date ) {
+          if ( !!selected_date && !!selected_date.total ) {
             scope.drawDayOverview();
+          } else if ( !!selected_date ) {
+            scope.drawMonthOverview();
           } else {
             scope.drawYearOverview();
           }
@@ -356,6 +358,13 @@ angular.module('g1b.calendar-heatmap', []).
                 .ease('ease-in')
                 .style('opacity', 1);
             });
+        };
+
+
+        /**
+         * Draw month overview
+         */
+        scope.drawMonthOverview = function () {
         };
 
 
