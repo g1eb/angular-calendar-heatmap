@@ -528,7 +528,7 @@ angular.module('g1b.calendar-heatmap', []).
             .data(weekLabels)
             .enter()
             .append('text')
-            .attr('class', 'label label-time')
+            .attr('class', 'label label-week')
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
             })
