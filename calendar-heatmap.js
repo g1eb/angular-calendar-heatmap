@@ -145,6 +145,7 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             })
             .on('click', function (d) {
+              if ( d.total === 0 ) { return; }
               in_transition = true;
 
               // Set selected date to the one clicked on
