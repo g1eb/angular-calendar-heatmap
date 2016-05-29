@@ -824,6 +824,21 @@ angular.module('g1b.calendar-heatmap', []).
 
 
         /**
+         * Transition and remove items and labels related to month overview
+         */
+        scope.removeMonthOverview = function () {
+          items.selectAll('.item-block')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease')
+            .style('opacity', 0)
+            .remove();
+          labels.selectAll('.label-day').remove();
+          labels.selectAll('.label-week').remove();
+        };
+
+
+        /**
          * Transition and remove items and labels related to daily overview
          */
         scope.removeDayOverview = function () {
