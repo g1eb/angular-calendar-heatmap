@@ -818,12 +818,6 @@ angular.module('g1b.calendar-heatmap', []).
             .ease('ease')
             .style('opacity', 0)
             .remove();
-          tooltip.selectAll('text')
-            .transition()
-            .duration(transition_duration)
-            .ease('ease')
-            .style('opacity', 0)
-            .remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-month').remove();
         };
