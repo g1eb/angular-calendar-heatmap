@@ -412,6 +412,9 @@ angular.module('g1b.calendar-heatmap', []).
                 .ease('ease-in')
                 .style('opacity', 1);
             });
+
+          // Add button to switch back to year overview
+          scope.drawButton();
         };
 
 
