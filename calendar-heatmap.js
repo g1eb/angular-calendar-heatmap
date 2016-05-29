@@ -291,6 +291,23 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 1);
+            })
+            .on('click', function (d) {
+              if ( in_transition ) { return; }
+
+              in_transition = true;
+
+              // Set selected month to the one clicked on
+              selected_date = d;
+
+              // Hide tooltip
+              scope.hideTooltip();
+
+              // Remove all year overview related items and labels
+              scope.removeYearOverview();
+
+              // Redraw the chart
+              scope.drawChart();
             });
 
           // Add day labels
