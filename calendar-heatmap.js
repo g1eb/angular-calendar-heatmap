@@ -153,6 +153,9 @@ angular.module('g1b.calendar-heatmap', []).
               // Set selected date to the one clicked on
               selected_date = d;
 
+              // Hide tooltip
+              scope.hideTooltip();
+
               // Remove all year overview related items and labels
               scope.removeYearOverview();
 
@@ -218,10 +221,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .attr('r', circle_radius);
 
               // Hide tooltip
-              tooltip.transition()
-                .duration(transition_duration / 2)
-                .ease('ease-in')
-                .style('opacity', 0);
+              scope.hideTooltip();
             })
             .transition()
               .delay( function () {
@@ -406,12 +406,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .on('mouseout', function () {
               if ( in_transition ) { return; };
-
-              // Hide tooltip
-              tooltip.transition()
-                .duration(transition_duration / 2)
-                .ease('ease-in')
-                .style('opacity', 0);
+              scope.hideTooltip();
             })
             .on('click', function (d) {
               if ( scope.handler ) {
@@ -631,6 +626,17 @@ angular.module('g1b.calendar-heatmap', []).
             .ease('ease')
             .style('opacity', 0)
             .remove();
+        };
+
+
+        /**
+         * Helper function to hide the tooltip
+         */
+        scope.hideTooltip = function () {
+          tooltip.transition()
+            .duration(transition_duration / 2)
+            .ease('ease-in')
+            .style('opacity', 0);
         };
 
 
