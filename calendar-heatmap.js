@@ -393,7 +393,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Define week labels and axis
           var weekLabels = [start_of_month.week()];
           while ( start_of_month.week() !== end_of_month.week() ) {
-            weekLabels.push(start_of_month.add('week', 1).week());
+            weekLabels.push(start_of_month.add(1, 'week').week());
           }
 
           // Add month data items to the overview
