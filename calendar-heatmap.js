@@ -442,7 +442,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Hide tooltip
               scope.hideTooltip();
 
-              // Remove all year overview related items and labels
+              // Remove all month overview related items and labels
               scope.removeMonthOverview();
 
               // Redraw the chart
