@@ -453,13 +453,13 @@ angular.module('g1b.calendar-heatmap', []).
           var itemScale = d3.scale.linear()
             .range([0, item_width]);
 
-          item_block.selectAll('rect')
+          item_block.selectAll('.item-block-rect')
             .data(function (d) {
               return d.summary;
             })
             .enter()
             .append('rect')
-            .attr('class', 'item item-block')
+            .attr('class', 'item item-block-rect')
             .attr('x', function (d) {
               var total = parseInt(d3.select(this.parentNode).attr('total'));
               var offset = parseInt(d3.select(this.parentNode).attr('offset'));
@@ -892,7 +892,7 @@ angular.module('g1b.calendar-heatmap', []).
          * Transition and remove items and labels related to month overview
          */
         scope.removeMonthOverview = function () {
-          svg.selectAll('.item-block')
+          svg.selectAll('.item-block-rect')
             .transition()
             .duration(transition_duration)
             .ease('ease-in')
