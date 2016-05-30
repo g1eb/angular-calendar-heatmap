@@ -14,6 +14,9 @@ Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target=
 ### Year overview
 [![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
+### Month overview
+[![Angular directive for d3.js calendar heatmap chart - month overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_month_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+
 ### Daily overview
 [![Angular directive for d3.js calendar heatmap chart - daily overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_daily_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
