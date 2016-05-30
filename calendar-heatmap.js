@@ -898,10 +898,9 @@ angular.module('g1b.calendar-heatmap', []).
             .ease('ease-in')
             .style('opacity', 0)
             .attr('x', function (d, i) {
-              return ( i % 2 === 0) ? -width/2 : width/2;
+              return ( i % 2 === 0) ? -width/3 : width/3;
             })
             .remove();
-          items.selectAll('.item-block-g').remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-week').remove();
           scope.hideBackButton();
