@@ -400,62 +400,34 @@ angular.module('g1b.calendar-heatmap', []).
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.1)
             .domain(weekLabels);
-          items.selectAll('.item-block').remove();
-          items.selectAll('.item-block')
+
+          items.selectAll('.item-block-g').remove();
+          var item_block = items.selectAll('.item-block-g')
             .data(month_data)
             .enter()
-            .append('rect')
-            .attr('class', 'item item-block')
-            .attr('x', function (d) {
-              return weekScale(moment(d.date).week());
-            })
-            .attr('y', function (d) {
-              return dayAxis(moment(d.date).weekday()) - 10;
-            })
+            .append('g')
+            .attr('class', 'item item-block-g')
             .attr('width', function () {
               return (width - label_padding) / weekLabels.length - gutter * 5;
             })
             .attr('height', function () {
               return Math.min(dayAxis.rangeBand(), max_block_height);
             })
-            .attr('fill', function (d) {
-              return ( d.total > 0 ) ? color(d.total) : 'transparent';
+            .attr('transform', function (d) {
+              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayAxis(moment(d.date).weekday()) - 10) + ')';
             })
-            .style('opacity', 0)
-            .on('mouseover', function(d) {
-              if ( in_transition ) { return; }
-
-              // Construct tooltip
-              var tooltip_html = '';
-              tooltip_html += '<div class="header"><strong>' + (d.total ? scope.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
-              tooltip_html += '<div>on ' + moment(d.date).format('dddd, MMM Do YYYY') + '</div><br>';
-
-              // Add summary to the tooltip
-              angular.forEach(d.summary, function (d) {
-                tooltip_html += '<div><span><strong>' + d.name + '</strong></span>';
-                tooltip_html += '<span>' + scope.formatTime(d.value) + '</span></div>';
+            .attr('total', function (d) {
+              return d.total;
+            })
+            .attr('max', function (d) {
+              return d3.max(d.summary, function (d) {
+                return d.value;
               });
-
-              // Calculate tooltip position
-              var x = weekScale(moment(d.date).week()) + tooltip_padding * 3;
-              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
-                x -= 10;
-              }
-              var y = dayAxis(moment(d.date).weekday()) + tooltip_padding;
-
-              // Show tooltip
-              tooltip.html(tooltip_html)
-                .style('left', x + 'px')
-                .style('top', y + 'px')
-                .transition()
-                  .duration(transition_duration / 2)
-                  .ease('ease-in')
-                  .style('opacity', 1);
             })
-            .on('mouseout', function () {
-              if ( in_transition ) { return; }
-              scope.hideTooltip();
+            .attr('date', function (d) {
+              return d.date;
             })
+            .attr('offset', 0)
             .on('click', function (d) {
               if ( in_transition ) { return; }
 
@@ -475,6 +447,71 @@ angular.module('g1b.calendar-heatmap', []).
 
               // Redraw the chart
               scope.drawChart();
+            });
+
+          var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
+          var itemScale = d3.scale.linear()
+            .range([0, item_width]);
+
+          item_block.selectAll('rect')
+            .data(function (d) {
+              return d.summary;
+            })
+            .enter()
+            .append('rect')
+            .attr('class', 'item item-block')
+            .attr('x', function (d) {
+              var total = parseInt(d3.select(this.parentNode).attr('total'));
+              var offset = parseInt(d3.select(this.parentNode).attr('offset'));
+              var item_width = d.value * ((width - label_padding) / weekLabels.length - gutter * 5) / total;
+              d3.select(this.parentNode).attr('offset', offset + item_width);
+              return offset;
+            })
+            .attr('width', function (d) {
+              var total = parseInt(d3.select(this.parentNode).attr('total'));
+              itemScale.domain([0, total]);
+              return itemScale(d.value);
+            })
+            .attr('height', function () {
+              return Math.min(dayAxis.rangeBand(), max_block_height);
+            })
+            .attr('fill', function (d) {
+              var max = parseInt(d3.select(this.parentNode).attr('max'));
+              var color = d3.scale.linear()
+                .range(['#ffffff', scope.color || '#ff4500'])
+                .domain([-0.15 * max, max]);
+              return color(d.value) || '#ff4500';
+            })
+            .style('opacity', 0)
+            .on('mouseover', function(d) {
+              if ( in_transition ) { return; }
+
+              // Construct tooltip
+              var tooltip_html = '';
+              tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
+              tooltip_html += '<div><strong>' + (d.value ? scope.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
+              tooltip_html += '<div>on ' + moment(d.value).format('dddd, MMM Do YYYY') + '</div>';
+
+              // Calculate tooltip position
+              var date = new Date(d3.select(this.parentNode).attr('date'));
+              var x = weekScale(moment(date).week()) + tooltip_padding * 3;
+              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
+                x -= 10;
+              }
+              var y = dayAxis(moment(date).weekday()) + tooltip_padding;
+
+              // Show tooltip
+              tooltip.html(tooltip_html)
+                .style('left', x + 'px')
+                .style('top', y + 'px')
+                .transition()
+                  .duration(transition_duration / 2)
+                  .ease('ease-in')
+                  .style('opacity', 1);
+            })
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
+              scope.hideTooltip();
             })
             .transition()
               .delay(function () {
@@ -484,7 +521,7 @@ angular.module('g1b.calendar-heatmap', []).
                 return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
               })
               .ease('ease-in')
-              .style('opacity', 0.5)
+              .style('opacity', 0.75)
               .call(function (transition, callback) {
                 if ( transition.empty() ) {
                   callback();
