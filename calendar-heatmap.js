@@ -478,14 +478,16 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseover', function(d) {
               if ( in_transition ) { return; }
 
+              // Get date from the parent node
+              var date = new Date(d3.select(this.parentNode).attr('date'));
+
               // Construct tooltip
               var tooltip_html = '';
               tooltip_html += '<div class="header"><strong>' + d.name + '</strong></div><br>';
               tooltip_html += '<div><strong>' + (d.value ? scope.formatTime(d.value) : 'No time') + ' tracked</strong></div>';
-              tooltip_html += '<div>on ' + moment(d.value).format('dddd, MMM Do YYYY') + '</div>';
+              tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
               // Calculate tooltip position
-              var date = new Date(d3.select(this.parentNode).attr('date'));
               var x = weekScale(moment(date).week()) + tooltip_padding * 3;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
