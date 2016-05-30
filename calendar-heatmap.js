@@ -855,15 +855,16 @@ angular.module('g1b.calendar-heatmap', []).
          * Transition and remove items and labels related to month overview
          */
         scope.removeMonthOverview = function () {
-          items.selectAll('.item-block')
+          svg.selectAll('.item-block')
             .transition()
             .duration(transition_duration)
             .ease('ease-in')
             .style('opacity', 0)
             .attr('x', function (d, i) {
-              return ( i % 2 === 0) ? 0 : width;
+              return ( i % 2 === 0) ? -width/2 : width/2;
             })
             .remove();
+          items.selectAll('.item-block-g').remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-week').remove();
           scope.hideBackButton();
