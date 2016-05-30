@@ -374,14 +374,6 @@ angular.module('g1b.calendar-heatmap', []).
             return start_of_month <= d.date && d.date < end_of_month;
           });
 
-          // Calculate max_value and set color range
-          var max_value = d3.max(month_data, function (d) {
-            return d.total;
-          });
-          var color = d3.scale.linear()
-            .range(['#ffffff', scope.color || '#ff4500'])
-            .domain([-0.15 * max_value, max_value]);
-
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayAxis = d3.scale.ordinal()
