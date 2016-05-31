@@ -18,6 +18,7 @@ angular.module('g1b.calendar-heatmap', []).
 
         // Defaults
         var gutter = 5;
+        var item_gutter = 1;
         var width = 1000;
         var height = 200;
         var circle_radius = 10;
@@ -456,8 +457,8 @@ angular.module('g1b.calendar-heatmap', []).
               var total = parseInt(d3.select(this.parentNode).attr('total'));
               var offset = parseInt(d3.select(this.parentNode).attr('offset'));
               var item_width = d.value * ((width - label_padding) / weekLabels.length - gutter * 5) / total;
-              d3.select(this.parentNode).attr('offset', offset + item_width);
-              return offset;
+              d3.select(this.parentNode).attr('offset', offset + item_width + item_gutter);
+              return offset + item_gutter;
             })
             .attr('width', function (d) {
               var total = parseInt(d3.select(this.parentNode).attr('total'));
