@@ -373,6 +373,11 @@ angular.module('g1b.calendar-heatmap', []).
           var month_data = scope.data.filter(function (d) {
             return start_of_month <= moment(d.date) && moment(d.date) < end_of_month;
           });
+          var max_value = d3.max(month_data, function (d) {
+            return d3.max(d.summary, function (d) {
+              return d.value;
+            });
+          });
 
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
@@ -471,7 +476,7 @@ angular.module('g1b.calendar-heatmap', []).
               var max = parseInt(d3.select(this.parentNode).attr('max'));
               var color = d3.scale.linear()
                 .range(['#ffffff', scope.color || '#ff4500'])
-                .domain([-0.15 * max, max]);
+                .domain([-0.15 * max_value, max_value]);
               return color(d.value) || '#ff4500';
             })
             .style('opacity', 0)
@@ -515,7 +520,7 @@ angular.module('g1b.calendar-heatmap', []).
                 return Math.cos( Math.PI * Math.random() ) * transition_duration * 2;
               })
               .ease('ease-in')
-              .style('opacity', 0.75)
+              .style('opacity', 1)
               .call(function (transition, callback) {
                 if ( transition.empty() ) {
                   callback();
