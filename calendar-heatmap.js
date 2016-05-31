@@ -416,11 +416,6 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('total', function (d) {
               return d.total;
             })
-            .attr('max', function (d) {
-              return d3.max(d.summary, function (d) {
-                return d.value;
-              });
-            })
             .attr('date', function (d) {
               return d.date;
             })
@@ -473,7 +468,6 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.min(dayAxis.rangeBand(), max_block_height);
             })
             .attr('fill', function (d) {
-              var max = parseInt(d3.select(this.parentNode).attr('max'));
               var color = d3.scale.linear()
                 .range(['#ffffff', scope.color || '#ff4500'])
                 .domain([-0.15 * max_value, max_value]);
