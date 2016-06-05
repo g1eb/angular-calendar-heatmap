@@ -444,7 +444,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
           var itemScale = d3.scale.linear()
-            .range([0, item_width]);
+            .rangeRound([0, item_width]);
 
           item_block.selectAll('.item-block-rect')
             .data(function (d) {
