@@ -377,7 +377,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Add day labels
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
-          var dayAxis = d3.scale.ordinal()
+          var dayScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, height])
             .domain(dayLabels.map(function (d) {
               return moment(d).weekday();
@@ -390,7 +390,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return dayAxis(i) + dayAxis.rangeBand() / 1.75;
+              return dayScale(i) + dayScale.rangeBand() / 1.75;
             })
             .style('text-anchor', 'left')
             .attr('font-size', function () {
@@ -443,7 +443,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
-          var dayAxis = d3.scale.ordinal()
+          var dayScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, height])
             .domain(dayLabels.map(function (d) {
               return moment(d).weekday();
@@ -470,10 +470,10 @@ angular.module('g1b.calendar-heatmap', []).
               return (width - label_padding) / weekLabels.length - gutter * 5;
             })
             .attr('height', function () {
-              return Math.min(dayAxis.rangeBand(), max_block_height);
+              return Math.min(dayScale.rangeBand(), max_block_height);
             })
             .attr('transform', function (d) {
-              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayAxis(moment(d.date).weekday()) + 5) + ')';
+              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayScale(moment(d.date).weekday()) + 5) + ')';
             })
             .attr('total', function (d) {
               return d.total;
@@ -527,7 +527,7 @@ angular.module('g1b.calendar-heatmap', []).
               return itemScale(d.value) - item_gutter;
             })
             .attr('height', function () {
-              return Math.min(dayAxis.rangeBand(), max_block_height);
+              return Math.min(dayScale.rangeBand(), max_block_height);
             })
             .attr('fill', function (d) {
               var color = d3.scale.linear()
@@ -553,7 +553,7 @@ angular.module('g1b.calendar-heatmap', []).
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = dayAxis(moment(date).weekday()) + tooltip_padding;
+              var y = dayScale(moment(date).weekday()) + tooltip_padding;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -602,7 +602,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return dayAxis(i) + dayAxis.rangeBand() / 1.75;
+              return dayScale(i) + dayScale.rangeBand() / 1.75;
             })
             .style('text-anchor', 'left')
             .attr('font-size', function () {
