@@ -602,14 +602,11 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return dayAxis(i);
+              return dayAxis(i) + dayAxis.rangeBand() / 1.75;
             })
-            .style('text-anchor', 'middle')
+            .style('text-anchor', 'left')
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
-            })
-            .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
             })
             .text(function (d) {
               return moment(d).format('dddd')[0];
