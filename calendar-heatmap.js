@@ -892,11 +892,13 @@ angular.module('g1b.calendar-heatmap', []).
               // Set transition boolean
               in_transition = true;
 
-              // Cleanup the canvas from whichever overview type was on
-              if ( !!selected_date && !!selected_date.total ) {
-                scope.removeDayOverview();
-              } else if ( !!selected_date ) {
+              // Clean the canvas from whichever overview type was on
+              if ( history[history.length-1] === 'year' ) {
+                scope.removeYearOverview();
+              } else if ( history[history.length-1] === 'month' ) {
                 scope.removeMonthOverview();
+              } else if ( history[history.length-1] === 'day' ) {
+                scope.removeDayOverview();
               }
 
               // Unset selected date
