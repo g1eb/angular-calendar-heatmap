@@ -684,8 +684,8 @@ angular.module('g1b.calendar-heatmap', []).
             return project.name;
           });
           var projectScale = d3.scale.ordinal()
-            .domain(projectLabels)
-            .rangeRoundBands([label_padding, height], 0.1);
+            .rangeRoundBands([label_padding, height])
+            .domain(projectLabels);
 
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
@@ -700,7 +700,7 @@ angular.module('g1b.calendar-heatmap', []).
               return itemScale(moment(d.date));
             })
             .attr('y', function (d) {
-              return projectScale(d.name) - 10;
+              return (projectScale(d.name) + projectScale.rangeBand() / 2) - 15;
             })
             .attr('width', function (d) {
               var end = itemScale(d3.time.second.offset(moment(d.date), d.value));
@@ -826,7 +826,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('class', 'label label-project')
             .attr('x', gutter)
             .attr('y', function (d) {
-              return projectScale(d);
+              return projectScale(d) + projectScale.rangeBand() / 2;
             })
             .attr('min-height', function () {
               return projectScale.rangeBand();
@@ -834,9 +834,6 @@ angular.module('g1b.calendar-heatmap', []).
             .style('text-anchor', 'left')
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
-            })
-            .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
             })
             .text(function (d) {
               return d;
