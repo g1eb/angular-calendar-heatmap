@@ -151,6 +151,12 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('rx', function (d) {
               return calcItemSize(d);
             })
+            .attr('x', function (d) {
+              return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
+            })
+            .attr('y', function (d) {
+              return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
+            })
             .attr('width', function (d) {
               return calcItemSize(d);
             })
@@ -159,12 +165,6 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('fill', function (d) {
               return ( d.total > 0 ) ? color(d.total) : 'transparent';
-            })
-            .attr('x', function (d) {
-              return calcItemX(d);
-            })
-            .attr('y', function (d) {
-              return calcItemY(d);
             })
             .on('click', function (d) {
               if ( in_transition ) { return; }
@@ -207,10 +207,10 @@ angular.module('g1b.calendar-heatmap', []).
                   .duration(transition_duration)
                   .ease('ease-in')
                   .attr('x', function (d) {
-                    return calcItemX(d);
+                    return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
                   })
                   .attr('y', function (d) {
-                    return calcItemY(d);
+                    return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
                   })
                   .attr('width', function (d) {
                     return calcItemSize(d);
@@ -256,10 +256,10 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration / 2)
                 .ease('ease-in')
                 .attr('x', function (d) {
-                  return calcItemX(d);
+                  return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
                 })
                 .attr('y', function (d) {
-                  return calcItemY(d);
+                  return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
                 })
                 .attr('width', function (d) {
                   return calcItemSize(d);
