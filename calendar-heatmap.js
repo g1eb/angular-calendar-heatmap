@@ -593,6 +593,44 @@ angular.module('g1b.calendar-heatmap', []).
                   in_transition = false;
                 });
 
+          // Add week labels
+          labels.selectAll('.label-week').remove();
+          labels.selectAll('.label-week')
+            .data(weekLabels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-week')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .text(function (week_nr) {
+              return 'Week ' + week_nr;
+            })
+            .attr('x', function (d) {
+              return weekScale(d);
+            })
+            .attr('y', label_padding / 2)
+            .on('mouseenter', function (week_nr) {
+              if ( in_transition ) { return; }
+
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  return ( moment(d.date).week() === week_nr ) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
+
+              items.selectAll('.item-block')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 0.5);
+            });
+
           // Add day labels
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
@@ -631,44 +669,6 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 1);
-            });
-
-          // Add week labels
-          labels.selectAll('.label-week').remove();
-          labels.selectAll('.label-week')
-            .data(weekLabels)
-            .enter()
-            .append('text')
-            .attr('class', 'label label-week')
-            .attr('font-size', function () {
-              return Math.floor(label_padding / 3) + 'px';
-            })
-            .text(function (week_nr) {
-              return 'Week ' + week_nr;
-            })
-            .attr('x', function (d) {
-              return weekScale(d);
-            })
-            .attr('y', label_padding / 2)
-            .on('mouseenter', function (week_nr) {
-              if ( in_transition ) { return; }
-
-              items.selectAll('.item-block')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease-in')
-                .style('opacity', function (d) {
-                  return ( moment(d.date).week() === week_nr ) ? 1 : 0.1;
-                });
-            })
-            .on('mouseout', function () {
-              if ( in_transition ) { return; }
-
-              items.selectAll('.item-block')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease-in')
-                .style('opacity', 0.5);
             });
 
           // Add button to switch back to year overview
