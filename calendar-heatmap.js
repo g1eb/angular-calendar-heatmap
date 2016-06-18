@@ -549,11 +549,11 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
               // Calculate tooltip position
-              var x = weekScale(moment(date).week()) + tooltip_padding * 3;
+              var x = weekScale(moment(date).week()) + tooltip_padding;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = dayScale(moment(date).weekday()) + tooltip_padding;
+              var y = dayScale(moment(date).weekday()) + tooltip_padding * 2;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -727,7 +727,7 @@ angular.module('g1b.calendar-heatmap', []).
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = projectScale(d.name) - 10 + projectScale.rangeBand();
+              var y = projectScale(d.name) + projectScale.rangeBand() / 2 + tooltip_padding / 2;
 
               // Show tooltip
               tooltip.html(tooltip_html)
