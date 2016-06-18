@@ -23,7 +23,7 @@ angular.module('g1b.calendar-heatmap', []).
         var height = 200;
         var item_size = 10;
         var label_padding = 40;
-        var max_block_height = 25;
+        var max_block_height = 20;
         var transition_duration = 500;
         var in_transition = false;
         var selected_date;
