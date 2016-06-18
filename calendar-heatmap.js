@@ -444,7 +444,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Define day labels and axis
           var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayAxis = d3.scale.ordinal()
-            .rangeRoundBands([label_padding, height], 0.1)
+            .rangeRoundBands([label_padding, height])
             .domain(dayLabels.map(function (d) {
               return moment(d).weekday();
             }));
@@ -473,7 +473,7 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.min(dayAxis.rangeBand(), max_block_height);
             })
             .attr('transform', function (d) {
-              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayAxis(moment(d.date).weekday()) - 10) + ')';
+              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayAxis(moment(d.date).weekday()) + 5) + ')';
             })
             .attr('total', function (d) {
               return d.total;
