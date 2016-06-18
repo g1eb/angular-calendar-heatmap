@@ -27,6 +27,7 @@ angular.module('g1b.calendar-heatmap', []).
         var transition_duration = 500;
         var in_transition = false;
         var selected_date;
+        var history = [];
 
         // Tooltip defaults
         var tooltip_width = 250;
@@ -100,15 +101,30 @@ angular.module('g1b.calendar-heatmap', []).
         /**
          * Draw the chart based on the current overview type
          */
-        scope.drawChart = function () {
+        scope.drawChart = function (type) {
           if ( !scope.data ) { return; }
 
-          if ( !!selected_date && !!selected_date.total ) {
-            scope.drawDayOverview();
-          } else if ( !!selected_date ) {
-            scope.drawMonthOverview();
-          } else {
-            scope.drawYearOverview();
+          switch (type) {
+            case 'month':
+              if ( history.indexOf('month') < 0 ) {
+                history.push('month');
+              }
+              scope.drawMonthOverview();
+              break;
+            case 'day':
+              if ( history.indexOf('day') < 0 ) {
+                history.push('day');
+              }
+              scope.drawDayOverview();
+              break;
+            case 'prev':
+              history.pop();
+              scope.drawChart(history[history.length - 1]);
+              break;
+            default:
+              history = [];
+              scope.drawYearOverview();
+              break;
           }
         };
 
@@ -184,7 +200,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
-              scope.drawChart();
+              scope.drawChart('day');
             })
             .on('mouseover', function (d) {
               if ( in_transition ) { return; }
@@ -356,7 +372,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
-              scope.drawChart();
+              scope.drawChart('month');
             });
 
           // Add day labels
@@ -482,7 +498,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeMonthOverview();
 
               // Redraw the chart
-              scope.drawChart();
+              scope.drawChart('day');
             });
 
           var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
@@ -887,7 +903,7 @@ angular.module('g1b.calendar-heatmap', []).
               selected_date = undefined;
 
               // Redraw the chart
-              scope.drawChart();
+              scope.drawChart('prev');
             });
           button.append('circle')
             .attr('cx', label_padding / 3)
