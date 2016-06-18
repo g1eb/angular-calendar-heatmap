@@ -613,7 +613,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (week_nr) {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -624,11 +624,11 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
-                .style('opacity', 0.5);
+                .style('opacity', 1);
             });
 
           // Add day labels
@@ -653,7 +653,7 @@ angular.module('g1b.calendar-heatmap', []).
               if ( in_transition ) { return; }
 
               var selectedDay = moment(d);
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -664,7 +664,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
