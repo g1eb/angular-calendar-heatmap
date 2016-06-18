@@ -21,7 +21,7 @@ angular.module('g1b.calendar-heatmap', []).
         var item_gutter = 1;
         var width = 1000;
         var height = 200;
-        var circle_radius = 10;
+        var item_size = 10;
         var label_padding = 40;
         var max_block_height = 25;
         var transition_duration = 500;
@@ -52,9 +52,8 @@ angular.module('g1b.calendar-heatmap', []).
         }, function ( w ) {
           if ( !w ) { return; }
           width = w < 1000 ? 1000 : w;
-          circle_radius = (((width - gutter) / (moment().weeksInYear() + 2)) - gutter) / 2;
-          label_padding = circle_radius * 4;
-          height = label_padding + 7 * (circle_radius * 2 + gutter);
+          item_size = (((width - label_padding) / moment().diff(moment().subtract(1, 'year'), 'weeks')) - gutter);
+          height = label_padding + 7 * (item_size + gutter);
           svg.attr({'width': width, 'height': height});
           scope.drawChart();
         });
@@ -126,27 +125,46 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([-0.15 * max_value, max_value]);
 
+          var calcItemX = function (d) {
+            var date = moment(d.date);
+            var week_num = date.week() - firstDate.week() + (firstDate.weeksInYear() * (date.weekYear() - firstDate.weekYear()));
+            return week_num * (item_size + gutter) + label_padding;
+          };
+          var calcItemY = function (d) {
+            return label_padding + moment(d.date).weekday() * (item_size + gutter);
+          };
+          var calcItemSize = function (d) {
+            if ( max_value <= 0 ) { return item_size; }
+            return item_size * 0.75 + (item_size * d.total / max_value) * 0.25;
+          };
+
           items.selectAll('.item-circle').remove();
           items.selectAll('.item-circle')
             .data(scope.data)
             .enter()
-            .append('circle')
+            .append('rect')
             .attr('class', 'item item-circle')
             .style('opacity', 0)
-            .attr('r', function (d) {
-              if ( max_value <= 0 ) { return circle_radius; }
-              return circle_radius * 0.75 + (circle_radius * d.total / max_value) * 0.25;
+            .attr('rx', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('rx', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('width', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('height', function (d) {
+              return calcItemSize(d);
             })
             .attr('fill', function (d) {
               return ( d.total > 0 ) ? color(d.total) : 'transparent';
             })
-            .attr('cx', function (d) {
-              var cellDate = moment(d.date);
-              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-              return week_num * (circle_radius * 2 + gutter) + label_padding;
+            .attr('x', function (d) {
+              return calcItemX(d);
             })
-            .attr('cy', function (d) {
-              return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
+            .attr('y', function (d) {
+              return calcItemY(d);
             })
             .on('click', function (d) {
               if ( in_transition ) { return; }
@@ -177,11 +195,29 @@ angular.module('g1b.calendar-heatmap', []).
                 circle = circle.transition()
                   .duration(transition_duration)
                   .ease('ease-in')
-                  .attr('r', circle_radius+1)
+                  .attr('x', function (d) {
+                    return calcItemX(d) - (item_size * 1.1 - item_size) / 2;
+                  })
+                  .attr('y', function (d) {
+                    return calcItemY(d) - (item_size * 1.1 - item_size) / 2;
+                  })
+                  .attr('width', item_size * 1.1)
+                  .attr('height', item_size * 1.1)
                   .transition()
                   .duration(transition_duration)
                   .ease('ease-in')
-                  .attr('r', circle_radius)
+                  .attr('x', function (d) {
+                    return calcItemX(d);
+                  })
+                  .attr('y', function (d) {
+                    return calcItemY(d);
+                  })
+                  .attr('width', function (d) {
+                    return calcItemSize(d);
+                  })
+                  .attr('height', function (d) {
+                    return calcItemSize(d);
+                  })
                   .each('end', repeat);
               })();
 
@@ -197,13 +233,11 @@ angular.module('g1b.calendar-heatmap', []).
               });
 
               // Calculate tooltip position
-              var cellDate = moment(d.date);
-              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-              var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              var x = calcItemX(d) + item_size;
               if ( width - x < (tooltip_width + tooltip_padding * 3) ) {
-                x -= tooltip_width + tooltip_padding * 3;
+                x -= tooltip_width + tooltip_padding * 2;
               }
-              var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              var y = calcItemY(d) + item_size;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -221,7 +255,18 @@ angular.module('g1b.calendar-heatmap', []).
               d3.select(this).transition()
                 .duration(transition_duration / 2)
                 .ease('ease-in')
-                .attr('r', circle_radius);
+                .attr('x', function (d) {
+                  return calcItemX(d);
+                })
+                .attr('y', function (d) {
+                  return calcItemY(d);
+                })
+                .attr('width', function (d) {
+                  return calcItemSize(d);
+                })
+                .attr('height', function (d) {
+                  return calcItemSize(d);
+                });
 
               // Hide tooltip
               scope.hideTooltip();
