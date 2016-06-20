@@ -16,6 +16,8 @@
   <script>
     angular.module('ExampleApp', ['g1b.calendar-heatmap']).
       controller('MainCtrl', function ($scope) {
+
+        // Initialize random data for the demo
         var now = moment().endOf('day').toDate();
         var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
         $scope.exampleData = d3.time.days(yearAgo, now).map(function (dateElement) {
@@ -45,6 +47,7 @@
         // Set overview type (choices are year, month and day)
         $scope.overview = 'year';
 
+        // Handler function
         $scope.print = function (val) {
           console.log(val);
         };
