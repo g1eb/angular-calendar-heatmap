@@ -10,6 +10,7 @@ angular.module('g1b.calendar-heatmap', []).
       scope: {
         data: '=',
         color: '=',
+        overview: '=',
         handler: '='
       },
       replace: true,

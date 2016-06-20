@@ -6,7 +6,7 @@
 </head>
 <body ng-controller="MainCtrl">
 
-  <calendar-heatmap data="exampleData" color="'#ff0000'" handler="print"></calendar-heatmap>
+  <calendar-heatmap data="exampleData" color="'#ff0000'" overview="overview" handler="print"></calendar-heatmap>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
@@ -41,6 +41,10 @@
             }
           }.init();
         });
+
+        // Set overview type (choices are year, month and day)
+        $scope.overview = 'year';
+
         $scope.print = function (val) {
           console.log(val);
         };
