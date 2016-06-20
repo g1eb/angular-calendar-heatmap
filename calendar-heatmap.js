@@ -34,7 +34,7 @@ angular.module('g1b.calendar-heatmap', []).
 
         // Initialize current overview type and history
         scope.overview = scope.overview || 'year';
-        scope.history = [];
+        scope.history = ['year'];
         scope.selected = {};
 
         // Initialize svg element
