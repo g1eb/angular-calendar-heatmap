@@ -681,6 +681,11 @@ angular.module('g1b.calendar-heatmap', []).
           // Add current overview to the history
           scope.history.push(scope.overview);
 
+          // Initialize selected date to today if it was not set
+          if ( !!scope.selected ) {
+              scope.selected = scope.data[scope.data.length - 1];
+          }
+
           var project_labels = scope.selected.summary.map(function (project) {
             return project.name;
           });
