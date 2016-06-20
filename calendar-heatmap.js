@@ -26,12 +26,15 @@ angular.module('g1b.calendar-heatmap', []).
         var max_block_height = 20;
         var transition_duration = 500;
         var in_transition = false;
-        var selected_date;
-        var history = [];
 
         // Tooltip defaults
         var tooltip_width = 250;
         var tooltip_padding = 15;
+
+        // Initialize current overview type and history
+        scope.overview = scope.overview || 'year';
+        scope.history = [scope.overview];
+        scope.selected_date;
 
         // Initialize svg element
         var svg = d3.select(element[0])
@@ -118,6 +121,9 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw year overview
          */
         scope.drawYearOverview = function () {
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
           var firstDate = moment(scope.data[0].date);
           var max_value = d3.max(scope.data, function (d) {
             return d.total;
@@ -176,7 +182,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              selected_date = d;
+              scope.selected_date = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -185,7 +191,8 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
-              scope.drawChart('day');
+              scope.overview = 'day';
+              scope.drawChart();
             })
             .on('mouseover', function (d) {
               if ( in_transition ) { return; }
@@ -348,7 +355,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected month to the one clicked on
-              selected_date = d;
+              scope.selected_date = {date: d};
 
               // Hide tooltip
               scope.hideTooltip();
@@ -357,7 +364,8 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
-              scope.drawChart('month');
+              scope.overview = 'month';
+              scope.drawChart();
             });
 
           // Add day labels
@@ -412,9 +420,12 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw month overview
          */
         scope.drawMonthOverview = function () {
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
           // Define beginning and end of the month
-          var start_of_month = moment(selected_date).startOf('month');
-          var end_of_month = moment(selected_date).endOf('month');
+          var start_of_month = moment(scope.selected_date.date).startOf('month');
+          var end_of_month = moment(scope.selected_date.date).endOf('month');
 
           // Filter data down to the selected month
           var month_data = scope.data.filter(function (d) {
@@ -476,7 +487,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              selected_date = d;
+              scope.selected_date = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -485,7 +496,8 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeMonthOverview();
 
               // Redraw the chart
-              scope.drawChart('day');
+              scope.overview = 'day';
+              scope.drawChart();
             });
 
           var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
@@ -665,7 +677,10 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw day overview
          */
         scope.drawDayOverview = function () {
-          var projectLabels = selected_date.summary.map(function (project) {
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
+          var projectLabels = scope.selected_date.summary.map(function (project) {
             return project.name;
           });
           var projectScale = d3.scale.ordinal()
@@ -674,10 +689,10 @@ angular.module('g1b.calendar-heatmap', []).
 
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
-            .domain([moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day')]);
+            .domain([moment(scope.selected_date.date).startOf('day'), moment(scope.selected_date.date).endOf('day')]);
           items.selectAll('.item-block').remove();
           items.selectAll('.item-block')
-            .data(selected_date.details)
+            .data(scope.selected_date.details)
             .enter()
             .append('rect')
             .attr('class', 'item item-block')
@@ -758,7 +773,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
 
           // Add time labels
-          var timeLabels = d3.time.hours(moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day'));
+          var timeLabels = d3.time.hours(moment(scope.selected_date.date).startOf('day'), moment(scope.selected_date.date).endOf('day'));
           var timeScale = d3.time.scale()
             .range([label_padding*2, width])
             .domain([0, timeLabels.length]);
@@ -874,19 +889,18 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Clean the canvas from whichever overview type was on
-              if ( history[history.length-1] === 'year' ) {
+              if ( scope.overview === 'year' ) {
                 scope.removeYearOverview();
-              } else if ( history[history.length-1] === 'month' ) {
+              } else if ( scope.overview === 'month' ) {
                 scope.removeMonthOverview();
-              } else if ( history[history.length-1] === 'day' ) {
+              } else if ( scope.overview === 'day' ) {
                 scope.removeDayOverview();
               }
 
-              // Unset selected date
-              selected_date = undefined;
-
               // Redraw the chart
-              scope.drawChart('prev');
+              scope.history.pop();
+              scope.overview = scope.history.pop();
+              scope.drawChart();
             });
           button.append('circle')
             .attr('cx', label_padding / 2)
