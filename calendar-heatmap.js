@@ -59,7 +59,9 @@ angular.module('g1b.calendar-heatmap', []).
           item_size = (((width - label_padding) / moment().diff(moment().subtract(1, 'year'), 'weeks')) - gutter);
           height = label_padding + 7 * (item_size + gutter);
           svg.attr({'width': width, 'height': height});
-          scope.drawChart();
+          if ( !!scope.data && !!scope.data[0].summary ) {
+            scope.drawChart();
+          }
         });
 
         angular.element($window).bind('resize', function () {
