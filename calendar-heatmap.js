@@ -124,7 +124,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add current overview to the history
           scope.history.push(scope.overview);
 
-          var firstDate = moment(scope.data[0].date);
+          var first_date = moment(scope.data[0].date);
           var max_value = d3.max(scope.data, function (d) {
             return d.total;
           });
@@ -134,7 +134,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           var calcItemX = function (d) {
             var date = moment(d.date);
-            var week_num = date.week() - firstDate.week() + (firstDate.weeksInYear() * (date.weekYear() - firstDate.weekYear()));
+            var week_num = date.week() - first_date.week() + (first_date.weeksInYear() * (date.weekYear() - first_date.weekYear()));
             return week_num * (item_size + gutter) + label_padding;
           };
           var calcItemY = function (d) {
@@ -306,15 +306,14 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Add month labels
           var today = moment().endOf('day');
-          var todayYearAgo = moment().startOf('day').subtract(1, 'year');
-          var monthLabels = d3.time.months(todayYearAgo.startOf('month'), today);
-
+          var today_year_ago = moment().startOf('day').subtract(1, 'year');
+          var month_labels = d3.time.months(today_year_ago.startOf('month'), today);
           var monthScale = d3.scale.linear()
             .range([0, width])
-            .domain([0, monthLabels.length]);
+            .domain([0, month_labels.length]);
           labels.selectAll('.label-month').remove();
           labels.selectAll('.label-month')
-            .data(monthLabels)
+            .data(month_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-month')
@@ -331,13 +330,13 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (d) {
               if ( in_transition ) { return; }
 
-              var selectedMonth = moment(d);
+              var selected_month = moment(d);
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return moment(d.date).isSame(selectedMonth, 'month') ? 1 : 0.1;
+                  return moment(d.date).isSame(selected_month, 'month') ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -369,15 +368,15 @@ angular.module('g1b.calendar-heatmap', []).
             });
 
           // Add day labels
-          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var day_labels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, height])
-            .domain(dayLabels.map(function (d) {
+            .domain(day_labels.map(function (d) {
               return moment(d).weekday();
             }));
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
-            .data(dayLabels)
+            .data(day_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-day')
@@ -395,13 +394,13 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (d) {
               if ( in_transition ) { return; }
 
-              var selectedDay = moment(d);
+              var selected_day = moment(d);
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
+                  return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -438,10 +437,10 @@ angular.module('g1b.calendar-heatmap', []).
           });
 
           // Define day labels and axis
-          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var day_labels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
           var dayScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, height])
-            .domain(dayLabels.map(function (d) {
+            .domain(day_labels.map(function (d) {
               return moment(d).weekday();
             }));
 
@@ -631,7 +630,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add day labels
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
-            .data(dayLabels)
+            .data(day_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-day')
@@ -649,13 +648,13 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (d) {
               if ( in_transition ) { return; }
 
-              var selectedDay = moment(d);
+              var selected_day = moment(d);
               items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
+                  return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -680,12 +679,12 @@ angular.module('g1b.calendar-heatmap', []).
           // Add current overview to the history
           scope.history.push(scope.overview);
 
-          var projectLabels = scope.selected.summary.map(function (project) {
+          var project_labels = scope.selected.summary.map(function (project) {
             return project.name;
           });
           var projectScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, height])
-            .domain(projectLabels);
+            .domain(project_labels);
 
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
@@ -820,7 +819,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add project labels
           labels.selectAll('.label-project').remove();
           labels.selectAll('.label-project')
-            .data(projectLabels)
+            .data(project_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-project')
@@ -840,12 +839,12 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .each(function () {
               var obj = d3.select(this),
-                textLength = obj.node().getComputedTextLength(),
+                text_length = obj.node().getComputedTextLength(),
                 text = obj.text();
-              while (textLength > (label_padding * 1.5) && text.length > 0) {
+              while (text_length > (label_padding * 1.5) && text.length > 0) {
                 text = text.slice(0, -1);
                 obj.text(text + '...');
-                textLength = obj.node().getComputedTextLength();
+                text_length = obj.node().getComputedTextLength();
               }
             })
             .on('mouseenter', function (project) {
