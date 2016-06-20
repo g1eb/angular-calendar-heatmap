@@ -104,27 +104,12 @@ angular.module('g1b.calendar-heatmap', []).
         scope.drawChart = function (type) {
           if ( !scope.data ) { return; }
 
-          switch (type) {
-            case 'month':
-              if ( history.indexOf('month') < 0 ) {
-                history.push('month');
-              }
-              scope.drawMonthOverview();
-              break;
-            case 'day':
-              if ( history.indexOf('day') < 0 ) {
-                history.push('day');
-              }
-              scope.drawDayOverview();
-              break;
-            case 'prev':
-              history.pop();
-              scope.drawChart(history[history.length - 1]);
-              break;
-            default:
-              history = [];
-              scope.drawYearOverview();
-              break;
+          if ( scope.overview === 'year' ) {
+            scope.drawYearOverview();
+          } else if ( scope.overview === 'month' ) {
+            scope.drawMonthOverview();
+          } else if ( scope.overview === 'day' ) {
+            scope.drawDayOverview();
           }
         };
 
