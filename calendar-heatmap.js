@@ -21,16 +21,20 @@ angular.module('g1b.calendar-heatmap', []).
         var item_gutter = 1;
         var width = 1000;
         var height = 200;
-        var circle_radius = 10;
+        var item_size = 10;
         var label_padding = 40;
-        var max_block_height = 25;
+        var max_block_height = 20;
         var transition_duration = 500;
         var in_transition = false;
-        var selected_date;
 
         // Tooltip defaults
         var tooltip_width = 250;
         var tooltip_padding = 15;
+
+        // Initialize current overview type and history
+        scope.overview = scope.overview || 'year';
+        scope.history = [];
+        scope.selected;
 
         // Initialize svg element
         var svg = d3.select(element[0])
@@ -52,9 +56,8 @@ angular.module('g1b.calendar-heatmap', []).
         }, function ( w ) {
           if ( !w ) { return; }
           width = w < 1000 ? 1000 : w;
-          circle_radius = (((width - gutter) / (moment().weeksInYear() + 2)) - gutter) / 2;
-          label_padding = circle_radius * 4;
-          height = label_padding + 7 * (circle_radius * 2 + gutter);
+          item_size = (((width - label_padding) / moment().diff(moment().subtract(1, 'year'), 'weeks')) - gutter);
+          height = label_padding + 7 * (item_size + gutter);
           svg.attr({'width': width, 'height': height});
           scope.drawChart();
         });
@@ -101,15 +104,15 @@ angular.module('g1b.calendar-heatmap', []).
         /**
          * Draw the chart based on the current overview type
          */
-        scope.drawChart = function () {
+        scope.drawChart = function (type) {
           if ( !scope.data ) { return; }
 
-          if ( !!selected_date && !!selected_date.total ) {
-            scope.drawDayOverview();
-          } else if ( !!selected_date ) {
-            scope.drawMonthOverview();
-          } else {
+          if ( scope.overview === 'year' ) {
             scope.drawYearOverview();
+          } else if ( scope.overview === 'month' ) {
+            scope.drawMonthOverview();
+          } else if ( scope.overview === 'day' ) {
+            scope.drawDayOverview();
           }
         };
 
@@ -118,7 +121,10 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw year overview
          */
         scope.drawYearOverview = function () {
-          var firstDate = moment(scope.data[0].date);
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
+          var first_date = moment(scope.data[0].date);
           var max_value = d3.max(scope.data, function (d) {
             return d.total;
           });
@@ -126,27 +132,46 @@ angular.module('g1b.calendar-heatmap', []).
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([-0.15 * max_value, max_value]);
 
+          var calcItemX = function (d) {
+            var date = moment(d.date);
+            var week_num = date.week() - first_date.week() + (first_date.weeksInYear() * (date.weekYear() - first_date.weekYear()));
+            return week_num * (item_size + gutter) + label_padding;
+          };
+          var calcItemY = function (d) {
+            return label_padding + moment(d.date).weekday() * (item_size + gutter);
+          };
+          var calcItemSize = function (d) {
+            if ( max_value <= 0 ) { return item_size; }
+            return item_size * 0.75 + (item_size * d.total / max_value) * 0.25;
+          };
+
           items.selectAll('.item-circle').remove();
           items.selectAll('.item-circle')
             .data(scope.data)
             .enter()
-            .append('circle')
+            .append('rect')
             .attr('class', 'item item-circle')
             .style('opacity', 0)
-            .attr('r', function (d) {
-              if ( max_value <= 0 ) { return circle_radius; }
-              return circle_radius * 0.75 + (circle_radius * d.total / max_value) * 0.25;
+            .attr('rx', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('rx', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('x', function (d) {
+              return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
+            })
+            .attr('y', function (d) {
+              return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
+            })
+            .attr('width', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('height', function (d) {
+              return calcItemSize(d);
             })
             .attr('fill', function (d) {
               return ( d.total > 0 ) ? color(d.total) : 'transparent';
-            })
-            .attr('cx', function (d) {
-              var cellDate = moment(d.date);
-              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-              return week_num * (circle_radius * 2 + gutter) + label_padding;
-            })
-            .attr('cy', function (d) {
-              return moment(d.date).weekday() * (circle_radius * 2 + gutter) + label_padding;
             })
             .on('click', function (d) {
               if ( in_transition ) { return; }
@@ -157,7 +182,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              selected_date = d;
+              scope.selected = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -166,6 +191,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
+              scope.overview = 'day';
               scope.drawChart();
             })
             .on('mouseover', function (d) {
@@ -177,11 +203,29 @@ angular.module('g1b.calendar-heatmap', []).
                 circle = circle.transition()
                   .duration(transition_duration)
                   .ease('ease-in')
-                  .attr('r', circle_radius+1)
+                  .attr('x', function (d) {
+                    return calcItemX(d) - (item_size * 1.1 - item_size) / 2;
+                  })
+                  .attr('y', function (d) {
+                    return calcItemY(d) - (item_size * 1.1 - item_size) / 2;
+                  })
+                  .attr('width', item_size * 1.1)
+                  .attr('height', item_size * 1.1)
                   .transition()
                   .duration(transition_duration)
                   .ease('ease-in')
-                  .attr('r', circle_radius)
+                  .attr('x', function (d) {
+                    return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
+                  })
+                  .attr('y', function (d) {
+                    return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
+                  })
+                  .attr('width', function (d) {
+                    return calcItemSize(d);
+                  })
+                  .attr('height', function (d) {
+                    return calcItemSize(d);
+                  })
                   .each('end', repeat);
               })();
 
@@ -197,13 +241,11 @@ angular.module('g1b.calendar-heatmap', []).
               });
 
               // Calculate tooltip position
-              var cellDate = moment(d.date);
-              var week_num = cellDate.week() - firstDate.week() + (firstDate.weeksInYear() * (cellDate.weekYear() - firstDate.weekYear()));
-              var x = week_num * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              var x = calcItemX(d) + item_size;
               if ( width - x < (tooltip_width + tooltip_padding * 3) ) {
-                x -= tooltip_width + tooltip_padding * 3;
+                x -= tooltip_width + tooltip_padding * 2;
               }
-              var y = cellDate.weekday() * (circle_radius * 2 + gutter) + label_padding + circle_radius;
+              var y = calcItemY(d) + item_size;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -221,7 +263,18 @@ angular.module('g1b.calendar-heatmap', []).
               d3.select(this).transition()
                 .duration(transition_duration / 2)
                 .ease('ease-in')
-                .attr('r', circle_radius);
+                .attr('x', function (d) {
+                  return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
+                })
+                .attr('y', function (d) {
+                  return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
+                })
+                .attr('width', function (d) {
+                  return calcItemSize(d);
+                })
+                .attr('height', function (d) {
+                  return calcItemSize(d);
+                });
 
               // Hide tooltip
               scope.hideTooltip();
@@ -253,15 +306,14 @@ angular.module('g1b.calendar-heatmap', []).
 
           // Add month labels
           var today = moment().endOf('day');
-          var todayYearAgo = moment().startOf('day').subtract(1, 'year');
-          var monthLabels = d3.time.months(todayYearAgo.startOf('month'), today);
-
+          var today_year_ago = moment().startOf('day').subtract(1, 'year');
+          var month_labels = d3.time.months(today_year_ago.startOf('month'), today);
           var monthScale = d3.scale.linear()
             .range([0, width])
-            .domain([0, monthLabels.length]);
+            .domain([0, month_labels.length]);
           labels.selectAll('.label-month').remove();
           labels.selectAll('.label-month')
-            .data(monthLabels)
+            .data(month_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-month')
@@ -278,13 +330,13 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (d) {
               if ( in_transition ) { return; }
 
-              var selectedMonth = moment(d);
+              var selected_month = moment(d);
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return moment(d.date).isSame(selectedMonth, 'month') ? 1 : 0.1;
+                  return moment(d.date).isSame(selected_month, 'month') ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -302,7 +354,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected month to the one clicked on
-              selected_date = d;
+              scope.selected = {date: d};
 
               // Hide tooltip
               scope.hideTooltip();
@@ -311,30 +363,30 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeYearOverview();
 
               // Redraw the chart
+              scope.overview = 'month';
               scope.drawChart();
             });
 
           // Add day labels
-          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
-          var dayAxis = d3.scale.linear()
-            .range([label_padding, height])
-            .domain([0, dayLabels.length]);
+          var day_labels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var dayScale = d3.scale.ordinal()
+            .rangeRoundBands([label_padding, height])
+            .domain(day_labels.map(function (d) {
+              return moment(d).weekday();
+            }));
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-day')
-            .data(dayLabels)
+            .data(day_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-day')
             .attr('x', label_padding / 3)
             .attr('y', function (d, i) {
-              return dayAxis(i);
+              return dayScale(i) + dayScale.rangeBand() / 1.75;
             })
-            .style('text-anchor', 'middle')
+            .style('text-anchor', 'left')
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
-            })
-            .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
             })
             .text(function (d) {
               return moment(d).format('dddd')[0];
@@ -342,13 +394,13 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (d) {
               if ( in_transition ) { return; }
 
-              var selectedDay = moment(d);
+              var selected_day = moment(d);
               items.selectAll('.item-circle')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
+                  return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -367,9 +419,12 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw month overview
          */
         scope.drawMonthOverview = function () {
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
           // Define beginning and end of the month
-          var start_of_month = moment(selected_date).startOf('month');
-          var end_of_month = moment(selected_date).endOf('month');
+          var start_of_month = moment(scope.selected.date).startOf('month');
+          var end_of_month = moment(scope.selected.date).endOf('month');
 
           // Filter data down to the selected month
           var month_data = scope.data.filter(function (d) {
@@ -382,10 +437,10 @@ angular.module('g1b.calendar-heatmap', []).
           });
 
           // Define day labels and axis
-          var dayLabels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
-          var dayAxis = d3.scale.ordinal()
-            .rangeRoundBands([label_padding, height], 0.1)
-            .domain(dayLabels.map(function (d) {
+          var day_labels = d3.time.days(moment().startOf('week'), moment().endOf('week'));
+          var dayScale = d3.scale.ordinal()
+            .rangeRoundBands([label_padding, height])
+            .domain(day_labels.map(function (d) {
               return moment(d).weekday();
             }));
 
@@ -410,10 +465,10 @@ angular.module('g1b.calendar-heatmap', []).
               return (width - label_padding) / weekLabels.length - gutter * 5;
             })
             .attr('height', function () {
-              return Math.min(dayAxis.rangeBand(), max_block_height);
+              return Math.min(dayScale.rangeBand(), max_block_height);
             })
             .attr('transform', function (d) {
-              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayAxis(moment(d.date).weekday()) - 10) + ')';
+              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayScale(moment(d.date).weekday()) + 5) + ')';
             })
             .attr('total', function (d) {
               return d.total;
@@ -431,7 +486,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              selected_date = d;
+              scope.selected = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -440,6 +495,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.removeMonthOverview();
 
               // Redraw the chart
+              scope.overview = 'day';
               scope.drawChart();
             });
 
@@ -467,7 +523,7 @@ angular.module('g1b.calendar-heatmap', []).
               return itemScale(d.value) - item_gutter;
             })
             .attr('height', function () {
-              return Math.min(dayAxis.rangeBand(), max_block_height);
+              return Math.min(dayScale.rangeBand(), max_block_height);
             })
             .attr('fill', function (d) {
               var color = d3.scale.linear()
@@ -489,11 +545,11 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
               // Calculate tooltip position
-              var x = weekScale(moment(date).week()) + tooltip_padding * 3;
+              var x = weekScale(moment(date).week()) + tooltip_padding;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = dayAxis(moment(date).weekday()) + tooltip_padding;
+              var y = dayScale(moment(date).weekday()) + tooltip_padding * 2;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -533,49 +589,6 @@ angular.module('g1b.calendar-heatmap', []).
                   in_transition = false;
                 });
 
-          // Add day labels
-          labels.selectAll('.label-day').remove();
-          labels.selectAll('.label-day')
-            .data(dayLabels)
-            .enter()
-            .append('text')
-            .attr('class', 'label label-day')
-            .attr('x', label_padding / 3)
-            .attr('y', function (d, i) {
-              return dayAxis(i);
-            })
-            .style('text-anchor', 'middle')
-            .attr('font-size', function () {
-              return Math.floor(label_padding / 3) + 'px';
-            })
-            .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
-            })
-            .text(function (d) {
-              return moment(d).format('dddd')[0];
-            })
-            .on('mouseenter', function (d) {
-              if ( in_transition ) { return; }
-
-              var selectedDay = moment(d);
-              items.selectAll('.item-block')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease-in')
-                .style('opacity', function (d) {
-                  return (moment(d.date).day() === selectedDay.day()) ? 1 : 0.1;
-                });
-            })
-            .on('mouseout', function () {
-              if ( in_transition ) { return; }
-
-              items.selectAll('.item-block')
-                .transition()
-                .duration(transition_duration)
-                .ease('ease-in')
-                .style('opacity', 1);
-            });
-
           // Add week labels
           labels.selectAll('.label-week').remove();
           labels.selectAll('.label-week')
@@ -596,7 +609,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (week_nr) {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -607,11 +620,51 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block')
+              items.selectAll('.item-block-g')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
-                .style('opacity', 0.5);
+                .style('opacity', 1);
+            });
+
+          // Add day labels
+          labels.selectAll('.label-day').remove();
+          labels.selectAll('.label-day')
+            .data(day_labels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-day')
+            .attr('x', label_padding / 3)
+            .attr('y', function (d, i) {
+              return dayScale(i) + dayScale.rangeBand() / 1.75;
+            })
+            .style('text-anchor', 'left')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .text(function (d) {
+              return moment(d).format('dddd')[0];
+            })
+            .on('mouseenter', function (d) {
+              if ( in_transition ) { return; }
+
+              var selected_day = moment(d);
+              items.selectAll('.item-block-g')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  return (moment(d.date).day() === selected_day.day()) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              if ( in_transition ) { return; }
+
+              items.selectAll('.item-block-g')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 1);
             });
 
           // Add button to switch back to year overview
@@ -623,19 +676,22 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw day overview
          */
         scope.drawDayOverview = function () {
-          var projectLabels = selected_date.summary.map(function (project) {
+          // Add current overview to the history
+          scope.history.push(scope.overview);
+
+          var project_labels = scope.selected.summary.map(function (project) {
             return project.name;
           });
           var projectScale = d3.scale.ordinal()
-            .domain(projectLabels)
-            .rangeRoundBands([label_padding, height], 0.1);
+            .rangeRoundBands([label_padding, height])
+            .domain(project_labels);
 
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
-            .domain([moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day')]);
+            .domain([moment(scope.selected.date).startOf('day'), moment(scope.selected.date).endOf('day')]);
           items.selectAll('.item-block').remove();
           items.selectAll('.item-block')
-            .data(selected_date.details)
+            .data(scope.selected.details)
             .enter()
             .append('rect')
             .attr('class', 'item item-block')
@@ -643,7 +699,7 @@ angular.module('g1b.calendar-heatmap', []).
               return itemScale(moment(d.date));
             })
             .attr('y', function (d) {
-              return projectScale(d.name) - 10;
+              return (projectScale(d.name) + projectScale.rangeBand() / 2) - 15;
             })
             .attr('width', function (d) {
               var end = itemScale(d3.time.second.offset(moment(d.date), d.value));
@@ -670,7 +726,7 @@ angular.module('g1b.calendar-heatmap', []).
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = projectScale(d.name) - 10 + projectScale.rangeBand();
+              var y = projectScale(d.name) + projectScale.rangeBand() / 2 + tooltip_padding / 2;
 
               // Show tooltip
               tooltip.html(tooltip_html)
@@ -716,8 +772,8 @@ angular.module('g1b.calendar-heatmap', []).
                 });
 
           // Add time labels
-          var timeLabels = d3.time.hours(moment(selected_date.date).startOf('day'), moment(selected_date.date).endOf('day'));
-          var timeAxis = d3.time.scale()
+          var timeLabels = d3.time.hours(moment(scope.selected.date).startOf('day'), moment(scope.selected.date).endOf('day'));
+          var timeScale = d3.time.scale()
             .range([label_padding*2, width])
             .domain([0, timeLabels.length]);
           labels.selectAll('.label-time').remove();
@@ -733,7 +789,7 @@ angular.module('g1b.calendar-heatmap', []).
               return moment(d).format('HH:mm');
             })
             .attr('x', function (d, i) {
-              return timeAxis(i);
+              return timeScale(i);
             })
             .attr('y', label_padding / 2)
             .on('mouseenter', function (d) {
@@ -763,13 +819,13 @@ angular.module('g1b.calendar-heatmap', []).
           // Add project labels
           labels.selectAll('.label-project').remove();
           labels.selectAll('.label-project')
-            .data(projectLabels)
+            .data(project_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-project')
             .attr('x', gutter)
             .attr('y', function (d) {
-              return projectScale(d);
+              return projectScale(d) + projectScale.rangeBand() / 2;
             })
             .attr('min-height', function () {
               return projectScale.rangeBand();
@@ -778,20 +834,17 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
             })
-            .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
-            })
             .text(function (d) {
               return d;
             })
             .each(function () {
               var obj = d3.select(this),
-                textLength = obj.node().getComputedTextLength(),
+                text_length = obj.node().getComputedTextLength(),
                 text = obj.text();
-              while (textLength > (label_padding * 1.5) && text.length > 0) {
+              while (text_length > (label_padding * 1.5) && text.length > 0) {
                 text = text.slice(0, -1);
                 obj.text(text + '...');
-                textLength = obj.node().getComputedTextLength();
+                text_length = obj.node().getComputedTextLength();
               }
             })
             .on('mouseenter', function (project) {
@@ -834,26 +887,25 @@ angular.module('g1b.calendar-heatmap', []).
               // Set transition boolean
               in_transition = true;
 
-              // Cleanup the canvas from whichever overview type was on
-              if ( !!selected_date && !!selected_date.total ) {
-                scope.removeDayOverview();
-              } else if ( !!selected_date ) {
+              // Clean the canvas from whichever overview type was on
+              if ( scope.overview === 'month' ) {
                 scope.removeMonthOverview();
+              } else if ( scope.overview === 'day' ) {
+                scope.removeDayOverview();
               }
 
-              // Unset selected date
-              selected_date = undefined;
-
               // Redraw the chart
+              scope.history.pop();
+              scope.overview = scope.history.pop();
               scope.drawChart();
             });
           button.append('circle')
-            .attr('cx', label_padding / 2.75)
+            .attr('cx', label_padding / 2)
             .attr('cy', label_padding / 2.5)
-            .attr('r', circle_radius);
+            .attr('r', item_size / 2.5);
           button.append('text')
-            .attr('x', label_padding / 2.75)
-            .attr('y', label_padding / 2.5)
+            .attr('x', label_padding / 2)
+            .attr('y', label_padding / 2.75)
             .attr('dy', function () {
               return Math.floor(width / 100) / 3;
             })
