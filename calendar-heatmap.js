@@ -34,7 +34,7 @@ angular.module('g1b.calendar-heatmap', []).
         // Initialize current overview type and history
         scope.overview = scope.overview || 'year';
         scope.history = [scope.overview];
-        scope.selected_date;
+        scope.selected;
 
         // Initialize svg element
         var svg = d3.select(element[0])
@@ -182,7 +182,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              scope.selected_date = d;
+              scope.selected = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -355,7 +355,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected month to the one clicked on
-              scope.selected_date = {date: d};
+              scope.selected = {date: d};
 
               // Hide tooltip
               scope.hideTooltip();
@@ -424,8 +424,8 @@ angular.module('g1b.calendar-heatmap', []).
           scope.history.push(scope.overview);
 
           // Define beginning and end of the month
-          var start_of_month = moment(scope.selected_date.date).startOf('month');
-          var end_of_month = moment(scope.selected_date.date).endOf('month');
+          var start_of_month = moment(scope.selected.date).startOf('month');
+          var end_of_month = moment(scope.selected.date).endOf('month');
 
           // Filter data down to the selected month
           var month_data = scope.data.filter(function (d) {
@@ -487,7 +487,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected date to the one clicked on
-              scope.selected_date = d;
+              scope.selected = d;
 
               // Hide tooltip
               scope.hideTooltip();
@@ -680,7 +680,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add current overview to the history
           scope.history.push(scope.overview);
 
-          var projectLabels = scope.selected_date.summary.map(function (project) {
+          var projectLabels = scope.selected.summary.map(function (project) {
             return project.name;
           });
           var projectScale = d3.scale.ordinal()
@@ -689,10 +689,10 @@ angular.module('g1b.calendar-heatmap', []).
 
           var itemScale = d3.time.scale()
             .range([label_padding*2, width])
-            .domain([moment(scope.selected_date.date).startOf('day'), moment(scope.selected_date.date).endOf('day')]);
+            .domain([moment(scope.selected.date).startOf('day'), moment(scope.selected.date).endOf('day')]);
           items.selectAll('.item-block').remove();
           items.selectAll('.item-block')
-            .data(scope.selected_date.details)
+            .data(scope.selected.details)
             .enter()
             .append('rect')
             .attr('class', 'item item-block')
@@ -773,7 +773,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
 
           // Add time labels
-          var timeLabels = d3.time.hours(moment(scope.selected_date.date).startOf('day'), moment(scope.selected_date.date).endOf('day'));
+          var timeLabels = d3.time.hours(moment(scope.selected.date).startOf('day'), moment(scope.selected.date).endOf('day'));
           var timeScale = d3.time.scale()
             .range([label_padding*2, width])
             .domain([0, timeLabels.length]);
