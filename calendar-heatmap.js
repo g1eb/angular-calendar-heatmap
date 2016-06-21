@@ -125,7 +125,9 @@ angular.module('g1b.calendar-heatmap', []).
          */
         scope.drawYearOverview = function () {
           // Add current overview to the history
-          scope.history.push(scope.overview);
+          if ( scope.history[scope.history.length-1] !== scope.overview ) {
+            scope.history.push(scope.overview);
+          }
 
           var first_date = moment(scope.data[0].date);
           var max_value = d3.max(scope.data, function (d) {
@@ -423,7 +425,9 @@ angular.module('g1b.calendar-heatmap', []).
          */
         scope.drawMonthOverview = function () {
           // Add current overview to the history
-          scope.history.push(scope.overview);
+          if ( scope.history[scope.history.length-1] !== scope.overview ) {
+            scope.history.push(scope.overview);
+          }
 
           // Define beginning and end of the month
           var start_of_month = moment(scope.selected.date).startOf('month');
@@ -680,7 +684,9 @@ angular.module('g1b.calendar-heatmap', []).
          */
         scope.drawDayOverview = function () {
           // Add current overview to the history
-          scope.history.push(scope.overview);
+          if ( scope.history[scope.history.length-1] !== scope.overview ) {
+            scope.history.push(scope.overview);
+          }
 
           // Initialize selected date to today if it was not set
           if ( !scope.selected ) {
