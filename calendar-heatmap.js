@@ -689,7 +689,7 @@ angular.module('g1b.calendar-heatmap', []).
           }
 
           // Initialize selected date to today if it was not set
-          if ( !scope.selected ) {
+          if ( !Object.keys(scope.selected).length ) {
               scope.selected = scope.data[scope.data.length - 1];
           }
 
