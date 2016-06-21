@@ -41,7 +41,7 @@ angular.module('myApp', [
 3) Use 'calendar-heatmap' directive in a view
 
 ```html
-<calendar-heatmap data="exampleData" color="'#ff0000'" handler="print"></calendar-heatmap>
+<calendar-heatmap data="exampleData" color="'#ff0000'" overview="'year'" handler="print"></calendar-heatmap>
 ```
 
 ### Attributes
@@ -50,6 +50,7 @@ angular.module('myApp', [
 |:------------- |:-------------|:-----:|:-----:|
 | data | Time series data | none | yes |
 | color | Theme hex color | #45ff00 | no |
+| overview | Initial overview type (choices are: year, month, day) | year | no |
 | handler | Handler function is fired on click of a time entry in daily overview | none | no |
 
 ### Example data
