@@ -9,9 +9,9 @@ angular.module('g1b.calendar-heatmap', []).
       restrict: 'E',
       scope: {
         data: '=',
-        color: '=',
-        overview: '=',
-        handler: '='
+        color: '=?',
+        overview: '=?',
+        handler: '=?'
       },
       replace: true,
       template: '<div class="calendar-heatmap"></div>',
