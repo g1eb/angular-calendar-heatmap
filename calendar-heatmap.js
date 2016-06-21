@@ -475,7 +475,7 @@ angular.module('g1b.calendar-heatmap', []).
               return Math.min(dayScale.rangeBand(), max_block_height);
             })
             .attr('transform', function (d) {
-              return 'translate(' + weekScale(moment(d.date).week()) + ',' + (dayScale(moment(d.date).weekday()) + 5) + ')';
+              return 'translate(' + weekScale(moment(d.date).week()) + ',' + ((dayScale(moment(d.date).weekday()) + dayScale.rangeBand() / 1.75) - 15)+ ')';
             })
             .attr('total', function (d) {
               return d.total;
