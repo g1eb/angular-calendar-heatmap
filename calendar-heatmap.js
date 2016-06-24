@@ -633,7 +633,26 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', 1);
+            })
+            .on('click', function (d) {
+              if ( in_transition ) { return; }
+
+              in_transition = true;
+
+              // Set selected month to the one clicked on
+              scope.selected = {date: moment(scope.selected.date).week(d)};
+
+              // Hide tooltip
+              scope.hideTooltip();
+
+              // Remove all year overview related items and labels
+              scope.removeMonthOverview();
+
+              // Redraw the chart
+              scope.overview = 'week';
+              scope.drawChart();
             });
+
 
           // Add day labels
           labels.selectAll('.label-day').remove();
