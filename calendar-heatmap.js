@@ -114,6 +114,8 @@ angular.module('g1b.calendar-heatmap', []).
             scope.drawYearOverview();
           } else if ( scope.overview === 'month' ) {
             scope.drawMonthOverview();
+          } else if ( scope.overview === 'week' ) {
+            scope.drawWeekOverview();
           } else if ( scope.overview === 'day' ) {
             scope.drawDayOverview();
           }
