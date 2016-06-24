@@ -456,12 +456,11 @@ angular.module('g1b.calendar-heatmap', []).
           while ( start_of_month.week() !== end_of_month.week() ) {
             weekLabels.push(start_of_month.add(1, 'week').week());
           }
-
-          // Add month data items to the overview
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.1)
             .domain(weekLabels);
 
+          // Add month data items to the overview
           items.selectAll('.item-block-g').remove();
           var item_block = items.selectAll('.item-block-g')
             .data(month_data)
