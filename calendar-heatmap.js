@@ -1226,6 +1226,25 @@ angular.module('g1b.calendar-heatmap', []).
 
 
         /**
+         * Transition and remove items and labels related to week overview
+         */
+        scope.removeWeekOverview = function () {
+          svg.selectAll('.item-block-rect')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease-in')
+            .style('opacity', 0)
+            .attr('x', function (d, i) {
+              return ( i % 2 === 0) ? -width/3 : width/3;
+            })
+            .remove();
+          labels.selectAll('.label-day').remove();
+          labels.selectAll('.label-week').remove();
+          scope.hideBackButton();
+        };
+
+
+        /**
          * Transition and remove items and labels related to daily overview
          */
         scope.removeDayOverview = function () {
