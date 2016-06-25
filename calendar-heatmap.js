@@ -463,12 +463,12 @@ angular.module('g1b.calendar-heatmap', []).
             .domain(week_labels);
 
           // Add month data items to the overview
-          items.selectAll('.item-block-g').remove();
-          var item_block = items.selectAll('.item-block-g')
+          items.selectAll('.item-block-month').remove();
+          var item_block = items.selectAll('.item-block-month')
             .data(month_data)
             .enter()
             .append('g')
-            .attr('class', 'item item-block-g')
+            .attr('class', 'item item-block-month')
             .attr('width', function () {
               return (width - label_padding) / week_labels.length - gutter * 5;
             })
@@ -617,7 +617,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (week_nr) {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-month')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -628,7 +628,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-month')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -676,7 +676,7 @@ angular.module('g1b.calendar-heatmap', []).
               if ( in_transition ) { return; }
 
               var selected_day = moment(d);
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-month')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -687,7 +687,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-month')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -740,12 +740,12 @@ angular.module('g1b.calendar-heatmap', []).
             .domain(week_labels);
 
           // Add week data items to the overview
-          items.selectAll('.item-block-g').remove();
-          var item_block = items.selectAll('.item-block-g')
+          items.selectAll('.item-block-week').remove();
+          var item_block = items.selectAll('.item-block-week')
             .data(week_data)
             .enter()
             .append('g')
-            .attr('class', 'item item-block-g')
+            .attr('class', 'item item-block-week')
             .attr('width', function () {
               return (width - label_padding) / week_labels.length - gutter * 5;
             })
@@ -894,7 +894,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseenter', function (week_nr) {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-week')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -905,7 +905,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-week')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -934,7 +934,7 @@ angular.module('g1b.calendar-heatmap', []).
               if ( in_transition ) { return; }
 
               var selected_day = moment(d);
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-week')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
@@ -945,7 +945,7 @@ angular.module('g1b.calendar-heatmap', []).
             .on('mouseout', function () {
               if ( in_transition ) { return; }
 
-              items.selectAll('.item-block-g')
+              items.selectAll('.item-block-week')
                 .transition()
                 .duration(transition_duration)
                 .ease('ease-in')
