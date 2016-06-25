@@ -1182,6 +1182,8 @@ angular.module('g1b.calendar-heatmap', []).
               // Clean the canvas from whichever overview type was on
               if ( scope.overview === 'month' ) {
                 scope.removeMonthOverview();
+              } else if ( scope.overview === 'week' ) {
+                scope.removeWeekOverview();
               } else if ( scope.overview === 'day' ) {
                 scope.removeDayOverview();
               }
