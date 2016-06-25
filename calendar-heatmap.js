@@ -1277,7 +1277,7 @@ angular.module('g1b.calendar-heatmap', []).
             .ease('ease-in')
             .style('opacity', 0)
             .attr('x', function (d, i) {
-              return ( i % 2 === 0) ? 0 : width;
+              return ( i % 2 === 0) ? -width/3 : width/3;
             })
             .remove();
           labels.selectAll('.label-time').remove();
