@@ -830,11 +830,11 @@ angular.module('g1b.calendar-heatmap', []).
               tooltip_html += '<div>on ' + moment(date).format('dddd, MMM Do YYYY') + '</div>';
 
               // Calculate tooltip position
-              var x = weekScale(moment(date).week()) + tooltip_padding;
+              var x = parseInt(d3.select(this).attr('x')) + label_padding + tooltip_padding * 2;
               while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
                 x -= 10;
               }
-              var y = dayScale(moment(date).weekday()) + tooltip_padding * 2;
+              var y = dayScale(moment(date).weekday()) + tooltip_padding * 1.5;
 
               // Show tooltip
               tooltip.html(tooltip_html)
