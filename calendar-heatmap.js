@@ -459,7 +459,7 @@ angular.module('g1b.calendar-heatmap', []).
             week_labels.push(start_of_month.add(1, 'week').week());
           }
           var weekScale = d3.scale.ordinal()
-            .rangeRoundBands([label_padding, width], 0.1)
+            .rangeRoundBands([label_padding, width], 0.05)
             .domain(week_labels);
 
           // Add month data items to the overview
@@ -736,7 +736,7 @@ angular.module('g1b.calendar-heatmap', []).
             week_labels.push(start_of_week.add(1, 'week').week());
           }
           var weekScale = d3.scale.ordinal()
-            .rangeRoundBands([label_padding, width], 0.1)
+            .rangeRoundBands([label_padding, width], 0.01)
             .domain(week_labels);
 
           // Add week data items to the overview
