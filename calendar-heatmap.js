@@ -1233,7 +1233,7 @@ angular.module('g1b.calendar-heatmap', []).
          * Transition and remove items and labels related to month overview
          */
         scope.removeMonthOverview = function () {
-          svg.selectAll('.item-block-rect')
+          items.selectAll('.item-block-month').selectAll('.item-block-rect')
             .transition()
             .duration(transition_duration)
             .ease('ease-in')
@@ -1252,7 +1252,7 @@ angular.module('g1b.calendar-heatmap', []).
          * Transition and remove items and labels related to week overview
          */
         scope.removeWeekOverview = function () {
-          svg.selectAll('.item-block-rect')
+          items.selectAll('.item-block-week').selectAll('.item-block-rect')
             .transition()
             .duration(transition_duration)
             .ease('ease-in')
