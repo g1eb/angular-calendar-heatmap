@@ -454,13 +454,13 @@ angular.module('g1b.calendar-heatmap', []).
             }));
 
           // Define week labels and axis
-          var weekLabels = [start_of_month.week()];
+          var week_labels = [start_of_month.week()];
           while ( start_of_month.week() !== end_of_month.week() ) {
-            weekLabels.push(start_of_month.add(1, 'week').week());
+            week_labels.push(start_of_month.add(1, 'week').week());
           }
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.1)
-            .domain(weekLabels);
+            .domain(week_labels);
 
           // Add month data items to the overview
           items.selectAll('.item-block-g').remove();
@@ -470,7 +470,7 @@ angular.module('g1b.calendar-heatmap', []).
             .append('g')
             .attr('class', 'item item-block-g')
             .attr('width', function () {
-              return (width - label_padding) / weekLabels.length - gutter * 5;
+              return (width - label_padding) / week_labels.length - gutter * 5;
             })
             .attr('height', function () {
               return Math.min(dayScale.rangeBand(), max_block_height);
@@ -507,7 +507,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.drawChart();
             });
 
-          var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
+          var item_width = (width - label_padding) / week_labels.length - gutter * 5;
           var itemScale = d3.scale.linear()
             .rangeRound([0, item_width]);
 
@@ -600,7 +600,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add week labels
           labels.selectAll('.label-week').remove();
           labels.selectAll('.label-week')
-            .data(weekLabels)
+            .data(week_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-week')
@@ -731,13 +731,13 @@ angular.module('g1b.calendar-heatmap', []).
             }));
 
           // Define week labels and axis
-          var weekLabels = [start_of_week.week()];
+          var week_labels = [start_of_week.week()];
           while ( start_of_week.week() !== end_of_week.week() ) {
-            weekLabels.push(start_of_week.add(1, 'week').week());
+            week_labels.push(start_of_week.add(1, 'week').week());
           }
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.1)
-            .domain(weekLabels);
+            .domain(week_labels);
 
           // Add week data items to the overview
           items.selectAll('.item-block-g').remove();
@@ -747,7 +747,7 @@ angular.module('g1b.calendar-heatmap', []).
             .append('g')
             .attr('class', 'item item-block-g')
             .attr('width', function () {
-              return (width - label_padding) / weekLabels.length - gutter * 5;
+              return (width - label_padding) / week_labels.length - gutter * 5;
             })
             .attr('height', function () {
               return Math.min(dayScale.rangeBand(), max_block_height);
@@ -784,7 +784,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.drawChart();
             });
 
-          var item_width = (width - label_padding) / weekLabels.length - gutter * 5;
+          var item_width = (width - label_padding) / week_labels.length - gutter * 5;
           var itemScale = d3.scale.linear()
             .rangeRound([0, item_width]);
 
@@ -877,7 +877,7 @@ angular.module('g1b.calendar-heatmap', []).
           // Add week labels
           labels.selectAll('.label-week').remove();
           labels.selectAll('.label-week')
-            .data(weekLabels)
+            .data(week_labels)
             .enter()
             .append('text')
             .attr('class', 'label label-week')
