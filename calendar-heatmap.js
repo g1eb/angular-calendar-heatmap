@@ -159,17 +159,17 @@ angular.module('g1b.calendar-heatmap', []).
             .append('rect')
             .attr('class', 'item item-circle')
             .style('opacity', 0)
-            .attr('rx', function (d) {
-              return calcItemSize(d);
-            })
-            .attr('rx', function (d) {
-              return calcItemSize(d);
-            })
             .attr('x', function (d) {
               return calcItemX(d) + (item_size - calcItemSize(d)) / 2;
             })
             .attr('y', function (d) {
               return calcItemY(d) + (item_size - calcItemSize(d)) / 2;
+            })
+            .attr('rx', function (d) {
+              return calcItemSize(d);
+            })
+            .attr('ry', function (d) {
+              return calcItemSize(d);
             })
             .attr('width', function (d) {
               return calcItemSize(d);
