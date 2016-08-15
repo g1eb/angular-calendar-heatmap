@@ -6,7 +6,7 @@
 </head>
 <body ng-controller="MainCtrl">
 
-  <calendar-heatmap data="exampleData" color="color" overview="overview" handler="print"></calendar-heatmap>
+  <calendar-heatmap data="example_data" color="color" overview="overview" handler="print"></calendar-heatmap>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular.min.js" charset="utf-8"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.12.0/moment.min.js" charset="utf-8"></script>
@@ -19,8 +19,8 @@
 
         // Initialize random data for the demo
         var now = moment().endOf('day').toDate();
-        var yearAgo = moment().startOf('day').subtract(1, 'year').toDate();
-        $scope.exampleData = d3.time.days(yearAgo, now).map(function (dateElement) {
+        var year_ago = moment().startOf('day').subtract(1, 'year').toDate();
+        $scope.example_data = d3.time.days(year_ago, now).map(function (dateElement) {
           return {
             date: dateElement,
             details: Array.apply(null, new Array(Math.floor(Math.random() * 25))).map(function(e, i, arr) {
