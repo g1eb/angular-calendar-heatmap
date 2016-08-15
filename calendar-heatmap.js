@@ -131,7 +131,7 @@ angular.module('g1b.calendar-heatmap', []).
             scope.history.push(scope.overview);
           }
 
-          var first_date = moment(scope.data[0].date);
+          var year_ago = moment().startOf('day').subtract(1, 'year');
           var max_value = d3.max(scope.data, function (d) {
             return d.total;
           });
@@ -141,7 +141,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           var calcItemX = function (d) {
             var date = moment(d.date);
-            var week_num = date.week() - first_date.week() + (first_date.weeksInYear() * (date.weekYear() - first_date.weekYear()));
+            var week_num = date.week() - year_ago.week() + (year_ago.weeksInYear() * (date.weekYear() - year_ago.weekYear()));
             return week_num * (item_size + gutter) + label_padding;
           };
           var calcItemY = function (d) {
