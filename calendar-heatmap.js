@@ -454,13 +454,15 @@ angular.module('g1b.calendar-heatmap', []).
             }));
 
           // Define week labels and axis
-          var week_labels = [start_of_month.week()];
+          var week_labels = [start_of_month.clone()];
           while ( start_of_month.week() !== end_of_month.week() ) {
-            week_labels.push(start_of_month.add(1, 'week').week());
+            week_labels.push(start_of_month.add(1, 'week').clone());
           }
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.05)
-            .domain(week_labels);
+            .domain(week_labels.map(function(weekday) {
+              return weekday.week();
+            }));
 
           // Add month data items to the overview
           items.selectAll('.item-block-month').remove();
@@ -607,14 +609,14 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
             })
-            .text(function (week_nr) {
-              return 'Week ' + week_nr;
+            .text(function (d) {
+              return 'Week ' + d.week();
             })
             .attr('x', function (d) {
-              return weekScale(d);
+              return weekScale(d.week());
             })
             .attr('y', label_padding / 2)
-            .on('mouseenter', function (week_nr) {
+            .on('mouseenter', function (weekday) {
               if ( in_transition ) { return; }
 
               items.selectAll('.item-block-month')
@@ -622,7 +624,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return ( moment(d.date).week() === week_nr ) ? 1 : 0.1;
+                  return ( moment(d.date).week() === weekday.week() ) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
@@ -640,7 +642,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected month to the one clicked on
-              scope.selected = {date: moment(scope.selected.date).week(d)};
+              scope.selected = {date: d};
 
               // Hide tooltip
               scope.hideTooltip();
