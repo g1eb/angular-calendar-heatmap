@@ -658,10 +658,7 @@ angular.module('g1b.calendar-heatmap', []).
               in_transition = true;
 
               // Set selected month to the one clicked on
-              scope.selected = {
-                date: d,
-                week_data: week_data
-              };
+              scope.selected = { date: d };
 
               // Hide tooltip
               scope.hideTooltip();
