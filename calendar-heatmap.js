@@ -358,10 +358,18 @@ angular.module('g1b.calendar-heatmap', []).
             .on('click', function (d) {
               if ( in_transition ) { return; }
 
-              in_transition = true;
+              // Check month data
+              var month_data = scope.data.filter(function (e) {
+                return moment(d).startOf('month') <= moment(e.date) && moment(e.date) < moment(d).endOf('month');
+              });
+
+              // Don't transition if there is no data to show
+              if ( !month_data.length ) { return; }
 
               // Set selected month to the one clicked on
               scope.selected = {date: d};
+
+              in_transition = true;
 
               // Hide tooltip
               scope.hideTooltip();
