@@ -23,7 +23,7 @@
         $scope.example_data = d3.time.days(year_ago, now).map(function (dateElement) {
           return {
             date: dateElement,
-            details: Array.apply(null, new Array(Math.floor(Math.random() * 25))).map(function(e, i, arr) {
+            details: Array.apply(null, new Array(Math.floor(Math.random() * 15))).map(function(e, i, arr) {
               return {
                 'name': 'Project ' + Math.floor(Math.random() * 10),
                 'date': function () {
