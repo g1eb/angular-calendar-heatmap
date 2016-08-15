@@ -17,8 +17,11 @@ Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target=
 ### Month overview
 [![Angular directive for d3.js calendar heatmap chart - month overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_month_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
-### Daily overview
-[![Angular directive for d3.js calendar heatmap chart - daily overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_daily_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+### Week overview
+[![Angular directive for d3.js calendar heatmap chart - week overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_week_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+
+### Day overview
+[![Angular directive for d3.js calendar heatmap chart - day overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_day_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ## Installation
 
@@ -41,14 +44,14 @@ angular.module('myApp', [
 3) Use 'calendar-heatmap' directive in a view
 
 ```html
-<calendar-heatmap data="exampleData" color="'#ff0000'" overview="'year'" handler="print"></calendar-heatmap>
+<calendar-heatmap data="example_data" color="'#ff0000'" overview="'year'" handler="print"></calendar-heatmap>
 ```
 
 ### Attributes
 
 |Property        | Usage           | Default  | Required |
 |:------------- |:-------------|:-----:|:-----:|
-| data | Time series data | none | yes |
+| data | Time series data from max a year back | none | yes |
 | color | Theme hex color | #45ff00 | no |
 | overview | Initial overview type (choices are: year, month, day) | year | no |
 | handler | Handler function is fired on click of a time entry in daily overview | none | no |
