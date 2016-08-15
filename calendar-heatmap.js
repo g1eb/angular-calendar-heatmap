@@ -530,7 +530,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('width', function (d) {
               var total = parseInt(d3.select(this.parentNode).attr('total'));
               itemScale.domain([0, total]);
-              return itemScale(d.value) - item_gutter;
+              return Math.max((itemScale(d.value) - item_gutter), 1)
             })
             .attr('height', function () {
               return Math.min(dayScale.rangeBand(), max_block_height);
@@ -817,7 +817,7 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('width', function (d) {
               var total = parseInt(d3.select(this.parentNode).attr('total'));
               itemScale.domain([0, total]);
-              return itemScale(d.value) - item_gutter;
+              return Math.max((itemScale(d.value) - item_gutter), 1)
             })
             .attr('height', function () {
               return Math.min(dayScale.rangeBand(), max_block_height);
@@ -1009,7 +1009,7 @@ angular.module('g1b.calendar-heatmap', []).
             })
             .attr('width', function (d) {
               var end = itemScale(d3.time.second.offset(moment(d.date), d.value));
-              return end - itemScale(moment(d.date));
+              return Math.max((end - itemScale(moment(d.date))), 1);
             })
             .attr('height', function () {
               return Math.min(projectScale.rangeBand(), max_block_height);
