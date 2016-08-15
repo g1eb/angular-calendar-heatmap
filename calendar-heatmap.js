@@ -639,10 +639,21 @@ angular.module('g1b.calendar-heatmap', []).
             .on('click', function (d) {
               if ( in_transition ) { return; }
 
+              // Check week data
+              var week_data = scope.data.filter(function (e) {
+                return d.startOf('week') <= moment(e.date) && moment(e.date) < d.endOf('week');
+              });
+
+              // Don't transition if there is no data to show
+              if ( !week_data.length ) { return; }
+
               in_transition = true;
 
               // Set selected month to the one clicked on
-              scope.selected = {date: d};
+              scope.selected = {
+                date: d,
+                week_data: week_data
+              };
 
               // Hide tooltip
               scope.hideTooltip();
