@@ -107,7 +107,7 @@ angular.module('g1b.calendar-heatmap', []).
         /**
          * Draw the chart based on the current overview type
          */
-        scope.drawChart = function (type) {
+        scope.drawChart = function () {
           if ( !scope.data ) { return; }
 
           if ( scope.overview === 'year' ) {
