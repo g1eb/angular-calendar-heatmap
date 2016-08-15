@@ -1196,14 +1196,14 @@ angular.module('g1b.calendar-heatmap', []).
               scope.drawChart();
             });
           button.append('circle')
-            .attr('cx', label_padding / 2)
+            .attr('cx', label_padding / 2.25)
             .attr('cy', label_padding / 2.5)
-            .attr('r', item_size / 2.5);
+            .attr('r', item_size / 2);
           button.append('text')
-            .attr('x', label_padding / 2)
+            .attr('x', label_padding / 2.25)
             .attr('y', label_padding / 2.75)
             .attr('dy', function () {
-              return Math.floor(width / 100) / 3;
+              return Math.floor(width / 100) / 2.5;
             })
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
