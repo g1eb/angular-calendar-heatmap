@@ -733,13 +733,12 @@ angular.module('g1b.calendar-heatmap', []).
             }));
 
           // Define week labels and axis
-          var week_labels = [start_of_week.week()];
-          while ( start_of_week.week() !== end_of_week.week() ) {
-            week_labels.push(start_of_week.add(1, 'week').week());
-          }
+          var week_labels = [start_of_week];
           var weekScale = d3.scale.ordinal()
             .rangeRoundBands([label_padding, width], 0.01)
-            .domain(week_labels);
+            .domain(week_labels.map(function (weekday) {
+              return weekday.week();
+            }));
 
           // Add week data items to the overview
           items.selectAll('.item-block-week').remove();
@@ -888,14 +887,14 @@ angular.module('g1b.calendar-heatmap', []).
             .attr('font-size', function () {
               return Math.floor(label_padding / 3) + 'px';
             })
-            .text(function (week_nr) {
-              return 'Week ' + week_nr;
+            .text(function (d) {
+              return 'Week ' + d.week();
             })
             .attr('x', function (d) {
-              return weekScale(d);
+              return weekScale(d.week());
             })
             .attr('y', label_padding / 2)
-            .on('mouseenter', function (week_nr) {
+            .on('mouseenter', function (weekday) {
               if ( in_transition ) { return; }
 
               items.selectAll('.item-block-week')
@@ -903,7 +902,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .duration(transition_duration)
                 .ease('ease-in')
                 .style('opacity', function (d) {
-                  return ( moment(d.date).week() === week_nr ) ? 1 : 0.1;
+                  return ( moment(d.date).week() === weekday.week() ) ? 1 : 0.1;
                 });
             })
             .on('mouseout', function () {
