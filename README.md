@@ -12,16 +12,16 @@ Aaand [Calendar View](https://bl.ocks.org/mbostock/4063318) by [Mike Bostock](ht
 Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
 
 ### Year overview
-[![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+[![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ### Month overview
-[![Angular directive for d3.js calendar heatmap chart - month overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_month_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+[![Angular directive for d3.js calendar heatmap chart - month overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_month_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ### Week overview
-[![Angular directive for d3.js calendar heatmap chart - week overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_week_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+[![Angular directive for d3.js calendar heatmap chart - week overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_week_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ### Day overview
-[![Angular directive for d3.js calendar heatmap chart - day overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/screenshot_day_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
+[![Angular directive for d3.js calendar heatmap chart - day overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_day_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ## Installation
 
