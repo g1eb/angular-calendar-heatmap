@@ -1,0 +1,36 @@
+{
+  "name": "angular-calendar-heatmap",
+  "version": "0.2.1",
+  "description": "Angular directive of calendar heatmap graph representing time series data.",
+  "homepage": "https://github.com/g1eb/calendar-heatmap#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/g1eb/angular-calendar-heatmap.git"
+  },
+  "author": "g1eb",
+  "license": "MIT",
+  "main": "index.html",
+  "bugs": {
+    "url": "https://github.com/g1eb/angular-calendar-heatmap/issues"
+  },
+  "dependencies": {
+    "angular": "^1.4.8",
+    "d3": "^3.5.16",
+    "moment": "^2.13.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-cssnano": "^2.1.2",
+    "gulp-uglify": "^1.5.3"
+  },
+  "keywords": [
+    "calendar",
+    "heatmap",
+    "graph",
+    "visualization",
+    "chart",
+    "time",
+    "d3"
+  ]
+}
