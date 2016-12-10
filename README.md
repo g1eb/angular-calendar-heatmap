@@ -31,6 +31,12 @@ Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target=
 bower install angular-calendar-heatmap
 ```
 
+Or:
+
+```
+npm install angular-calendar-heatmap
+```
+
 2) Add 'g1b.calendar-heatmap' module to your app config
 
 
@@ -111,6 +117,10 @@ var data = [{
 ```
 
 See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/index.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
+
+## Non-Angular version
+
+If you are looking for a plain vanilla javascript version of the heatmap, check out [calendar-heatmap-graph](https://github.com/g1eb/calendar-heatmap)
 
 ## Dependencies
 
