@@ -28,12 +28,16 @@
     "gulp-uglify": "^1.5.3"
   },
   "keywords": [
+    "angular",
+    "angularjs",
+    "directive",
     "calendar",
     "heatmap",
     "graph",
     "visualization",
     "chart",
     "time",
+    "d3js",
     "d3"
   ]
 }

@@ -17,10 +17,12 @@
     "directive",
     "calendar",
     "heatmap",
-    "d3",
+    "graph",
+    "visualization",
     "chart",
     "time",
-    "visualisation"
+    "d3js",
+    "d3"
   ],
   "license": "MIT",
   "ignore": [
