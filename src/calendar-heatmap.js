@@ -53,10 +53,9 @@ angular.module('g1b.calendar-heatmap', []).
           .style('opacity', 0);
 
         var getNumberOfWeeks = function () {
-          var dayInMillis = 1000*60*60*24;
-          var extraDays = ((moment() - moment().subtract(1, 'year').subtract(1, 'day')) / dayInMillis) - 52 * 7;
-          var currentDay = Math.ceil((moment() - moment().startOf('week')) / dayInMillis);
-          var numWeeks = currentDay < extraDays ? 54 : 53;
+          var dayIndex = Math.floor((moment() - moment().subtract(1, 'year').startOf('week')) / 86400000);
+          var colIndex = Math.trunc(dayIndex / 7);
+          var numWeeks = colIndex + 1;
           return numWeeks;
         }
 
@@ -149,8 +148,9 @@ angular.module('g1b.calendar-heatmap', []).
 
           var calcItemX = function (d) {
             var date = moment(d.date);
-            var week_num = date.week() - year_ago.week() + (year_ago.weeksInYear() * (date.weekYear() - year_ago.weekYear()));
-            return week_num * (item_size + gutter) + label_padding;
+            var dayIndex = Math.floor((date - moment(year_ago).startOf('week')) / 86400000);
+            var colIndex = Math.trunc(dayIndex / 7);
+            return colIndex * (item_size + gutter) + label_padding;
           };
           var calcItemY = function (d) {
             return label_padding + moment(d.date).weekday() * (item_size + gutter);
