@@ -93,7 +93,7 @@ var data = [{
 ### Optimization
 
 In some cases details array could be large and in order to fit the data into the tooltip a short summary is generated with distinct projects and their total tracked time for that date.
-In terms of optimization summary data can be computed server-side and passed in using the ``summary'' attribute.
+In terms of optimization summary data can be computed server-side and passed in using the ```summary``` attribute.
 And in addition to the data structure described above this would result in a summary dictionary with distinct project names and total values of tracked time in seconds, e.g.:
 
 ```
