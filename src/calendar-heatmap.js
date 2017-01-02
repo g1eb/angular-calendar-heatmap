@@ -52,12 +52,20 @@ angular.module('g1b.calendar-heatmap', []).
           .attr('class', 'heatmap-tooltip')
           .style('opacity', 0);
 
+        var getNumberOfWeeks = function () {
+          var dayInMillis = 1000*60*60*24;
+          var extraDays = ((moment() - moment().subtract(1, 'year').subtract(1, 'day')) / dayInMillis) - 52 * 7;
+          var currentDay = Math.ceil((moment() - moment().startOf('week')) / dayInMillis);
+          var numWeeks = currentDay < extraDays ? 54 : 53;
+          return numWeeks;
+        }
+
         scope.$watch(function () {
           return element[0].clientWidth;
         }, function ( w ) {
           if ( !w ) { return; }
           width = w < 1000 ? 1000 : w;
-          item_size = ((width - label_padding) / 53 - gutter);
+          item_size = ((width - label_padding) / getNumberOfWeeks() - gutter);
           height = label_padding + 7 * (item_size + gutter);
           svg.attr({'width': width, 'height': height});
           if ( !!scope.data && !!scope.data[0].summary ) {
