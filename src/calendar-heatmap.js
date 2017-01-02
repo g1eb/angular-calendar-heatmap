@@ -53,7 +53,7 @@ angular.module('g1b.calendar-heatmap', []).
           .style('opacity', 0);
 
         var getNumberOfWeeks = function () {
-          var dayIndex = Math.floor((moment() - moment().subtract(1, 'year').startOf('week')) / 86400000);
+          var dayIndex = Math.round((moment() - moment().subtract(1, 'year').startOf('week')) / 86400000);
           var colIndex = Math.trunc(dayIndex / 7);
           var numWeeks = colIndex + 1;
           return numWeeks;
@@ -148,7 +148,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           var calcItemX = function (d) {
             var date = moment(d.date);
-            var dayIndex = Math.floor((date - moment(year_ago).startOf('week')) / 86400000);
+            var dayIndex = Math.round((date - moment(year_ago).startOf('week')) / 86400000);
             var colIndex = Math.trunc(dayIndex / 7);
             return colIndex * (item_size + gutter) + label_padding;
           };
