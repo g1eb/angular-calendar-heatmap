@@ -57,7 +57,7 @@ angular.module('g1b.calendar-heatmap', []).
         }, function ( w ) {
           if ( !w ) { return; }
           width = w < 1000 ? 1000 : w;
-          item_size = ((width - label_padding) / (moment().subtract(1, 'year').weeksInYear() - moment().subtract(1, 'year').week() + moment().week() + 1) - gutter);
+          item_size = ((width - label_padding) / 53 - gutter);
           height = label_padding + 7 * (item_size + gutter);
           svg.attr({'width': width, 'height': height});
           if ( !!scope.data && !!scope.data[0].summary ) {
