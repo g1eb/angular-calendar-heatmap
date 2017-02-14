@@ -9,7 +9,7 @@
   "authors": [
     "Gleb <git@gleb.nl>"
   ],
-  "description": "Angular directive for d3.js heatmap representing time series data.",
+  "description": "Angular directive for the calendar heatmap graph representing time series data.",
   "moduleType": [],
   "keywords": [
     "angular",
