@@ -1,6 +1,6 @@
 {
   "name": "angular-calendar-heatmap",
-  "version": "0.2.7",
+  "version": "0.2.8",
   "description": "Angular directive for d3.js calendar heatmap graph.",
   "homepage": "https://github.com/g1eb/angular-calendar-heatmap#readme",
   "repository": {
