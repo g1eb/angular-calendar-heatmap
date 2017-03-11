@@ -1,7 +1,8 @@
 # Angular directive for D3.js Calendar Heatmap
 
-This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand.
-Converted into an angular directive for your convenience :)
+This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand. Converted into an angular directive for your convenience :)  
+
+Includes visualization of year, month, week and day overview.
 
 Inspired by Github's contribution chart.
 
@@ -118,12 +119,16 @@ var data = [{
 
 See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/index.html) for an example implementation with random data or click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
 
+## Angular2 component
+
+If you want to use this heatmap as an angular component (version 2.x), see [angular2-calendar-heatmap](https://github.com/g1eb/angular2-calendar-heatmap)
+
 ## Non-Angular version
 
 If you are looking for a plain vanilla javascript version of the heatmap, check out [calendar-heatmap-graph](https://github.com/g1eb/calendar-heatmap)
 
 ## Dependencies
 
-* [d3.js](https://d3js.org/)
-* [moment.js](http://momentjs.com/)
 * [AngularJS](https://angularjs.org/)
+* [moment.js](https://momentjs.com/)
+* [d3.js](https://d3js.org/)
