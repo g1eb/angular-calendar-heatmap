@@ -7,9 +7,9 @@
   ],
   "homepage": "https://github.com/g1eb/angular-calendar-heatmap",
   "authors": [
-    "Gleb <git@gleb.nl>"
+    "g1eb <mail@g1eb.com> (https://g1eb.com)"
   ],
-  "description": "Angular directive for the calendar heatmap graph representing time series data.",
+  "description": "Angular directive for d3.js calendar heatmap graph.",
   "moduleType": [],
   "keywords": [
     "angular",

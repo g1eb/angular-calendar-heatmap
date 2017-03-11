@@ -1,13 +1,13 @@
 {
   "name": "angular-calendar-heatmap",
   "version": "0.2.6",
-  "description": "Angular directive for the calendar heatmap graph representing time series data.",
-  "homepage": "https://github.com/g1eb/calendar-heatmap#readme",
+  "description": "Angular directive for d3.js calendar heatmap graph.",
+  "homepage": "https://github.com/g1eb/angular-calendar-heatmap#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/g1eb/angular-calendar-heatmap.git"
   },
-  "author": "g1eb",
+  "author": "g1eb <mail@g1eb.com> (https://g1eb.com)",
   "license": "MIT",
   "main": "index.html",
   "bugs": {
