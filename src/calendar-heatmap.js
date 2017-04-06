@@ -117,7 +117,9 @@ angular.module('g1b.calendar-heatmap', []).
         scope.drawChart = function () {
           if ( !scope.data ) { return; }
 
-          if ( scope.overview === 'year' ) {
+          if ( scope.overview === 'global' ) {
+            scope.drawGlobalOverview();
+          } else if ( scope.overview === 'year' ) {
             scope.drawYearOverview();
           } else if ( scope.overview === 'month' ) {
             scope.drawMonthOverview();
