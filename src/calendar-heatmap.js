@@ -144,13 +144,28 @@ angular.module('g1b.calendar-heatmap', []).
           var max_value = d3.max(scope.data, function (d) {
             return d.total;
           });
+
+          // Define start and end date of the selected year
+          var start_of_year = moment(scope.selected.date).startOf('year');
+          var end_of_year = moment(scope.selected.date).endOf('year');
+
+          // Filter data down to the selected year
+          var year_data = scope.data.filter(function (d) {
+            return start_of_year <= moment(d.date) && moment(d.date) < end_of_year;
+          });
+
+          // Calculate max value of the year data
+          var max_value = d3.max(year_data, function (d) {
+            return d.total;
+          });
+
           var color = d3.scale.linear()
             .range(['#ffffff', scope.color || '#ff4500'])
             .domain([-0.15 * max_value, max_value]);
 
           var calcItemX = function (d) {
             var date = moment(d.date);
-            var dayIndex = Math.round((date - moment(year_ago).startOf('week')) / 86400000);
+            var dayIndex = Math.round((date - moment(start_of_year).startOf('week')) / 86400000);
             var colIndex = Math.trunc(dayIndex / 7);
             return colIndex * (item_size + gutter) + label_padding;
           };
@@ -164,7 +179,7 @@ angular.module('g1b.calendar-heatmap', []).
 
           items.selectAll('.item-circle').remove();
           items.selectAll('.item-circle')
-            .data(scope.data)
+            .data(year_data)
             .enter()
             .append('rect')
             .attr('class', 'item item-circle')
@@ -322,9 +337,7 @@ angular.module('g1b.calendar-heatmap', []).
                 });
 
           // Add month labels
-          var today = moment().endOf('day');
-          var today_year_ago = moment().startOf('day').subtract(1, 'year');
-          var month_labels = d3.time.months(today_year_ago.startOf('month'), today);
+          var month_labels = d3.time.months(start_of_year, end_of_year);
           var monthScale = d3.scale.linear()
             .range([0, width])
             .domain([0, month_labels.length]);
