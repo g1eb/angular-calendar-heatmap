@@ -1264,6 +1264,20 @@ angular.module('g1b.calendar-heatmap', []).
         /**
          * Transition and remove items and labels related to year overview
          */
+        scope.removeGlobalOverview = function () {
+          items.selectAll('.item-block-year')
+            .transition()
+            .duration(transition_duration)
+            .ease('ease-out')
+            .style('opacity', 0)
+            .remove();
+          labels.selectAll('.label-year').remove();
+        },
+
+
+        /**
+         * Transition and remove items and labels related to year overview
+         */
         scope.removeYearOverview = function () {
           items.selectAll('.item-circle')
             .transition()
