@@ -2,7 +2,7 @@
 
 This [d3.js](https://d3js.org/) heatmap representing time series data is used to visualize tracked time over the past year, showing details for each of the days on demand. Converted into an angular directive for your convenience :)  
 
-Includes visualization of year, month, week and day overview.
+Includes a global overview of multiple years and visualizations of year, month, week and day overview with zoom for details-on-demand.
 
 Inspired by Github's contribution chart.
 
@@ -11,6 +11,9 @@ Aaand [Calendar View](https://bl.ocks.org/mbostock/4063318) by [Mike Bostock](ht
 
 ## Demo
 Click <a href="https://rawgit.com/g1eb/angular-calendar-heatmap/master/" target="_blank">here</a> for a live demo.
+
+### Global overview
+[![Angular directive for d3.js calendar heatmap chart - global overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_global_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
 
 ### Year overview
 [![Angular directive for d3.js calendar heatmap chart - year overview](https://raw.githubusercontent.com/g1eb/angular-calendar-heatmap/master/images/screenshot_year_overview.png)](https://rawgit.com/g1eb/angular-calendar-heatmap/master/)
@@ -65,9 +68,8 @@ angular.module('myApp', [
 
 ### Example data
 
-Time series data for each day going 1 year back.
-Each day has a total time tracked (in seconds).
-Details, if provided, are shown in a tooltip as well as in daily overview.
+Time series data where each day has a total time tracked (in seconds).  
+Details, if provided, are shown in a tooltip on mouseover in different overviews.
 
 ```
 var data = [{
@@ -94,7 +96,7 @@ var data = [{
 ### Optimization
 
 In some cases details array could be large and in order to fit the data into the tooltip a short summary is generated with distinct projects and their total tracked time for that date.
-In terms of optimization summary data can be computed server-side and passed in using the ```summary``` attribute.
+In terms of optimization, summary data can be computed server-side and passed in using the ```summary``` attribute.
 And in addition to the data structure described above this would result in a summary dictionary with distinct project names and total values of tracked time in seconds, e.g.:
 
 ```
