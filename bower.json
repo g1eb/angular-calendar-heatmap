@@ -1,6 +1,6 @@
 {
   "name": "angular-calendar-heatmap",
-  "version": "0.2.8",
+  "version": "0.3.0",
   "main": [
     "dist/calendar-heatmap.min.js",
     "dist/calendar-heatmap.min.css"
