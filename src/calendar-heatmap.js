@@ -132,6 +132,233 @@ angular.module('g1b.calendar-heatmap', []).
 
 
         /**
+         * Draw global overview (multiple years)
+         */
+        scope.drawGlobalOverview = function () {
+          // Add current overview to the history
+          if ( scope.history[scope.history.length-1] !== scope.overview ) {
+            scope.history.push(scope.overview);
+          }
+
+          // Define start and end of the dataset
+          var start = moment(scope.data[0].date).startOf('year');
+          var end = moment(scope.data[scope.data.length-1].date).endOf('year');
+
+          // Define array of years and total values
+          var year_data = d3.time.years(start, end).map(function (d) {
+            var date = moment(d);
+            return {
+              'date': date,
+              'total': scope.data.reduce(function (prev, current) {
+                if ( moment(current.date).year() === date.year() ) {
+                  prev += current.total;
+                }
+                return prev;
+              }, 0),
+              'summary': function () {
+                var summary = scope.data.reduce(function (summary, d) {
+                  if ( moment(d.date).year() === date.year() ) {
+                    for ( var i = 0; i < d.summary.length; i++ ) {
+                      if ( !summary[d.summary[i].name] ) {
+                        summary[d.summary[i].name] = {
+                          'value': d.summary[i].value,
+                        };
+                      } else {
+                        summary[d.summary[i].name].value += d.summary[i].value;
+                      }
+                    }
+                  }
+                  return summary;
+                }, {});
+                var unsorted_summary = Object.keys(summary).map(function (key) {
+                  return {
+                    'name': key,
+                    'value': summary[key].value
+                  };
+                });
+                return unsorted_summary.sort(function (a, b) {
+                  return b.value - a.value;
+                });
+              }(),
+            };
+          });
+
+          // Calculate max value of all the years in the dataset
+          var max_value = d3.max(year_data, function (d) {
+            return d.total;
+          });
+
+          // Define year labels and axis
+          var year_labels = d3.time.years(start, end).map(function (d) {
+            return moment(d);
+          });
+          var yearScale = d3.scale.ordinal()
+            .rangeRoundBands([0, width], 0.05)
+            .domain(year_labels.map(function(d) {
+              return d.year();
+            }));
+
+          // Add month data items to the overview
+          items.selectAll('.item-block-year').remove();
+          var item_block = items.selectAll('.item-block-year')
+            .data(year_data)
+            .enter()
+            .append('rect')
+            .attr('class', 'item item-block-year')
+            .attr('width', function () {
+              return (width - label_padding) / year_labels.length - gutter * 5;
+            })
+            .attr('height', function () {
+              return height - label_padding;
+            })
+            .attr('transform', function (d) {
+              return 'translate(' + yearScale(d.date.year()) + ',' + tooltip_padding * 2 + ')';
+            })
+            .attr('fill', function (d) {
+              var color = d3.scale.linear()
+                .range(['#ffffff', scope.color || '#ff4500'])
+                .domain([-0.15 * max_value, max_value]);
+              return color(d.total) || '#ff4500';
+            })
+            .on('click', function (d) {
+              if ( scope.in_transition ) { return; }
+
+              // Set in_transition flag
+              scope.in_transition = true;
+
+              // Set selected date to the one clicked on
+              scope.selected = d;
+
+              // Hide tooltip
+              scope.hideTooltip();
+
+              // Remove all month overview related items and labels
+              scope.removeGlobalOverview();
+
+              // Redraw the chart
+              scope.overview = 'year';
+              scope.drawChart();
+            })
+            .style('opacity', 0)
+            .on('mouseover', function(d) {
+              if ( scope.in_transition ) { return; }
+
+              // Construct tooltip
+              var tooltip_html = '';
+              tooltip_html += '<div class="header"><strong>' + (d.total ? scope.formatTime(d.total) : 'No time') + ' tracked</strong></div>';
+              tooltip_html += '<div>in ' + d.date.year() + '</div><br>';
+
+              // Add summary to the tooltip
+              for ( var i = 0; i < d.summary.length; i++ ) {
+                tooltip_html += '<div><span><strong>' + d.summary[i].name + '</strong></span>';
+                tooltip_html += '<span>' + scope.formatTime(d.summary[i].value) + '</span></div>';
+              };
+
+              // Calculate tooltip position
+              var x = yearScale(d.date.year()) + tooltip_padding;
+              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
+                x -= 10;
+              }
+              var y = tooltip_padding * 3;
+
+              // Show tooltip
+              tooltip.html(tooltip_html)
+                .style('left', x + 'px')
+                .style('top', y + 'px')
+                .transition()
+                  .duration(transition_duration / 2)
+                  .ease('ease-in')
+                  .style('opacity', 1);
+            })
+            .on('mouseout', function () {
+              if ( scope.in_transition ) { return; }
+              scope.hideTooltip();
+            })
+            .transition()
+              .delay(function (d, i) {
+                return transition_duration * (i + 1) / 10;
+              })
+              .duration(function () {
+                return transition_duration;
+              })
+              .ease('ease-in')
+              .style('opacity', 1)
+              .call(function (transition, callback) {
+                if ( transition.empty() ) {
+                  callback();
+                }
+                var n = 0;
+                transition
+                  .each(function() { ++n; })
+                  .each('end', function() {
+                    if ( !--n ) {
+                      callback.apply(this, arguments);
+                    }
+                  });
+                }, function() {
+                  scope.in_transition = false;
+                });
+
+          // Add year labels
+          labels.selectAll('.label-year').remove();
+          labels.selectAll('.label-year')
+            .data(year_labels)
+            .enter()
+            .append('text')
+            .attr('class', 'label label-year')
+            .attr('font-size', function () {
+              return Math.floor(label_padding / 3) + 'px';
+            })
+            .text(function (d) {
+              return d.year();
+            })
+            .attr('x', function (d) {
+              return yearScale(d.year());
+            })
+            .attr('y', label_padding / 2)
+            .on('mouseenter', function (year_label) {
+              if ( scope.in_transition ) { return; }
+
+              items.selectAll('.item-block-year')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', function (d) {
+                  return ( moment(d.date).year() === year_label.year() ) ? 1 : 0.1;
+                });
+            })
+            .on('mouseout', function () {
+              if ( scope.in_transition ) { return; }
+
+              items.selectAll('.item-block-year')
+                .transition()
+                .duration(transition_duration)
+                .ease('ease-in')
+                .style('opacity', 1);
+            })
+            .on('click', function (d) {
+              if ( scope.in_transition ) { return; }
+
+              // Set in_transition flag
+              scope.in_transition = true;
+
+              // Set selected month to the one clicked on
+              scope.selected = d;
+
+              // Hide tooltip
+              scope.hideTooltip();
+
+              // Remove all year overview related items and labels
+              scope.removeGlobalOverview();
+
+              // Redraw the chart
+              scope.overview = 'year';
+              scope.drawChart();
+            });
+        },
+
+
+        /**
          * Draw year overview
          */
         scope.drawYearOverview = function () {
