@@ -33,8 +33,8 @@ angular.module('g1b.calendar-heatmap', []).
         var tooltip_padding = 15;
 
         // Initialize current overview type and history
-        scope.overview = scope.overview || 'year';
-        scope.history = ['year'];
+        scope.overview = scope.overview || 'global';
+        scope.history = ['global'];
         scope.selected = {};
 
         // Initialize svg element
