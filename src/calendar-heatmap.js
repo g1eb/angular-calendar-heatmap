@@ -450,6 +450,9 @@ angular.module('g1b.calendar-heatmap', []).
                 .ease('ease-in')
                 .style('opacity', 1);
             });
+
+          // Add button to switch back to year overview
+          scope.drawButton();
         };
 
 
@@ -1268,6 +1271,7 @@ angular.module('g1b.calendar-heatmap', []).
             .remove();
           labels.selectAll('.label-day').remove();
           labels.selectAll('.label-month').remove();
+          scope.hideBackButton();
         };
 
 
