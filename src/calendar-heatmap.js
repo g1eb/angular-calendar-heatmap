@@ -1615,7 +1615,7 @@ angular.module('g1b.calendar-heatmap', []).
             time += minutes === 1 ? '1 minute' : minutes + ' minutes';
           }
           if ( hours === 0 && minutes === 0 ) {
-            time = seconds + ' seconds';
+            time = Math.round(seconds) + ' seconds';
           }
           return time;
         };
