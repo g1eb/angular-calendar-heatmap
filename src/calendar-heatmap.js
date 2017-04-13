@@ -292,8 +292,8 @@ angular.module('g1b.calendar-heatmap', []).
               }
 
               // Calculate tooltip position
-              var x = yearScale(d.date.year()) + tooltip_padding;
-              while ( width - x < (tooltip_width + tooltip_padding * 3) ) {
+              var x = yearScale(d.date.year()) + tooltip_padding * 2;
+              while ( width - x < (tooltip_width + tooltip_padding * 5) ) {
                 x -= 10;
               }
               var y = tooltip_padding * 3;
