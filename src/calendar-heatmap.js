@@ -678,7 +678,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 1);
             });
 
-          // Add button to switch back to year overview
+          // Add button to switch back to previous overview
           scope.drawButton();
         };
 
@@ -965,7 +965,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 1);
             });
 
-          // Add button to switch back to year overview
+          // Add button to switch back to previous overview
           scope.drawButton();
         };
 
@@ -1224,7 +1224,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 1);
             });
 
-          // Add button to switch back to year overview
+          // Add button to switch back to previous overview
           scope.drawButton();
         };
 
@@ -1432,7 +1432,7 @@ angular.module('g1b.calendar-heatmap', []).
                 .style('opacity', 0.5);
             });
 
-          // Add button to switch back to year overview
+          // Add button to switch back to previous overview
           scope.drawButton();
         };
 
@@ -1489,7 +1489,7 @@ angular.module('g1b.calendar-heatmap', []).
 
 
         /**
-         * Transition and remove items and labels related to year overview
+         * Transition and remove items and labels related to global overview
          */
         scope.removeGlobalOverview = function () {
           items.selectAll('.item-block-year')
