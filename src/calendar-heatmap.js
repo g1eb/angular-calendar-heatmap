@@ -1641,9 +1641,8 @@ angular.module('g1b.calendar-heatmap', []).
          * @param seconds Integer
          */
         scope.formatTime = function (seconds) {
-          var sec_num = parseInt(seconds, 10);
-          var hours = Math.floor(sec_num / 3600);
-          var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+          var hours = Math.floor(seconds / 3600);
+          var minutes = Math.floor((seconds - (hours * 3600)) / 60);
           var time = '';
           if ( hours > 0 ) {
             time += hours === 1 ? '1 hour ' : hours + ' hours ';
