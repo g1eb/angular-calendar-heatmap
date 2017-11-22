@@ -125,6 +125,10 @@ See [index.html](https://github.com/g1eb/angular-calendar-heatmap/blob/master/in
 
 If you want to use this heatmap as an angular component (version 2.x), see [angular2-calendar-heatmap](https://github.com/g1eb/angular2-calendar-heatmap)
 
+## React component
+
+If you want to use this heatmap as a React component, see [reactjs-calendar-heatmap](https://github.com/g1eb/reactjs-calendar-heatmap)
+
 ## Non-Angular version
 
 If you are looking for a plain vanilla javascript version of the heatmap, check out [calendar-heatmap-graph](https://github.com/g1eb/calendar-heatmap)
