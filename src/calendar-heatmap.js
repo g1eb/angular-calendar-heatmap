@@ -381,7 +381,7 @@ angular.module('g1b.calendar-heatmap', []).
               scope.in_transition = true;
 
               // Set selected year to the one clicked on
-              scope.selected = d;
+              scope.selected = { date: d };
 
               // Hide tooltip
               scope.hideTooltip();
