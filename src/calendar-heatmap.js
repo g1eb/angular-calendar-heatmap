@@ -135,6 +135,7 @@ angular.module('g1b.calendar-heatmap', []).
          * Draw global overview (multiple years)
          */
         scope.drawGlobalOverview = function () {
+
           // Add current overview to the history
           if ( scope.history[scope.history.length-1] !== scope.overview ) {
             scope.history.push(scope.overview);
@@ -198,7 +199,7 @@ angular.module('g1b.calendar-heatmap', []).
               return d.year();
             }));
 
-          // Add month data items to the overview
+          // Add global data items to the overview
           items.selectAll('.item-block-year').remove();
           var item_block = items.selectAll('.item-block-year')
             .data(year_data)
@@ -232,7 +233,7 @@ angular.module('g1b.calendar-heatmap', []).
               // Hide tooltip
               scope.hideTooltip();
 
-              // Remove all month overview related items and labels
+              // Remove all global overview related items and labels
               scope.removeGlobalOverview();
 
               // Redraw the chart
@@ -379,13 +380,13 @@ angular.module('g1b.calendar-heatmap', []).
               // Set in_transition flag
               scope.in_transition = true;
 
-              // Set selected month to the one clicked on
+              // Set selected year to the one clicked on
               scope.selected = d;
 
               // Hide tooltip
               scope.hideTooltip();
 
-              // Remove all year overview related items and labels
+              // Remove all global overview related items and labels
               scope.removeGlobalOverview();
 
               // Redraw the chart
